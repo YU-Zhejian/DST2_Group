@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# CONFIGURE v1
+set -eu
+DN="$(readlink -f "$(dirname "${0}")")"
+cd "${DN}"
+rm -rf etc/path.sh
+for PROGNAME in aria2c ascp axel curl fasterq-dump fastq-dump wget \
+fastqc cutadapt \
+bsub ylsjs \
+;do
+	printf "Locating ${PROGNAME}...\n"
+	x=$(which "${PROGNAME}" &>> /dev/null && echo "true" || echo "false")
+	echo "my${PROGNAME}=${x}" >> etc/path.sh
+done

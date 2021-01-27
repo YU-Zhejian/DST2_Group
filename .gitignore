@@ -1,0 +1,15 @@
+# IDE
+.idea
+.vscode
+.vs
+
+# Text Editor
+*~
+\#*\#
+*.swap
+
+# Java
+*.jar
+
+# Operating System Cache
+thumbs.db
