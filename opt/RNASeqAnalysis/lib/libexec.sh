@@ -2,7 +2,7 @@
 if ${mybsub};then
 	bsub="bsub"
 elif ${myylsjs};then
-	bsub="ylsjs"
+	bsub="ylsjs init"
 else
 	bsub="bash"
 fi

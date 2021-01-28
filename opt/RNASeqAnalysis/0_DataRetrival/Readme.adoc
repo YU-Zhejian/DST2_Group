@@ -1,4 +1,4 @@
 e.g. For run accession ERR164407,
 
 . Example of ascp Connect URL: fasp.sra.ebi.ac.uk:/vol1/fastq/ERR164/ERR164407/ERR164407.fastq.gz
-. Example of FTP URL: ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR164/ERR164407/ERR164407.fastq.gz
+. Example of FTP URL: ftp.sra.ebi.ac.uk/vol1/fastq/ERR164/ERR164407/ERR164407.fastq.gz

@@ -4,7 +4,8 @@ set -eu
 DN="$(readlink -f "$(dirname "${0}")")"
 cd "${DN}"
 rm -rf etc/path.sh
-for PROGNAME in aria2c ascp axel curl fasterq-dump fastq-dump wget \
+mkdir -p etc
+for PROGNAME in aria2c ascp axel curl wget \
 fastqc cutadapt \
 bsub ylsjs \
 ;do

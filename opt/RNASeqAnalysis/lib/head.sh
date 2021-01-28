@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-. "${HOME}"/LinuxMiniPrograms/lib/libDO.sh
+. "${HOME}"/LinuxMiniPrograms/lib/libdo
 GENOME_FASTA=GENOME_FASTA
 GENOME_FASTA_INDEX=GENOME_FASTA_INDEX
 TARGET=TARGET
+WD=WD
 LIBDO_LOG_MODE=4
-LIBDO_LOG="${TARGET}_$(date +%Y-%m-%d_%H-%M-%S).log"
+LIBDO_LOG="${WD}/${TARGET}_$(date +%Y-%m-%d_%H-%M-%S).log"
 

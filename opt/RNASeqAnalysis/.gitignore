@@ -1,1 +1,5 @@
-etc/path.sh
+*.log
+
+*.fq*
+*.fastq*
+*.conf
