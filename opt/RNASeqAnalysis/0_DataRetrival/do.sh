@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# TODO: Data retrival using ENA APIs.
 set -eu
 DN="$(readlink -f "$(dirname "${0}")")"
 cd "${DN}"
@@ -27,11 +26,12 @@ function my_rename() {
 	echo "  [done]"
 	if ls *.fq.gz &>>/dev/null; then
 		for fn in *.fq.gz; do
+			[ -f "$(basename -s ".fq.gz" "${fn}")"_fastqc.html ] && continue
 			echo "Initializing fastqc for ${fn}"
 			cat ../etc/head.sh ../lib/head.sh exec/fastqc.sh |\
 			sed "s;TARGET=TARGET;TARGET=$(echo ${fn});" |\
 			sed "s;WD=WD;WD=$(pwd);" |\
-			${bsub}
+			${bsub} -n:"fastqc ${fn}"
 		done
 	fi
 	exit
