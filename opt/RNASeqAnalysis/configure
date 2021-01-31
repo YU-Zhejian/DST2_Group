@@ -5,8 +5,9 @@ DN="$(readlink -f "$(dirname "${0}")")"
 cd "${DN}"
 rm -rf etc/path.sh
 mkdir -p etc
-for PROGNAME in aria2c ascp axel curl wget \
+for PROGNAME in aria2c ascp axel wget \
 fastqc cutadapt \
+hisat2 \
 bsub ylsjs \
 ;do
 	printf "Locating ${PROGNAME}...\n"
