@@ -1,0 +1,5 @@
+*.bam
+*.bam.bai
+*_dupmark_metrics.txt
+*.vcf
+*.bai
