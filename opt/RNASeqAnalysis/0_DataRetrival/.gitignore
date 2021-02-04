@@ -1,2 +1,5 @@
 accession.tsv
 *.html
+*.fastq
+*.fq
+*.gz

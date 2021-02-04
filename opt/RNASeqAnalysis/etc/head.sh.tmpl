@@ -1,7 +1,33 @@
 #!/usr/bin/env bash
+# Previous lines should not be modified.
+
+# The following line specifies the path of LibDO in YuZJLab MiniPrograms.
+# You may get YuZJLab MiniPrograms at https://github.com/YuZJLab/LinuxMiniPrograms
+# LibDO is used to collect stdout, stderr and exit value of a specific command.
+# It also records the start/end timestamp.
+# You may view its log by `libdoman` in YuZJLab MiniPrograms.
+# You may change this into the absolute path of libdo.sh installed under ../lib
+# LibDO version 2 or 3 is allowed.
 LIBDO_PATH="${HOME}/LinuxMiniPrograms/lib/libdo"
-GENOME_FASTA_DIR="${HOME}/REF/gallus_gallus/"
+
+# The following line specifies the genome FASTA and GZipped genome FASTA.
+# You may use the version provided in GATK bundle.
+GENOME_FASTA_DIR="${HOME}/REF/GRCg6a/"
 GENOME_FASTA_GZ="${GENOME_FASTA_DIR}/Gallus_gallus.GRCg6a.dna_sm.toplevel.fa.gz"
 GENOME_FASTA="${GENOME_FASTA_DIR}/Gallus_gallus.GRCg6a.dna_sm.toplevel.fa"
-GENOME_FASTA_HISAT2_INDEX="${GENOME_FASTA}/hisat2/GRCg6a"
-ascp_etc="${HOME}/opt/aspera_connect/etc"
+
+# The following line specifies the hisat2 index of the genome FASTA.
+GENOME_FASTA_HISAT2_INDEX="${GENOME_FASTA_DIR}/hisat2/GRCg6a"
+
+# If you're willing to use IM Aspera Connect to download these files, please specify where you install it.
+# We will check for asperaweb_id_dsa.openssh and asperaweb_id_dsa.putty.
+ascp_etc="${HOME}/opt/aspera_connect/etc/"
+
+# Whether to use BQSR.
+ENABLE_BQSR=false
+
+# WHere GATK bundle is installed. We will check for these files:
+# dbsnp_146.hg38.vcf.gz
+# hapmap_3.3.hg38.vcf.gz
+# Mills_and_1000G_gold_standard.indels.hg38.vcf.gz
+GATK_BASE="${HOME}/REF/GATK/hg38"

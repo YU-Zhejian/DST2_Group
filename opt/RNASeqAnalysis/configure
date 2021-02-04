@@ -3,14 +3,66 @@
 set -eu
 DN="$(readlink -f "$(dirname "${0}")")"
 cd "${DN}"
+. lib/libstr.sh
+
+infoh "---------------Checking etc/head.sh---------------"
+. etc/head.sh
+. "${LIBDO_PATH}"
+type DO &>> /dev/null && \
+infoh "LIBDO_PATH=${LIBDO_PATH} verified" || \
+errh "LIBDO_PATH=${LIBDO_PATH:-} invalid!"
+
+[ -f "${GENOME_FASTA:-}" ] && \
+infoh "GENOME_FASTA=${GENOME_FASTA} verified" || \
+errh "GENOME_FASTA=${GENOME_FASTA:-} invalid!"
+
+[ -f "${GENOME_FASTA_GZ:-}" ] && \
+infoh "GENOME_FASTA_GZ=${GENOME_FASTA_GZ} verified" || \
+errh "GENOME_FASTA_GA=${GENOME_FASTA_GZ:-} invalid!"
+
+if [ -n "${GENOME_FASTA_HISAT2_INDEX:-}" ];then
+	ls "${GENOME_FASTA_HISAT2_INDEX}".*.ht2 &>> /dev/null && \
+	infoh "GENOME_FASTA_HISAT2_INDEX=${GENOME_FASTA_HISAT2_INDEX} verified" || \
+	errh "GENOME_FASTA_HISAT2_INDEX=${GENOME_FASTA_HISAT2_INDEX} invalid!"
+fi
+
+if [ -n "${ascp_etc:-}" ];then
+	[ -f "${ascp_etc}"/asperaweb_id_dsa.openssh ] && \
+	[ -f "${ascp_etc}"/asperaweb_id_dsa.putty ] && \
+	infoh "ascp_etc=${ascp_etc} verified" || \
+	errh "ascp_etc=${ascp_etc} invalid!"
+fi
+
+if ${ENABLE_BQSR:-};then
+	[ -d "${GATK_BASE:-}" ] && errh "GATK_BASE invalid!"
+	[ -f "${GATK_BASE}"/dbsnp_146.hg38.vcf.gz ] && \
+	[ -f "${GATK_BASE}"/hapmap_3.3.hg38.vcf.gz ] && \
+	[ -f "${GATK_BASE}"/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz ] && \
+	infoh "GATK_BASE=${GATK_BASE} verified" || \
+	errh "GATK_BASE=${GATK_BASE} invalid!"
+fi
+
+infoh "---------------Checking executables---------------"
 rm -rf etc/path.sh
 mkdir -p etc
-for PROGNAME in aria2c ascp axel wget \
-fastqc cutadapt \
-hisat2 \
-bsub ylsjs \
-;do
-	printf "Locating ${PROGNAME}...\n"
-	x=$(which "${PROGNAME}" &>> /dev/null && echo "true" || echo "false")
-	echo "my${PROGNAME}=${x}" >> etc/path.sh
-done
+function oneof() {
+	y=1
+	for PROGNAME in "${@}";do
+		printf "Locating ${PROGNAME}..."
+		x=$(which "${PROGNAME}" &>> /dev/null && echo "true" || echo "false")
+		which "${PROGNAME}" &>> /dev/null && y=0
+		echo "my${PROGNAME}=${x}" >> etc/path.sh
+		echo "${x}"
+	done
+	if [ ${y} -eq 1 ];then
+		errh "None of ${*} was present!"
+	fi
+}
+oneof aria2c ascp axel wget
+oneof fastqc
+oneof cutadapt
+oneof hisat2 # TODO: Support multiple aligner
+oneof gatk
+oneof samtools
+oneof bsub ylsjs
+
