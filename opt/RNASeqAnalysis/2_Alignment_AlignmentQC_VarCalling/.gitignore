@@ -3,3 +3,5 @@
 *_dupmark_metrics.txt
 *.vcf
 *.bai
+*.bed
+*.vcf.unmap
