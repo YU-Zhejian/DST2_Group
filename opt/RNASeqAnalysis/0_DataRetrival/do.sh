@@ -3,9 +3,9 @@ set -eu
 DN="$(readlink -f "$(dirname "${0}")")"
 cd "${DN}"
 . ../etc/path.sh
-. ../lib/libexec.sh
 . ../etc/head.sh
 . ../lib/head.sh
+. ../lib/libexec.sh
 function my_rename() {
 	printf ".fastq -> .fq"
 	if ls *.fastq* &>>/dev/null; then
@@ -39,6 +39,10 @@ function my_rename() {
 function tail_name() {
 	basename -s .fastq "$(basename -s .fq "$(basename -s .gz "${1}")")"
 }
+# Skip download for local files
+if ${IS_LOCALFILE};then
+	my_rename
+fi
 base_url='https://www.ebi.ac.uk/ena/portal/api/search?result=read_run&dataPortal=ENA&fields=fastq_ftp,fastq_aspera,fastq_md5&limit=0&query=run_accession='
 if [ ! -f accession.tsv ];then
 cat ../sample.conf | grep -v '^$' | grep -v '^\#' | cut -f 2 -d ' ' | while read accession;do
@@ -53,7 +57,7 @@ fi
 if ${myascp}; then
 	echo "Will use ascp to accelerate download."
 	cat accession.tsv | grep -v '^$' | grep -v '^\#' | cut -f 3 | tr ';' '\n' | while read line; do
-		! ls "$(tail_name "${line}")".* &>/dev/null && ascp -QT -l 300m -P33001 --overwrite=diff+older -i "${ascp_etc}"/asperaweb_id_dsa.openssh era-fasp@"${line}" .
+		! ls "$(tail_name "${line}")".* &>/dev/null && ascp -QT -l 300m -P33001 --overwrite=diff+older -i "${ASCP_ETC}"/asperaweb_id_dsa.openssh era-fasp@"${line}" .
 	done
 	my_rename
 fi

@@ -10,6 +10,20 @@
 # LibDO version 2 or 3 is allowed.
 LIBDO_PATH="${HOME}/LinuxMiniPrograms/lib/libdo"
 
+# Whether your data comes from a local file.
+# Set true to read data from local file and prevent downloading.
+IS_LOCALFILE=false
+
+# Whether to use bsub/ylsjs/none as job-control system.
+# If you are on a computing cluster, please refer to the system administrator.
+# Default is true.
+# Will use system in an order of (1) bsub, (2) ylsjs and (3) none.
+ENABLE_JCS=true
+
+# How to define single thread? 1 by default.
+# If you are on a computing cluster, please refer to the system administrator.
+SINGLE_THREAD=1
+
 # The following line specifies the genome FASTA and GZipped genome FASTA.
 # You may use the version provided in GATK bundle.
 GENOME_FASTA_DIR="${HOME}/REF/GRCg6a/"
@@ -21,10 +35,13 @@ GENOME_FASTA_HISAT2_INDEX="${GENOME_FASTA_DIR}/hisat2/GRCg6a"
 
 # If you're willing to use IM Aspera Connect to download these files, please specify where you install it.
 # We will check for asperaweb_id_dsa.openssh and asperaweb_id_dsa.putty.
-ascp_etc="${HOME}/opt/aspera_connect/etc/"
+ASCP_ETC="${HOME}/opt/aspera_connect/etc/"
 
 # Whether to use BQSR.
 ENABLE_BQSR=false
+
+# Whether to use Indel Realignment.
+ENABLE_IndelRealn=false
 
 # WHere GATK bundle is installed. We will check for these files:
 # dbsnp_146.hg38.vcf.gz

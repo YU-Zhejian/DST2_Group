@@ -1,1 +1,1 @@
-DO fastqc "${TARGET}" -o "${PWD}"
+DO fastqc -t ${SINGLE_THREAD} "${TARGET}" -o "${PWD}"

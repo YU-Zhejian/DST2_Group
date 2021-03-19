@@ -1,4 +1,39 @@
-e.g. For run accession ERR164407,
+= 0_DataRetrival
+
+In this step, data is retrieved from remote servers or local files, and is later renamed to a proper form. Quality control by FastQC is performed afterwards.
+
+== Abbrvations used
+
+* NCBI = National Center for Biotechnology Information
+* EBI = European Bioinformatics Institute
+* SRA = Sequence Read Archive
+* ENA = European Nucleotide Archive
+
+== Retrieve filename list from EBI server
+
+Will *NOT* be done if `IS_LOCALFILE` is set to `true`.
+
+In this step, we will use EBI API to retrieve a list of filenames. The input will be run accession (Usually started with `SRR` in NCBI SRA databases or ERR in EBI ENA)
+
+e.g. For run accession ERR164407, the following URLs will be retrieved:
 
 . Example of ascp Connect URL: fasp.sra.ebi.ac.uk:/vol1/fastq/ERR164/ERR164407/ERR164407.fastq.gz
 . Example of FTP URL: ftp.sra.ebi.ac.uk/vol1/fastq/ERR164/ERR164407/ERR164407.fastq.gz
+
+== Download these files
+
+Will *NOT* be done if `IS_LOCALFILE` is set to `true`.
+
+Files on the file list retrieved in the step above will be downloaded.
+
+IBM Aspera Connect can be used to accelerate download speed. If it is installed on the server, please configure `ASCP_ETC` and point it to where `asperaweb_id_dsa.openssh` and `asperaweb_id_dsa.putty` is installed.
+
+If IBM Aspera Connect is not found, we will use axel, aria2c, wget or curl.
+
+== Filename Conversion
+
+Sequences with name containing `fastq` will be converted to `fq`. Unarchived sequences will be archived by gzip with level 9 (Highest compression rate).
+
+== Read Quality Accessment
+
+The quanly of sequences will be assessed by FastQC.

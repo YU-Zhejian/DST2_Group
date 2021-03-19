@@ -26,15 +26,9 @@ if [ -n "${GENOME_FASTA_HISAT2_INDEX:-}" ];then
 	errh "GENOME_FASTA_HISAT2_INDEX=${GENOME_FASTA_HISAT2_INDEX} invalid!"
 fi
 
-if [ -n "${ascp_etc:-}" ];then
-	[ -f "${ascp_etc}"/asperaweb_id_dsa.openssh ] && \
-	[ -f "${ascp_etc}"/asperaweb_id_dsa.putty ] && \
-	infoh "ascp_etc=${ascp_etc} verified" || \
-	errh "ascp_etc=${ascp_etc} invalid!"
-fi
 
-if ${ENABLE_BQSR:-};then
-	[ -d "${GATK_BASE:-}" ] && errh "GATK_BASE invalid!"
+if ${ENABLE_BQSR:-} || ${ENABLE_IndelRealn};then
+	[ -d "${GATK_BASE:-}" ] || errh "GATK_BASE invalid!"
 	[ -f "${GATK_BASE}"/dbsnp_146.hg38.vcf.gz ] && \
 	[ -f "${GATK_BASE}"/hapmap_3.3.hg38.vcf.gz ] && \
 	[ -f "${GATK_BASE}"/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz ] && \
@@ -58,11 +52,20 @@ function oneof() {
 		errh "None of ${*} was present!"
 	fi
 }
-oneof aria2c ascp axel wget
+if ! ${IS_LOCALFILE};then
+	if [ -n "${ASCP_ETC:-}" ];then
+		[ -f "${ASCP_ETC}"/asperaweb_id_dsa.openssh ] && \
+		[ -f "${ASCP_ETC}"/asperaweb_id_dsa.putty ] && \
+		infoh "ASCP_ETC=${ASCP_ETC} verified" || \
+		errh "ASCP_ETC=${ASCP_ETC} invalid!"
+	fi
+	oneof aria2c ascp axel wget
+fi
 oneof fastqc
 oneof cutadapt
 oneof hisat2 # TODO: Support multiple aligner
 oneof gatk
 oneof samtools
-oneof bsub ylsjs
-
+if ${ENABLE_JCS};then
+	oneof bsub ylsjs
+fi
