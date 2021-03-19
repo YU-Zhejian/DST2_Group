@@ -26,6 +26,12 @@ if [ -n "${GENOME_FASTA_HISAT2_INDEX:-}" ];then
 	errh "GENOME_FASTA_HISAT2_INDEX=${GENOME_FASTA_HISAT2_INDEX} invalid!"
 fi
 
+if [ -n "${GENOME_FASTA_STAR_INDEX:-}" ];then
+	[ -d "${GENOME_FASTA_STAR_INDEX}" ] && \
+	infoh "GENOME_FASTA_STAR_INDEX=${GENOME_FASTA_STAR_INDEX} verified" || \
+	errh "GENOME_FASTA_STAR_INDEX=${GENOME_FASTA_STAR_INDEX} invalid!"
+fi
+
 
 if ${ENABLE_BQSR:-} || ${ENABLE_IndelRealn};then
 	[ -d "${GATK_BASE:-}" ] || errh "GATK_BASE invalid!"
