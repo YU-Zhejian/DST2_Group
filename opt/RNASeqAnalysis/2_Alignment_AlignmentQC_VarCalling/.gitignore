@@ -7,3 +7,4 @@
 *.vcf.unmap
 */
 !exec/
+SplitNCigarReads_TMP/

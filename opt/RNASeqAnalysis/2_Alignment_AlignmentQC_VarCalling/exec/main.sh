@@ -44,7 +44,7 @@ if [ ! -f "${TARGET}"_dupmark.bam ];then
 	if ${mysambamba};then
 		DO sambamba markdup -r -p -l 9 -t ${SINGLE_THREAD} "${TARGET}"_rdadd.bam "${TARGET}"_dupmark.bam
 	else
-		DO gatk MarkDuplicates \
+		DO gatk MarkDuplicatesSpark \
 		-I "${TARGET}"_rdadd.bam \
 		-O "${TARGET}"_dupmark.bam \
 		--REMOVE_SEQUENCING_DUPLICATES true \
@@ -54,11 +54,13 @@ if [ ! -f "${TARGET}"_dupmark.bam ];then
 fi
 
 if [ ! -f "${TARGET}"_split.bam ];then
+	mkdir -p SplitNCigarReads_TMP
 	DO gatk SplitNCigarReads \
+	--tmp-dir SplitNCigarReads_TMP \
 	-R "${GENOME_FASTA}" \
 	-I "${TARGET}"_dupmark.bam \
-	-O "${TARGET}"_split.bam \
-	-RMQF 255 -RMQT 60 --filter_reads_with_N_cigar
+	-O "${TARGET}"_split.bam
+	# TODO: -RMQF 255 -RMQT 60 --filter_reads_with_N_cigar option not found
 fi
 
 NEXT_STEP="${TARGET}"_split.bam
@@ -91,14 +93,14 @@ fi
 
 if ${ENABLE_BQSR};then
 	if [ ! -f "${TARGET}"_bqsr.bam ];then
-		DO gatk BaseRecalibrator \
+		DO gatk BaseRecalibratorSpark \
 		-R "${GENOME_FASTA}" \
 		-known-sites "${GATK_BASE}/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz" \
 		-known-sites "${GATK_BASE}/dbsnp_146.hg38.vcf.gz" \
 		-I "${NEXT_STEP}" \
 		-O "${TARGET}"_bqsr
 
-		DO gatk ApplyBQSR \
+		DO gatk ApplyBQSRSpark \
 		-R "${GENOME_FASTA}" \
 		-I "${TARGET}"_realigned.bam \
 		-O "${TARGET}"_bqsr.bam \
@@ -112,7 +114,7 @@ if [ ! -f "${TARGET}"_FINAL.bam ];then
 	indexbam "${TARGET}"_FINAL.bam
 fi
 if [ ! -f "${TARGET}"_all.vcf ];then
-	DO gatk HaplotypeCaller \
+	DO gatk HaplotypeCallerSpark \
 	-R "${GENOME_FASTA}" \
 	-I "${TARGET}"__FINAL.bam \
 	-O "${TARGET}"_all.vcf
