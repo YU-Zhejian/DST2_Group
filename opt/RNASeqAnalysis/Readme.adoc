@@ -1,6 +1,7 @@
-= 0_DataRetrival
+= RNASeqAnalysis: Call germline mutations from RNA-Seq data
 
-In this step, data is retrieved from remote servers or local files, and is later renamed to a proper form. Quality control by FastQC is performed afterwards.
+This RNA Sequence Analyzer is used to call germline variants from RNA-Seq data.
+
 
 == Abbrvations used
 
@@ -9,7 +10,15 @@ In this step, data is retrieved from remote servers or local files, and is later
 * SRA = Sequence Read Archive
 * ENA = European Nucleotide Archive
 
-== Retrieve filename list from EBI server
+== Installation
+
+There is no installation process of this program, it can be executed right after being cloned. However, to make the program function, you are required to change configuration files specified in the following steps:
+
+=== Data Retrieval
+
+We roughly classify data in two categories: Remote and local. From the name you may easily get that remote data are those stored in EBI or NCBI and have to get downloaded, and local data are those stored in your local machine. That is correct. In this step, data is retrieved from remote servers or local files, and is later renamed to a proper form. Quality control by FastQC is performed afterwards.
+
+==== Retrieve filename list from EBI server
 
 Will *NOT* be done if `IS_LOCALFILE` is set to `true`.
 
@@ -20,7 +29,7 @@ e.g. For run accession ERR164407, the following URLs will be retrieved:
 . Example of ascp Connect URL: fasp.sra.ebi.ac.uk:/vol1/fastq/ERR164/ERR164407/ERR164407.fastq.gz
 . Example of FTP URL: ftp.sra.ebi.ac.uk/vol1/fastq/ERR164/ERR164407/ERR164407.fastq.gz
 
-== Download these files
+==== Download these files
 
 Will *NOT* be done if `IS_LOCALFILE` is set to `true`.
 
@@ -30,10 +39,23 @@ IBM Aspera Connect can be used to accelerate download speed. If it is installed 
 
 If IBM Aspera Connect is not found, we will use axel, aria2c, wget or curl.
 
-== Filename Conversion
+==== Filename Conversion
 
 Sequences with name containing `fastq` will be converted to `fq`. Unarchived sequences will be archived by gzip with level 9 (Highest compression rate).
 
-== Read Quality Accessment
+==== Read Quality Accessment
 
 The quanly of sequences will be assessed by FastQC.
+
+
+=== Read Quality Control
+
+Read quality control removes reads with low quality.
+
+=== Alignment and Variant Calling
+
+=== Filtering and Annotation
+
+=== Validating Installation
+
+To determine whether your configuration is correct, you may execute `configure` under this directory.

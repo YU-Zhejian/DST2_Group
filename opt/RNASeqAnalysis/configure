@@ -63,9 +63,9 @@ if ! ${IS_LOCALFILE};then
 fi
 oneof fastqc
 oneof cutadapt
-oneof hisat2 # TODO: Support multiple aligner
+oneof hisat2 STAR # TODO: Support multiple aligner
 oneof gatk
-oneof samtools
+oneof samtools sambamba
 if ${ENABLE_JCS};then
 	oneof bsub ylsjs
 fi

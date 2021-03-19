@@ -1,8 +1,31 @@
+function indexbam(){
+	if ${mysambamba};then
+		DO sambamba index -t ${SINGLE_THREAD} -p "${1}"
+	elif ${mysamtools};then
+		DO samtools index -@ ${SINGLE_THREAD} "${1}"
+	fi
+}
+
 if [ ! -f "${TARGET}".bam ];then
 	[ -f ../1_ReadQC/"${TARGET}_1.fq.gz" ] && [ -f ../1_ReadQC/"${TARGET}_2.fq.gz" ]
-	DO hisat2 --threads ${SINGLE_THREAD} -x "${GENOME_FASTA_HISAT2_INDEX}" -1 ../1_ReadQC/"${TARGET}_1.fq.gz" -2 ../1_ReadQC/"${TARGET}_2.fq.gz" \| samtools sort -@ ${SINGLE_THREAD} -l 9 -o "${TARGET}".bam
-	DO samtools index -@ ${SINGLE_THREAD} "${TARGET}".bam
+	if ${mySTAR};then
+		DO STAR --outFileNamePrefix "${TARGET}" \
+		--outSAMtype BAM SortedByCoordinate \
+		--outFilterMultimapNmax 1 \
+		--outSAMstrandField intronMotif \
+		--genomeDir "${GENOME_FASTA_STAR_INDEX}" \
+		--runThreadN  ${SINGLE_THREAD}  \
+		--readFilesIn ../1_ReadQC/"${TARGET}_1.fq.gz" ../1_ReadQC/"${TARGET}_2.fq.gz" \
+		--twopassMode Basic
+	elif ${myhisat2};then
+		DO hisat2 --threads ${SINGLE_THREAD} \
+		-x "${GENOME_FASTA_HISAT2_INDEX}" \
+		-1 ../1_ReadQC/"${TARGET}_1.fq.gz" \
+		-2 ../1_ReadQC/"${TARGET}_2.fq.gz" \| samtools sort -@ ${SINGLE_THREAD} -l 9 -o "${TARGET}".bam
+	fi
+	indexbam "${TARGET}".bam
 fi
+
 if [ ! -f "${TARGET}"_rdadd.bam ];then
 	DO gatk AddOrReplaceReadGroups \
 	-I "${TARGET}".bam \
@@ -11,7 +34,7 @@ if [ ! -f "${TARGET}"_rdadd.bam ];then
 	--RGPL illumina \
 	--RGPU unit \
 	--RGSM "${TARGET}"
-	DO samtools index -@ ${SINGLE_THREAD} "${TARGET}"_rdadd.bam
+	indexbam "${TARGET}"_rdadd.bam
 fi
 
 if [ ! -f "${TARGET}"_dupmark.bam ];then
@@ -20,10 +43,18 @@ if [ ! -f "${TARGET}"_dupmark.bam ];then
 	-O "${TARGET}"_dupmark.bam \
 	--REMOVE_SEQUENCING_DUPLICATES true \
 	-M "${TARGET}"_dupmark_metrics.txt
-	DO samtools index -@ ${SINGLE_THREAD} "${TARGET}"_dupmark.bam
+	indexbam "${TARGET}"_dupmark.bam
 fi
 
-NEXT_STEP="${TARGET}"_dupmark.bam
+if [ ! -f "${TARGET}"_split.bam ];then
+	DO gatk SplitNCigarReads \
+	-R "${GENOME_FASTA}" \
+	-I "${TARGET}"_dupmark.bam \
+	-O "${TARGET}"_split.bam \
+	-RMQF 255 -RMQT 60 --filter_reads_with_N_cigar
+fi
+
+NEXT_STEP="${TARGET}"_split.bam
 
 if ${ENABLE_IndelRealn} ;then
 	if [ ! -f "${TARGET}"_realigned.bam ];then
@@ -46,10 +77,11 @@ if ${ENABLE_IndelRealn} ;then
 		-I "${NEXT_STEP}" \
 		-o "${TARGET}"_realigned.bam
 
-		DO samtools index -@ ${SINGLE_THREAD} "${TARGET}"_realigned.bam
+		indexbam "${TARGET}"_realigned.bam
 	fi
 	NEXT_STEP="${TARGET}"_realigned.bam
 fi
+
 if ${ENABLE_BQSR};then
 	if [ ! -f "${TARGET}"_bqsr.bam ];then
 		DO gatk BaseRecalibrator \
@@ -68,17 +100,9 @@ if ${ENABLE_BQSR};then
 	NEXT_STEP="${TARGET}"_bqsr.bam
 fi
 
-if [ ! -f "${TARGET}"_split.bam ];then
-	DO gatk SplitNCigarReads \
-	-R "${GENOME_FASTA}" \
-	-I "${NEXT_STEP}" \
-	-O "${TARGET}"_split.bam \
-	-RMQF 255 -RMQT 60 --filter_reads_with_N_cigar
-fi
-
 if [ ! -f "${TARGET}"_FINAL.bam ];then
-	DO samtools view -@ ${SINGLE_THREAD} "${TARGET}"_split.bam -q 30 -b -o "${TARGET}"_FINAL.bam
-	DO samtools index -@ ${SINGLE_THREAD} "${TARGET}"_FINAL.bam
+	DO samtools view -@ ${SINGLE_THREAD} "${NEXT_STEP}" -q 30 -b -o "${TARGET}"_FINAL.bam
+	indexbam "${TARGET}"_FINAL.bam
 fi
 if [ ! -f "${TARGET}"_all.vcf ];then
 	DO gatk HaplotypeCaller \
