@@ -17,6 +17,7 @@ if [ ! -f "${TARGET}".bam ];then
 		--runThreadN  ${SINGLE_THREAD}  \
 		--outBAMsortingThreadN ${SINGLE_THREAD} \
 		--readFilesIn ../1_ReadQC/"${TARGET}_1.fq.gz" ../1_ReadQC/"${TARGET}_2.fq.gz" \
+		--readFilesCommand zcat \
 		--twopassMode Basic
 		ln -s "${TARGET}/Aligned.sortedByCoord.out.bam" "${TARGET}".bam
 	elif ${myhisat2};then
