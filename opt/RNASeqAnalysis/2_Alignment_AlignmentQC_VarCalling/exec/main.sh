@@ -38,11 +38,15 @@ if [ ! -f "${TARGET}"_rdadd.bam ];then
 fi
 
 if [ ! -f "${TARGET}"_dupmark.bam ];then
-	DO gatk MarkDuplicates \
-	-I "${TARGET}"_rdadd.bam \
-	-O "${TARGET}"_dupmark.bam \
-	--REMOVE_SEQUENCING_DUPLICATES true \
-	-M "${TARGET}"_dupmark_metrics.txt
+	if ${mysambamba};then
+		DO sambamba markdup -r -p -l 9 -t ${SINGLE_THREAD} "${TARGET}"_rdadd.bam "${TARGET}"_dupmark.bam
+	else
+		DO gatk MarkDuplicates \
+		-I "${TARGET}"_rdadd.bam \
+		-O "${TARGET}"_dupmark.bam \
+		--REMOVE_SEQUENCING_DUPLICATES true \
+		-M "${TARGET}"_dupmark_metrics.txt
+	fi
 	indexbam "${TARGET}"_dupmark.bam
 fi
 

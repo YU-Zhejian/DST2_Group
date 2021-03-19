@@ -2,15 +2,16 @@
 
 This RNA Sequence Analyzer is used to call germline variants from RNA-Seq data.
 
-
-== Abbrvations used
+== Abbreviations used
 
 * NCBI = National Center for Biotechnology Information
 * EBI = European Bioinformatics Institute
 * SRA = Sequence Read Archive
 * ENA = European Nucleotide Archive
+* SAM = Sequence Alignment & Mapping format
+* BQSR = Base Quality Score Recalibrate
 
-== Installation
+== Installation and Configuration
 
 There is no installation process of this program, it can be executed right after being cloned. However, to make the program function, you are required to change configuration files specified in the following steps:
 
@@ -18,7 +19,7 @@ There is no installation process of this program, it can be executed right after
 
 We roughly classify data in two categories: Remote and local. From the name you may easily get that remote data are those stored in EBI or NCBI and have to get downloaded, and local data are those stored in your local machine. That is correct. In this step, data is retrieved from remote servers or local files, and is later renamed to a proper form. Quality control by FastQC is performed afterwards.
 
-==== Retrieve filename list from EBI server
+==== Retrieve Filename List from EBI Server
 
 Will *NOT* be done if `IS_LOCALFILE` is set to `true`.
 
@@ -29,7 +30,7 @@ e.g. For run accession ERR164407, the following URLs will be retrieved:
 . Example of ascp Connect URL: fasp.sra.ebi.ac.uk:/vol1/fastq/ERR164/ERR164407/ERR164407.fastq.gz
 . Example of FTP URL: ftp.sra.ebi.ac.uk/vol1/fastq/ERR164/ERR164407/ERR164407.fastq.gz
 
-==== Download these files
+==== Download Them
 
 Will *NOT* be done if `IS_LOCALFILE` is set to `true`.
 
@@ -53,6 +54,32 @@ The quanly of sequences will be assessed by FastQC.
 Read quality control removes reads with low quality.
 
 === Alignment and Variant Calling
+
+==== Index bam Files
+
+SAM format is the intermediate file format between alignment and variant calling. It shows sequence reads, where they are mapped, sequencing quality, mapping quality (mapping confidence level) and other important information. Due to its enormous size, it is produced by the aligner and is soon coordinately sorted and converted to bam, a compressed binary form of sam.
+
+After being coordinately sorted (That is, sorted by their place on the chromosome), bam files should be indexed to allow random access. This can be done by `samtools` or `sambamba`. We will prefer the latter because the latter is normally faster.
+
+==== Alignment
+
+Alignment is a process of mapping raw reads to a reference genome. It takes sequence reads after quality control and output SAM.
+
+The aligner used will be `STAR` or `hisat2`. We will preferr the former due to its quality.
+
+WARNING: For machines that is not powerful enough, please use `hisat2` instead.
+
+==== Add Read Groups
+
+==== Remove Duplicates
+
+==== Split N Cigar Reads
+
+==== Indel Realignment
+
+==== BQSR
+
+==== Filtering Low-Quality Reads
 
 === Filtering and Annotation
 
