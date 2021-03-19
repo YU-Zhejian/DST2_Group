@@ -9,14 +9,16 @@ function indexbam(){
 if [ ! -f "${TARGET}".bam ];then
 	[ -f ../1_ReadQC/"${TARGET}_1.fq.gz" ] && [ -f ../1_ReadQC/"${TARGET}_2.fq.gz" ]
 	if ${mySTAR};then
-		DO STAR --outFileNamePrefix "${TARGET}" \
+		DO STAR --outFileNamePrefix "${TARGET}/" \
 		--outSAMtype BAM SortedByCoordinate \
 		--outFilterMultimapNmax 1 \
 		--outSAMstrandField intronMotif \
 		--genomeDir "${GENOME_FASTA_STAR_INDEX}" \
-		--runThreadN  ${SINGLE_THREAD}  \
+		--runThreadN  40  \
 		--readFilesIn ../1_ReadQC/"${TARGET}_1.fq.gz" ../1_ReadQC/"${TARGET}_2.fq.gz" \
+		--readFilesCommand zcat \
 		--twopassMode Basic
+		exit
 	elif ${myhisat2};then
 		DO hisat2 --threads ${SINGLE_THREAD} \
 		-x "${GENOME_FASTA_HISAT2_INDEX}" \
