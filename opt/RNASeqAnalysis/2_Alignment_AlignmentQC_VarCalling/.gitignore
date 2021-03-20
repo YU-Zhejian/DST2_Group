@@ -8,3 +8,6 @@
 */
 !exec/
 SplitNCigarReads_TMP/
+*_bqsr
+*.bam.sbi
+*.list

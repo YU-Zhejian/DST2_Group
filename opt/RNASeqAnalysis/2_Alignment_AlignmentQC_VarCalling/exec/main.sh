@@ -114,9 +114,10 @@ if [ ! -f "${TARGET}"_FINAL.bam ];then
 	indexbam "${TARGET}"_FINAL.bam
 fi
 if [ ! -f "${TARGET}"_all.vcf ];then
-	DO gatk HaplotypeCallerSpark \
+	# TODO: Spark have issues
+	DO gatk HaplotypeCaller \
 	-R "${GENOME_FASTA}" \
-	-I "${TARGET}"__FINAL.bam \
+	-I "${TARGET}"_FINAL.bam \
 	-O "${TARGET}"_all.vcf
 fi
 if [ ! -f "${TARGET}"_snp.vcf ];then

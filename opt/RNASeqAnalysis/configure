@@ -42,6 +42,8 @@ if ${ENABLE_BQSR:-} || ${ENABLE_IndelRealn};then
 	errh "GATK_BASE=${GATK_BASE} invalid!"
 fi
 
+# TODO: Annovar Humandb validation
+
 infoh "---------------Checking executables---------------"
 rm -rf etc/path.sh
 mkdir -p etc
@@ -72,6 +74,7 @@ oneof cutadapt
 oneof hisat2 STAR # TODO: Support multiple aligner
 oneof gatk
 oneof samtools sambamba
+oneof table_annovar.pl
 if ${ENABLE_JCS};then
 	oneof bsub ylsjs
 fi
