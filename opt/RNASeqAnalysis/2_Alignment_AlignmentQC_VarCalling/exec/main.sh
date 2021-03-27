@@ -128,31 +128,46 @@ if [ ! -f "${TARGET}"_snp.vcf ];then
 fi
 
 if ${ENABLE_VQSR};then
+	if [ ! -f "${TARGET}"_snp.vqsr.vcf ];then
 	LIBDO_TOP_PID_tmp=${LIBDO_TOP_PID:-}
 	unset LIBDO_TOP_PID
-	DO gatk VariantRecalibrator \
-	-R "${GENOME_FASTA}" \
-	-V "${TARGET}"_snp.vcf \
-	-resource:hapmap,known=false,training=true,truth=true,prior=15.0 "${GATK_BASE}/hapmap_3.3.hg38.vcf" \
-	-resource:omini,known=false,training=true,truth=false,prior=12.0 "${GATK_BASE}/1000G_omni2.5.hg38.vcf" \
-	-resource:1000G,known=false,training=true,truth=false,prior=10.0 "${GATK_BASE}/1000G_phase1.snps.high_confidence.hg38.vcf" \
-	-resource:dbsnp,known=true,training=false,truth=false,prior=2.0 "${GATK_BASE}/dbsnp_146.hg38.vcf" \
-	-an DP -an QD -an FS -an SOR -an ReadPosRankSum -an MQRankSum \
-	-mode SNP \
-	-tranche 100.0 -tranche 99.9 -tranche 99.0 -tranche 95.0 -tranche 90.0 \
-	-rscriptFile "${TARGET}"_HC.snps.plots.R \
-	--tranches-file  "${TARGET}"_.HC.snps.tranches \
-	-O  "${TARGET}"_HC.snps.recal
-	if [ ${?} -eq 0 ];then
+	RET=0
+	if [ ! -f "${TARGET}_.HC.snps.tranches" ];then
+		DO gatk VariantRecalibrator \
+		-R "${GENOME_FASTA}" \
+		-V "${TARGET}"_snp.vcf \
+		--use-annotation DP \
+		--use-annotation QD \
+		--use-annotation FS \
+		--use-annotation SOR \
+		--use-annotation ReadPosRankSum \
+		--use-annotation MQRankSum \
+		--truth-sensitivity-tranche 100.0 \
+		--truth-sensitivity-tranche 99.9 \
+		--truth-sensitivity-tranche 99.0 \
+		--truth-sensitivity-tranche 95.0 \
+		--truth-sensitivity-tranche 90.0 \
+		--resource:hapmap,known=false,training=true,truth=true,prior=15.0 "${GATK_BASE}/hapmap_3.3.hg38.vcf.gz" \
+		--resource:omini,known=false,training=true,truth=false,prior=12.0 "${GATK_BASE}/1000G_omni2.5.hg38.vcf.gz" \
+		--resource:1000G,known=false,training=true,truth=false,prior=10.0 "${GATK_BASE}/1000G_phase1.snps.high_confidence.hg38.vcf.gz" \
+		--resource:dbsnp,known=true,training=false,truth=false,prior=2.0 "${GATK_BASE}/dbsnp_146.hg38.vcf.gz" \
+		--mode SNP \
+		--rscript-file "${TARGET}"_HC.snps.plots.R \
+		--tranches-file  "${TARGET}"_.HC.snps.tranches \
+		-O  "${TARGET}"_HC.snps.recal
+		RET=${?}
+	fi
+	if [ ${RET} -eq 0 ];then
 		DO gatk ApplyVQSR \
 		-R "${GENOME_FASTA}" \
 		-V "${TARGET}"_snp.vcf \
-		--ts_filter_level 99.0 \
+		--truth-sensitivity-filter-level 99.0 \
 		--tranches-file  "${TARGET}"_.HC.snps.tranches \
-		-recalFile "${TARGET}"_HC.snps.recal \
-		-mode SNP \
+		--recal-file "${TARGET}"_HC.snps.recal \
+		--mode SNP \
 		-O "${TARGET}"_snp.vqsr.vcf
 		NEXT_STEP="${TARGET}"_snp.vqsr.vcf
+	fi
 	fi
 	LIBDO_TOP_PID=${LIBDO_TOP_PID_tmp}
 fi
@@ -166,7 +181,8 @@ if [ ! -f "${TARGET}"_snp.hdfilter.vcf ];then
 	--filter-expression "QD < 2.0 || MQ < 40.0 || FS > 60.0 || SOR > 3.0 || MQRankSum < -12.5 || ReadPosRankSum < -8.0"
 fi
 grep PASS "${TARGET}"_snp.hdfilter.vcf >> "${TARGET}"_snp.FINAL.vcf
-
-DO table_annovar.pl "${TARGET}"_snp.FINAL.vcf "${ANNOVAR_HUMANDB}" -buildver hg19 -out "${TARGET}_annovar" -remove -protocol refGene,cytoBand,1000g2015aug_all,1000g2015aug_afr,1000g2015aug_amr,1000g2015aug_eas,1000g2015aug_eur,1000g2015aug_sas,exac03,avsnp150,esp6500siv2_all,esp6500siv2_ea,esp6500siv2_aa,gnomad_exome,dbnsfp35a,gnomad_genome,clinvar_20180603,cosmic70,icgc21,intervar_20180118 -operation 'g,r,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f'  -arg '-hgvs',,,,,,,,,,,,,,,,,,, -nastring . -polish –vcfinput
+# TODO: 404 for cytoBand
+# TODO: CD: esp6500siv2_all esp6500siv2_ea esp6500siv2_aa icgc21
+#DO table_annovar.pl "${TARGET}"_snp.FINAL.vcf "${ANNOVAR_HUMANDB}" -buildver hg19 -out "${TARGET}_annovar" -remove -protocol refGene,cytoBand,1000g2015aug_all,1000g2015aug_afr,1000g2015aug_amr,1000g2015aug_eas,1000g2015aug_eur,1000g2015aug_sas,exac03,avsnp150,esp6500siv2_all,esp6500siv2_ea,esp6500siv2_aa,gnomad_exome,dbnsfp35a,gnomad_genome,clinvar_20180603,cosmic70,icgc21,intervar_20180118 -operation 'g,r,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f'  -arg '-hgvs',,,,,,,,,,,,,,,,,,, -nastring . -polish –vcfinput
 # TODO: Fix bugs
-grep exonic annovar_output.txt > medguide.txt
+#grep exonic annovar_output.txt > medguide.txt
