@@ -12,3 +12,5 @@ SplitNCigarReads_TMP/
 *.bam.sbi
 *.list
 *HC.snps.*
+*.avinput
+*annovar*
