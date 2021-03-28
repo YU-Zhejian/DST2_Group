@@ -180,9 +180,9 @@ if [ ! -f "${TARGET}"_snp.hdfilter.vcf ];then
 	--filter-name "GATK_SNP" \
 	--filter-expression "QD < 2.0 || MQ < 40.0 || FS > 60.0 || SOR > 3.0 || MQRankSum < -12.5 || ReadPosRankSum < -8.0"
 fi
-grep PASS "${TARGET}"_snp.hdfilter.vcf >> "${TARGET}"_snp.FINAL.vcf
-# TODO: 404 for cytoBand
-# TODO: CD: esp6500siv2_all esp6500siv2_ea esp6500siv2_aa icgc21
-#DO table_annovar.pl "${TARGET}"_snp.FINAL.vcf "${ANNOVAR_HUMANDB}" -buildver hg19 -out "${TARGET}_annovar" -remove -protocol refGene,cytoBand,1000g2015aug_all,1000g2015aug_afr,1000g2015aug_amr,1000g2015aug_eas,1000g2015aug_eur,1000g2015aug_sas,exac03,avsnp150,esp6500siv2_all,esp6500siv2_ea,esp6500siv2_aa,gnomad_exome,dbnsfp35a,gnomad_genome,clinvar_20180603,cosmic70,icgc21,intervar_20180118 -operation 'g,r,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f'  -arg '-hgvs',,,,,,,,,,,,,,,,,,, -nastring . -polish –vcfinput
+if [ ! -f "${TARGET}"_snp.FINAL.vcf ];then
+	grep PASS "${TARGET}"_snp.hdfilter.vcf >> "${TARGET}"_snp.FINAL.vcf
+fi
+DO table_annovar.pl "${TARGET}"_snp.FINAL.vcf "${ANNOVAR_HUMANDB}" -buildver hg19 -out "${TARGET}_annovar" -remove -protocol refGene,cytoBand,1000g2015aug_all,1000g2015aug_afr,1000g2015aug_amr,1000g2015aug_eas,1000g2015aug_eur,1000g2015aug_sas,exac03,avsnp150,esp6500siv2_all,esp6500siv2_ea,esp6500siv2_aa,gnomad_exome,dbnsfp35a,gnomad_genome,clinvar_20180603,cosmic70,icgc21,intervar_20180118 -operation 'g,r,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f'  -arg '-hgvs',,,,,,,,,,,,,,,,,,, -nastring . -polish –vcfinput
 # TODO: Fix bugs
 #grep exonic annovar_output.txt > medguide.txt
