@@ -1,0 +1,7 @@
+*HC.snps.*
+*.avinput
+*annovar*
+*.vcf
+*.vcf.unmap
+*/
+!exec/

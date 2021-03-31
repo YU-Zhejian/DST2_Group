@@ -47,6 +47,12 @@ ENABLE_VQSR=false
 # Whether to use Indel Realignment.
 ENABLE_IndelRealn=false
 
+# Whether to use following variant caller
+ENABLE_HAPLOTYPECALLER=true
+ENABLE_FREEBAYES=true
+ENABLE_LOFREQ=true
+ENABLE_STRELKA=true
+
 # Where GATK bundle is installed. We will check for these files:
 # dbsnp_146.hg38.vcf.gz
 # hapmap_3.3.hg38.vcf.gz
@@ -55,3 +61,6 @@ GATK_BASE="${HOME}/REF/GATK/hg38"
 
 # Where humandb of ANNOVAR is located.
 ANNOVAR_HUMANDB="${HOME}/REF/humandb"
+
+# Variants identified by more than ${VAR_THR} will be filtered.
+VAR_THR=4

@@ -11,11 +11,15 @@
         </webroots>
       </configuration>
     </facet>
+    <facet type="Python" name="Python">
+      <configuration sdkName="3.9 @ Ubuntu Conda" />
+    </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="3.9 @ Ubuntu Conda interpreter library" level="application" />
   </component>
 </module>
