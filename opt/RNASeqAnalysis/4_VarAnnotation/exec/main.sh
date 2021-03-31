@@ -33,7 +33,7 @@ if ${ENABLE_VQSR};then
 		if [ ${RET} -eq 0 ];then
 			DO gatk ApplyVQSR \
 			-R "${GENOME_FASTA}" \
-			-V "${TARGET}"_snp.vcf \
+			-V "${NEXT_STEP}" \
 			--truth-sensitivity-filter-level 99.0 \
 			--tranches-file  "${TARGET}"_.HC.snps.tranches \
 			--recal-file "${TARGET}"_HC.snps.recal \
