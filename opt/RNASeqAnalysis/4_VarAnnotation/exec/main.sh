@@ -1,9 +1,4 @@
-
-if [ ! -f "${TARGET}"_snp.vcf ];then
-	DO gatk SelectVariants --select-type-to-include SNP -R "${GENOME_FASTA}" --select-type-to-include MNP -V ../3_VarCalling/"${TARGET}"_all.vcf -O "${TARGET}"_snp.vcf
-	NEXT_STEP="${TARGET}"_snp.vcf
-fi
-
+NEXT_STEP="../3_VarCalling/VCF/${TARGET}_all.snp.vcf"
 if ${ENABLE_VQSR};then
 	if [ ! -f "${TARGET}"_snp.vqsr.vcf ];then
 		LIBDO_TOP_PID_tmp=${LIBDO_TOP_PID:-}
@@ -12,7 +7,7 @@ if ${ENABLE_VQSR};then
 		if [ ! -f "${TARGET}_.HC.snps.tranches" ];then
 			DO gatk VariantRecalibrator \
 			-R "${GENOME_FASTA}" \
-			-V "${TARGET}"_snp.vcf \
+			-V "${NEXT_STEP}" \
 			--use-annotation DP \
 			--use-annotation QD \
 			--use-annotation FS \
@@ -31,7 +26,7 @@ if ${ENABLE_VQSR};then
 			--mode SNP \
 			--rscript-file "${TARGET}"_HC.snps.plots.R \
 			--tranches-file  "${TARGET}"_.HC.snps.tranches \
-			-O  "${TARGET}"_HC.snps.recal
+			-O "${TARGET}"_HC.snps.recal
 			RET=${?}
 		fi
 		LIBDO_TOP_PID=${LIBDO_TOP_PID_tmp}

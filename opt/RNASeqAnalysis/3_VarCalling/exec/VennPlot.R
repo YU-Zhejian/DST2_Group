@@ -8,5 +8,4 @@ for (n in 1:length(allcaller)){
   loclist[n]<-locfile[locfile$caller==allcaller[n],]
 }
 names(loclist)<-allcaller
-venn.diagram(loclist[c("varscan-qbrc.indels","ms.indels")],height=5000,width=5200,resolution=500,imagetype="png",filename=paste(args[2],"_indels_venn.png"))
-venn.diagram(loclist[c("lofreq-call","mutect2","shimmer","mutect1","varscan-qbrc.snvs")],height=5000,width=5200,resolution=500,imagetype="png",filename=paste(args[2],"_snvs_venn.png"))
+venn.diagram(loclist,height=5000,width=5200,resolution=500,imagetype="png",filename=paste(args[2],"_snps_venn.png"))

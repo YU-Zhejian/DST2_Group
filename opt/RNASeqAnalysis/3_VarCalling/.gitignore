@@ -3,3 +3,4 @@
 *.vcf.unmap
 */
 !exec/
+*.all_loc

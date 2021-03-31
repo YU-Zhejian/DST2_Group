@@ -71,6 +71,9 @@ if ! ${IS_LOCALFILE};then
 	fi
 	oneof aria2c ascp axel wget
 fi
+${ENABLE_FREEBAYES} && oneof freebayes
+${ENABLE_LOFREQ} && oneof lofreq
+${ENABLE_STRELKA} && oneof configManta.py && oneof configureStrelkaGermlineWorkflow.py
 oneof fastqc
 oneof cutadapt
 oneof hisat2 STAR # TODO: Support multiple aligner
