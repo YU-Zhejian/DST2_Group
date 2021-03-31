@@ -1,0 +1,5 @@
+*HC.snps.*
+*.vcf
+*.vcf.unmap
+*/
+!exec/

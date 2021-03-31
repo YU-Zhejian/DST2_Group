@@ -6,6 +6,7 @@
 /.emacs.desktop
 /.emacs.desktop.lock
 *.elc
+*.elc
 auto-save-list
 tramp
 .\#*
@@ -181,7 +182,7 @@ Temporary Items
 
 ### Eclipse template
 .metadata
-bin/
+
 tmp/
 *.tmp
 *.bak
@@ -558,13 +559,6 @@ $RECYCLE.BIN/
 # Virtualenv
 # http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
 .Python
-[Bb]in
-[Ii]nclude
-[Ll]ib
-[Ll]ib64
-[Ll]ocal
-[Ss]cripts
-pyvenv.cfg
+
 .venv
 pip-selfcheck.json
-answers.csv

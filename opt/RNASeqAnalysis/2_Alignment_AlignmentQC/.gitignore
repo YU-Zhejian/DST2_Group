@@ -1,17 +1,11 @@
 *.bam
 *.bam.bai
 *_dupmark_metrics.txt
-*.vcf
 *.bai
 *.bed
-*.vcf.unmap
 */
 !exec/
-SplitNCigarReads_TMP/
 *_bqsr
 *.bam.sbi
 *.list
-*HC.snps.*
-*.avinput
-*annovar*
 *.txt
