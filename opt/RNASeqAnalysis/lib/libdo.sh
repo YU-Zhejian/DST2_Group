@@ -3,7 +3,7 @@
 # From https://github.com/YuZJLab/LinuxMiniPrograms, commit  19ec030cdc2dee900577e4df620b2b3b6bfb5a2d, branch BSD
 function DO_ECHO() {
 	[ "${LIBDO_LOG_MODE:-}" = "S" ] && retur || true
-	! [ -z "${LIBDO_LOG}" ] && echo "${@}" >> "${LIBDO_LOG}" || echo -e "\033[33m${*}\033[0m" >&2
+	! [ -z "${LIBDO_LOG}" ] && echo "${@}" >>"${LIBDO_LOG}" || echo -e "\033[33m${*}\033[0m" >&2
 }
 function DO() {
 	local LIBDO_CMD="${@}"
@@ -16,15 +16,15 @@ function DO() {
 	else
 		case "${LIBDO_LOG_MODE:-}" in
 		"2")
-			eval ${LIBDO_CMD} 2>> "${LIBDO_LOG}" &
+			eval ${LIBDO_CMD} 2>>"${LIBDO_LOG}" &
 			LIBDO_PID=${!}
 			;;
 		"3")
-			eval ${LIBDO_CMD} >> "${LIBDO_LOG}" &
+			eval ${LIBDO_CMD} >>"${LIBDO_LOG}" &
 			LIBDO_PID=${!}
 			;;
 		"4")
-			eval ${LIBDO_CMD} &>> "${LIBDO_LOG}" &
+			eval ${LIBDO_CMD} &>>"${LIBDO_LOG}" &
 			LIBDO_PID=${!}
 			;;
 		*)
@@ -38,7 +38,7 @@ function DO() {
 	DO_ECHO "LIBDO STOPPED AT $(date "+%Y-%m-%d %H:%M:%S")"
 	if [ ${LIBDO_PRIV} -ne 0 ]; then
 		DO_ECHO "LIBDO FAILED, GOT \$?=${LIBDO_PRIV}"
-		if ! [ -z ${LIBDO_TOP_PID} ]; then
+		if ! [ -z ${LIBDO_TOP_PID:-} ]; then
 			DO_ECHO "LIBDO WILL KILL ${LIBDO_TOP_PID}"
 			kill -9 ${LIBDO_TOP_PID}
 		fi
