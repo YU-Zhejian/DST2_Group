@@ -14,11 +14,13 @@ LIBDO_PATH="${HOME}/LinuxMiniPrograms/lib/libdo"
 # Set true to read data from local file and prevent downloading.
 IS_LOCALFILE=false
 
-# Whether to use bsub/ylsjs/none as job-control system.
+# Whether to use bsub/ylsjs/bash as job-control system.
 # If you are on a computing cluster, please refer to the system administrator.
 # Default is true.
-# Will use system in an order of (1) bsub, (2) ylsjs and (3) none.
+# Will use system in an order of (1) bsub, (2) ylsjs and (3) bash.
 ENABLE_JCS=true
+# Which job system to use. You may use bsub, ylsjs, bash or path to your own wrapper.
+bsub=""
 
 # How to define single thread? 1 by default.
 # If you are on a computing cluster, please refer to the system administrator.

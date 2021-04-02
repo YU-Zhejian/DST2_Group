@@ -61,12 +61,23 @@ if ${myascp}; then
 	done
 	my_rename
 fi
-for prog in aria2c axel wget; do
+for prog in aria2c axel; do
 	if eval "\${my${prog}}"; then
 		echo "Will use ${prog} to accelerate download."
 		cat accession.tsv | grep -v '^$' | grep -v '^\#' | cut -f 2 | tr ';' '\n' | while read line; do
 			printf "ftp://${line}"
 			! ls "$(tail_name "${line}")".* &>/dev/null && "${prog}" "ftp://${line}"
+			echo "  [done]"
+		done
+		my_rename
+	fi
+done
+for prog in wget; do
+	if eval "\${my${prog}}"; then
+		echo "Will use ${prog} to accelerate download."
+		cat accession.tsv | grep -v '^$' | grep -v '^\#' | cut -f 2 | tr ';' '\n' | while read line; do
+			printf "ftp://${line}"
+			! ls "$(tail_name "${line}")".* &>/dev/null && "${prog}" -C "ftp://${line}"
 			echo "  [done]"
 		done
 		my_rename

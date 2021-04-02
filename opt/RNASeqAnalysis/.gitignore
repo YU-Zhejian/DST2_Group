@@ -1,2 +1,4 @@
 *.log
 *.conf
+*.pdf
+/Readme.html

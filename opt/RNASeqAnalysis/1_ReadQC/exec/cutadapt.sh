@@ -1,4 +1,6 @@
 args=(${TARGET})
+# TODO: No need to cut?
+# TODO: Trimmomatic?
 fn="../0_DataRetrival/${args[0]}.fq.gz"
 [ -f "${fn}" ] && [ ! -f "${args[0]}.fq.gz" ]
 LIBDO_LOG="${args[0]}_$(date +%Y-%m-%d_%H-%M-%S).log"

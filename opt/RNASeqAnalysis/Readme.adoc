@@ -1,88 +1,683 @@
+:title: RNASeqAnalysis: Call germline mutations from RNA-Seq data
+:toc: left
+:toclevels: 5
+:author: YU Zhejian <Zhejian.19@intl.zju.edu.cn>
+
 = RNASeqAnalysis: Call germline mutations from RNA-Seq data
 
-This RNA Sequence Analyzer is used to call germline variants from RNA-Seq data.
+This RNA Sequence Analyzer is used to call germline variants from RNA-Seq data. It accepts Second (Next)-generation sequencing (NGS) data and call variants from them. The output will be annotated variants in a tab-separated text file.
 
-== Abbreviations used
+WARNING: This program uses hg38. For those who use different genomes, you may make a contribute <<Hacking RNASeqAnalysis>>.
 
-* NCBI = National Center for Biotechnology Information
+== Abbreviations
+
+* Bash = Bourne-Again Shell
+* BQSR = Base Quality Score Recalibration
+* CNV = Copy Number Variation
 * EBI = European Bioinformatics Institute
-* SRA = Sequence Read Archive
 * ENA = European Nucleotide Archive
+* Indel = small INsertions and DELetions
+* LSF = IBM LSF Systems
+* LMP = YuZJLab LinuxMiniPrograms
+* NCBI = National Center for Biotechnology Information
+* NGS = Next Generation Sequencing
+* PyPI = The Python Package Index
 * SAM = Sequence Alignment & Mapping format
-* BQSR = Base Quality Score Recalibrate
+* sh = POSIX Bourne Shell
+* SNP = Single Nucleotide Polymorphisms
+* SNV = Single Nucleotide Variations
+* SRA = Sequence Read Archive
+* SV = Structural Variation
+* TSV = Tab-Separated Value
+* VCF = Variant Calling Format
+* VEP = Ensembl Variant Effect Predicator
+* YLSJS = YuZJLab Simple Job System
 
-== Installation and Configuration
+== Definitions
+
+* *VARIANTS* or *MUTATIONS* are defined as differences between specific genomes.
+* *REFERENCE GENOME* are authentic genome sequences published by sequencing institutes like NCBI, ENSEMBL or USUC whih is considered as "standard" version. Popular human reference genomes are `hg19` (Or `GRCh37`) or `hg38` (Or `GRCh38`).
+* *GERMLINE MUTATIONS* are defined as mutations acquired _before birth_. They are from the germ cells of parents and may be inheritable. They are called by comparing to the reference genome.
+* *SOMATIC MUTATIONS* are defined as mutations acquired _after birth_, often arises in a specific part of body like tumours. They may come from carcinogens like tobacco or age-related issues. Somatic mutations are find by comparing mutations called from blood (which is considered as "normal") and from tumour sites. *THIS PIPELINE CANNOT BE USED TO CALL SOMATIC VARIATIONS*.
+
+== Introduction
+
+=== The Design of the Software
+
+The code for performing analysis is mainly based on VAP <<VAP>>, a RNA/DNA variant calling pipeline written in Perl. The design of segments (Mentioned below) and parallel processing is mainly from a deprecated second-generation sequencing somatic DNA SNV & Indel calling pipeline implemented in Bash script. It originated from QBRC-Somatic-Pipeline <<QBRC>> (Available from <https://github.com/tianshilu/QBRC-Somatic-Pipeline>), which is also implemented in Perl. The directory structure is from , which is originated from Filesystem Hierarchy Standard (FHS) <<FHS>>.
+
+The reason why Bash is chosen as the glue language of this project is:
+
+. Bash is the default shell for most GNU/Linux distribution. For this reason, other Shells like C Shell or Z Shell are excluded.
+. Bash progams are more readable for those who is not familiar to Bash. For this reason, Perl and sh are excluded.
+
+The RNASeqAnalysis performs its job mainly by several *SEGMENTS*. Segments are divided by:
+
+. sequential steps in common variant calling pipelines. For example, "Variant Calling" and "Variant Annotation", or
+. scale of data clustering (e. g. run-level, sample-level or experimental-level?). For example, "Data Retrieval" and "Read Quality Control".
+
+Each segment is wrapped inside a folder with leading number like `0_DataRetrival`. The leading number means the order of being executed. On installation, you may fill the configuration files specified in each step and execute `configure` to check them. Then, you may enter the directory of each segments and execute `do.sh`. Each segments should be executed sequentially. After one segment is finished, you are allowed to execute next one.
+ 
+RNASeqAnalysis is friendly to users working on a cluster with systems like OpenPBS, Torque, LSF, OAR or YLSJS (available in LMP). When the *CONTROLLER* (`do.sh` under each segment) is being executed, it will (1) modify the mutatable elements with specific target and working directory and (2) commit the modified script (called *REPLICA*) to the job system. If no job system is specified, it will commit a new background process to Bash.
+
+There are other useful utilities in `bin/`. Libraries (Which is written in Shell script) used by other Shell scripts are stored in `lib/`, while `etc/` stores global configurations used in all steps.
+
+When a Script is submitted onto a job system, it will source common configurations stored in `etc/` and common functions in `lib/`. On the controller, the scripts are sourced as follows:
+
+. etc/path.sh
+. etc/head.sh
+. lib/head.sh
+. lib/libexec.sh
+
+While in the replica, the order will be:
+
+. etc/head.sh
+. etc/path.sh
+. lib/head.sh
+
+Variables specified in `etc/head.sh` will work on both controller and replica.
+
+Among all these files, only `etc/head.sh` is allowed to be editted for normal users. `etc/path.sh` are generated by `configure` and `lib/*.sh` are shared Shell script libraries. For more details, please read the following sections.
+
+When reading the documentation, you may find lots of terms like "will". It is also common to see "TODO"s in the comments inside the codes. This is because this is only a prototype and furter developments are being purposed. They are either being reviewed (Literature) or being tested.
+
+=== Using YuZJLab LibDO to Monitor the Processes
+
+YuZJLab LibDO is a process-monitoring framework used in RNASeqAnalysis. It is designed for executing jobs on job systems like LSF or YLSJS where you cannot get access tostandard optput/standard error real-time, and can produce a comprehensive log including process start/end time, real-time standard output and error, exit status and process ID. It can also terminate the replica if error occurs inside (like `set -e`).
+
+The default LibDO embdedded in the system is version 2. You may specify external LibDO. For example, you may use LibDO version 3 which supports continuous monitoring and is useful in debugging (Need Python module `psutils`; see the documentation of LibDO for more details). LibDO version 1 is not supported and using this version is not recommended.
+
+For example, with the following script:
+
+[source,bash]
+----
+#!/usr/bin/env bash
+. lib/libdo.sh
+LIBDO_LOG=1.log
+LIBDO_LOG_MODE=4
+
+DO ls -lhF --color=auto
+----
+
+Will generate a log like:
+
+[source]
+----
+LIBDO IS GOING TO EXECUTE ls -lhF --color=auto
+LIBDO STARTED AT 2021-04-02 17:33:31
+LIBDO PID 393
+total 488K
+drwxrwxrwx 1 yuzj yuzj 4.0K Apr  1 21:30 0_DataRetrival/
+drwxrwxrwx 1 yuzj yuzj 4.0K Apr  1 13:52 1_ReadQC/
+drwxrwxrwx 1 yuzj yuzj 4.0K Apr  1 13:52 2_Alignment_AlignmentQC/
+drwxrwxrwx 1 yuzj yuzj 4.0K Apr  1 13:52 3_VarCalling/
+drwxrwxrwx 1 yuzj yuzj 4.0K Apr  1 13:52 4_VarAnnotation/
+-rwxrwxrwx 1 yuzj yuzj  30K Apr  2 17:33 Readme.adoc*
+-rwxrwxrwx 1 yuzj yuzj  87K Apr  2 17:30 Readme.html*
+-rwxrwxrwx 1 yuzj yuzj 362K Apr  2 17:30 Readme.pdf*
+drwxrwxrwx 1 yuzj yuzj 4.0K Apr  1 13:52 bin/
+-rwxrwxrwx 1 yuzj yuzj 2.7K Apr  1 13:52 configure*
+drwxrwxrwx 1 yuzj yuzj 4.0K Apr  1 20:42 etc/
+drwxrwxrwx 1 yuzj yuzj 4.0K Apr  1 19:33 lib/
+-rwxrwxrwx 1 yuzj yuzj   70 Apr  1 13:52 sample.conf.tmpl*
+LIBDO STOPPED AT 2021-04-02 17:33:31
+LIBDO EXITED SUCCESSFULLY
+----
+
+The log produced by YuZJLab LibDO can be read by LibDO Manager ("libdoman", also available in LMP). For example, the output of `1.log` is as follows:
+
+[source]
+----
+$ libdoman 1.txt
+YuZJLab LibDO Manager
+Copyright (C) 2020 YU Zhejian
+ Loading 1.log...1 item proceeded
+ File 1.log loaded. Making table...
+|==========================[...]==============|
+|NO.|COMMAND               [...]   |EXIT|TIME |
+|==========================[...]==============|
+|1  |ls -lhF --color=auto  [...]   |0   |0:0:0|
+|==========================[...]==============|
+ Finished
+----
+
+WARNING: Do not redirect the standard error of DO command to LiDO Manager!
+
+To disable the use of LibDO (*NOT* recommended!), you may add the following line to `lib/head.sh`:
+
+[source,bash]
+----
+function DO(){
+	eval "${@}"
+}
+function DO_ECHO{
+	true
+}
+----
+
+This function will replace every `DO` function introduced in LibDO to original `eval` command and completely disable `DO_ECHO`.
+
+== Stepwize Installation, Configuration and Execution
 
 There is no installation process of this program, it can be executed right after being cloned. However, to make the program function, you are required to change configuration files specified in the following steps:
 
-=== Data Retrieval
+=== General Configuration
 
-We roughly classify data in two categories: Remote and local. From the name you may easily get that remote data are those stored in EBI or NCBI and have to get downloaded, and local data are those stored in your local machine. That is correct. In this step, data is retrieved from remote servers or local files, and is later renamed to a proper form. Quality control by FastQC is performed afterwards.
+==== Finding and Editing Configuration Files
+
+As is mentioned above, users are allowed to edit `etc/head.sh` for global settings. On cloning this project, you will find `etc/head.sh.tmpl`. This is the template of `etc/head.sh` and you may (1) copy and rename the copied file to `etc/head.sh` and (2) make modifications with instructions bellow. There should be further instructions inside `etc/head.sh.tmpl`.
+
+For other segment-level configuration like `1_ReadQC`, templates will also be provided. See the following section for details.
+
+==== Configuring Batch Systems/Job Management Systems
+
+Normally, RNASeqAnalysis will automatically detect your job systems. To enable the use of a job system, you may set variable `ENABLE_JCS` to `true` footnote:[Because we use Bash script as configuration file, please note that it is `true` instead of `True` or `TRUE`.]. If so, the code located in `etc/libexec.sh` will locate system job management systems in an order of LSF ("bsub"), YuJLab Simple Job System ("ylsjs"). If non of them are found or `ENABLE_JCS` is `false`, we will use `bash` background process.
+
+All headers should be written to be compatible to LSF. If you use YLSJS, there will be a wrapper (`ylsjs bsub`) to convert headers of LSF to YLSJS arguments (or more simply, convert to arguments for `ylsjs init`).
+
+However, you may use job systems other than LSF or YLSJS. To add support for your system, you may write a wrapper. A common wrapper for Boo Batch System (Not exist!) may like follows:
+
+[source,bash]
+----
+#!/usr/bin/env bash
+# Wrapper for Boo Batch System (BBS)
+set -ue
+tmpf="$(mktemp -t BBS_Wrapper.XXXXXXX)"
+cat /dev/stdin > "${tmpf}"
+# Scripts transcribing different batch system specifications
+# You may use GNU Sed or GNU AWK to make in-file transcriptions
+# or transcribe batch system instructions to batch system arguments
+cat "${tmpf}".post | bbs init "${BBS_ARGS[@]}"
+exit 0
+----
+
+To make it effective, you may edit te configuration to set variable `bsub` to the path of the wrapper.
+
+For clustering systems that support multi-thread like LSF, you may configure the number of cores used by programs that supports multi-threading in variable `SINGLE_THREAD`.
+
+WARNING: If you're on a public computer, please configure the clustering system as is specified by your system administrator. *THIS IS OF VITAL SIGNIFICANCE--UNAUTHORIZED ACCESS TO SPECIFIC JOB SYSTEMS OR EXECUTE JOBS USING MANAGEMENT NODE MAY MAKE YOU PERMANENTLY EXPELLED FROM THE CLUSTER!*
+
+==== Validating Installation
+
+To determine whether your configuration is correct, you may execute `configure` under this directory. Errors detected will be reported and you need to manually fix them by updating `etc/head.sh` before re-running `configure`.
+
+WARNING: There might still be errors even if `configure` report none!
+
+=== 0_DataRetrieval
+
+Before retrieving data, it is required to complete the `sample.conf`. It is a file of two colums separated by exactly one space. The first column specifies sample name while the second one specifies sample run accession. Currently the pipeline do not support merging, so please use samples which have exactly one run accession under each sample accessions.
+
+We roughly classify data in two categories: Remote and local. From the name you may easily get that remote data are those stored in EBI or NCBI servers and have to get downloaded, and local data are those stored in your local machine. That is correct. In this step, data is retrieved from remote servers or local files, and is later renamed to a proper form. Quality control by FastQC is performed afterwards.
+
+Variable `IS_LOCALFILE` is used to distinguish above two types. When it is `true`, we will assume that (1) You have manually downloaded the files or (2) These files are provided by a local sequencer.
+
+Files being retrived or added should be second-generation pair-end (PE) sequencing reads in FastQ Format <<FASTQ>> without primers, adapters, etc.. GZipped version is also welcomed. Removing primers are needed to be implemented.
 
 ==== Retrieve Filename List from EBI Server
 
-Will *NOT* be done if `IS_LOCALFILE` is set to `true`.
+Will *NOT* be executed if `IS_LOCALFILE` is set to `true`.
 
-In this step, we will use EBI API to retrieve a list of filenames. The input will be run accession (Usually started with `SRR` in NCBI SRA databases or ERR in EBI ENA)
+In this step, we will use EBI API footnote:[The reason why we use EBI instead of NCBI is it is usually faster to access EBI from where the author lives. You may also write an extension to support NCBI.] to retrieve a list of filenames. The input will be run accession (Usually started with `SRR` in NCBI SRA databases or `ERR` in EBI ENA).
 
-e.g. For run accession ERR164407, the following URLs will be retrieved:
+e.g. For run accession `ERR164407`, the following URLs will be retrieved:
 
-. Example of ascp Connect URL: fasp.sra.ebi.ac.uk:/vol1/fastq/ERR164/ERR164407/ERR164407.fastq.gz
-. Example of FTP URL: ftp.sra.ebi.ac.uk/vol1/fastq/ERR164/ERR164407/ERR164407.fastq.gz
+. Example of IBM Aspera Connect URL: <fasp.sra.ebi.ac.uk:/vol1/fastq/ERR164/ERR164407/ERR164407.fastq.gz>
+. Example of FTP URL: <ftp.sra.ebi.ac.uk/vol1/fastq/ERR164/ERR164407/ERR164407.fastq.gz>
 
-==== Download Them
+==== Download Listed Files
 
-Will *NOT* be done if `IS_LOCALFILE` is set to `true`.
+Will *NOT* be executed if `IS_LOCALFILE` is set to `true`.
 
-Files on the file list retrieved in the step above will be downloaded.
+Files on the file list retrieved in the step above will be downloaded. This step is not done by replica.
 
-IBM Aspera Connect can be used to accelerate download speed. If it is installed on the server, please configure `ASCP_ETC` and point it to where `asperaweb_id_dsa.openssh` and `asperaweb_id_dsa.putty` is installed.
+IBM Aspera Connect can be used to accelerate download speed. If it is installed on the server, please configure `ASCP_ETC` and point it to where `asperaweb_id_dsa.openssh` and `asperaweb_id_dsa.putty` is installed. If IBM Aspera Connect is not found, we will use `axel`, `aria2c` or `wget` and download from FTP URL.
 
-If IBM Aspera Connect is not found, we will use axel, aria2c, wget or curl.
+If a previous download has failed, all used software will be able to resume the downloading process. So just press CTRL-C to terminate `do.sh` and restart it if error occurs during download process.
 
 ==== Filename Conversion
 
-Sequences with name containing `fastq` will be converted to `fq`. Unarchived sequences will be archived by gzip with level 9 (Highest compression rate).
+Sequences with suffixes containing `fastq` will be converted to `fq`. Unarchived sequences will be archived by gzip with level 9 (Highest compression rate). This step is done by replica.
 
-==== Read Quality Accessment
+There are currently two forms of archives with suffix `gz` popular among bioinformatics field: *GNU GZIP* or *GZIP COMPRESSED DATA* produced by GNU GZip and *BLOCKED GNU ZIP FORMAT* produced by `bgzip` in HTSLib footnote:[Previously called "Tabix"]. For compatibility, we will use the former.
 
-The quanly of sequences will be assessed by FastQC.
+==== Read Quality Assessment
 
+The quaintly of sequences will be assessed by FastQC. This step produces the parameters for the next step.
 
-=== Read Quality Control
+=== 1_ReadQC
 
-Read quality control removes reads with low quality.
+Read quality control removes reads with low quality. This step is done by CutAdapt <<CutAdapt>>.
 
-=== Alignment and Variant Calling
+The configuration file `CUTADAPT.conf` specifies number of bases to be cut. It is a table file separated by a single space into 2 or 3 columns. The first column should be the basename of runfiles (e. g. For pair-end reads, there should be `SRR5437679_1` and `SRR5437679_2`), one file per line. The second (and third, if needed) argument should be the bases to cut. Positive numbers indicate cut from head while negative numbers indicate cut from tail.
 
-==== Index bam Files
+If no base should be cut, please manually create symbolic links from segment 0.
 
-SAM format is the intermediate file format between alignment and variant calling. It shows sequence reads, where they are mapped, sequencing quality, mapping quality (mapping confidence level) and other important information. Due to its enormous size, it is produced by the aligner and is soon coordinately sorted and converted to bam, a compressed binary form of sam.
+Support for Trimmomatic <<Trimmomatic>> is being purposed. However, we still concern whether pre-defined arguments are more capable for dealing with raw sequences. So, although Trimmomatic might get added in the future, we will regard it as secondary.
 
-After being coordinately sorted (That is, sorted by their place on the chromosome), bam files should be indexed to allow random access. This can be done by `samtools` or `sambamba`. We will prefer the latter because the latter is normally faster.
+=== 2_Alignment_AlignmentQC
+
+==== Segmental Scope: Index BAM Files
+
+SAM format <<SAM>> is the intermediate file format between alignment and variant calling. It shows sequence reads, where they are mapped (coordinates), sequencing quality, mapping quality (by mapping confidence level) and other important information. Due to its enormous size, it is produced by the aligner and is soon coordinately sorted and converted to BAM <<SAM>>, a compressed binary form of SAM.
+
+After being coordinately sorted (That is, sorted by their place on the chromosome), BAM files should be indexed to allow random access. This can be done by SAMTools <<SAM>> <<SAMTools>> or sambamba <<sambamba>>. We will prefer the latter because the latter is normally faster from our personal experience and data from <<sambamba>>. Using SAMBLASTER <<SAMBLASTER>> or BamUtil <<BamUtil>> is being purposed.
+
+The reason why we do not use GATK <<GATKa>> <<GATKb>> <<GATKc>> or PiCard footnotr:[And the reason why we do not use PiCard in the entire peoject is because (1) PiCard is inbedded into GATK with GATK syntax and (2) Syntax of PiCard is changing.] is because they are normally slower.
 
 ==== Alignment
 
 Alignment is a process of mapping raw reads to a reference genome. It takes sequence reads after quality control and output SAM.
 
-The aligner used will be `STAR` or `hisat2`. We will preferr the former due to its quality.
+Aligners used will be STAR <<STAR>> or HiSat2 <<Hisat2>>. The former is preferred for its quality and speed when aligning with new 2PASS approach. More aligners like Tophat <<Tophat2a>><<Tophat2b>><<Tophat2c>><<Tophat2d>> is being purposed.
 
-WARNING: For machines that is not powerful enough, please use `hisat2` instead.
+WARNING: For machines that is not powerful enough, please use HiSat2 instead.
+
+TODO: Need article to prove STAR is better than TopHat or Hisat2.
 
 ==== Add Read Groups
 
-==== Remove Duplicates
+Read groups are identifiers to each BAM file that indicates from which run and which sample this BAM is produced. Although the RNASeqAnalysis pipeline can only deal with one run per sample, it is mandatory for variant callers like GATK HaplortypeCaller.
 
-==== Split N Cigar Reads
+If we use Hisat2 as our aligner, this step can be done when performing alignment. The reason why this step is moved here is because we use LibDO to execute Hisat2, and LibDO evaluates commands by `eval` function. Due to the Bash manual <<BashManual>>, `eval` reads all its arguments, re-evaluate them and then execute them. This means before acutal execution, evaluation steps like string formatting and variant assignment is done *TWICE*. This will led to increased difficulties in dealing with strings in Bash. For example, if we wish to add read group using Hisat2, the command line arguments for performing this step may like:
 
-==== Indel Realignment
+[source]
+----
+'@RG'\""\tID:${id}\tSM:${id}\tLB:WXS\tPL:Illumina"\"
+----
 
-==== BQSR
+However, to add the same read group in GATK AddOrReplaceReadGroups, it will be:
+
+[source]
+----
+DO gatk AddOrReplaceReadGroups \
+-I "${TARGET}".bam \
+-O "${TARGET}"_rdadd.bam \
+--RGLB WXS \
+--RGPL Illumina \
+--RGID "${TARGET}" \
+--RGSM "${TARGET}"
+----
+
+More software like BamUtil is being purposed.
+
+==== Mark & Remove Duplicates
+
+Mark duplicates (Also called remove duplicates or dedup) is the mark or removal of duplicated sequencing reads produced by the sequencer. Duplicated reads may cause errors in estimating sequencing depth and make variant-calling inaccurate <<GATKc>>.
+
+Duplicates can either be marked or removed. Usually, GATK and variant callers will be able to recognize marked reads by accessing the `FLAG` field (Integer, can be interpreted as alignment status) of each record <<SAM>>. In this pipeline,  instead of being marked, duplicates are removed to save space.
+
+This step is done by GATK. BamUtil and sambamba is being evaluated.
+
+==== Split Reads with N in Cigar
+
+Cigar (No relation to tobacco; Called `CIGAR` or `CIGAR String`  in SAM specifications) is a special property consists of ASCII characters with different meanings in records of SAM files <<SAM>>. It can be interpreted as another alignment status. If `N` is presented in Cigar, it means the read is mapped to the junction of inreon and exon. Under this circumstance, the read have to be split into two. It is only used in RNA sequences.
+
+This step is done by GATK.
+
+==== Local Indel Realignment
+
+Local indel realignment removes indel-induced "SNV-like" mapping artifacts <<GATKc>>.
+
+TODO: Article needed to prove this.
+
+This step is deprecated in GATK version 4. The reasonn provided by Broad Institute is that variant callers in GATK like HaplotypeCaller, UnifiedGenotyper or MuTect2 is good enough to skip this step. However, due to the fact that this pipeline is using multiple variant caller, we will not remove this step. We will use those provided by GATK version 3.
+
+==== Base Quality Score Recalibration
+
+Base Quality Score Recalibration ("BQSR" for short) recalibrates base quality produced by the sequencer by comparing them to high-quality SNV databases. This step is performed by GATK version 4.
+
+TODO: Article needed to prove this.
 
 ==== Filtering Low-Quality Reads
 
-=== Filtering and Annotation
+This is the last step of Alignment Quality Control. BAM files will be chscked by SamTools and reads with mapping quality lower than 30 will be removed.
 
-=== Validating Installation
+=== 3_VarCalling
 
-To determine whether your configuration is correct, you may execute `configure` under this directory.
+In this step, variants are called from the same BAM file by various callers. Variants are documented in VCF <<VCF>> with their coordinate (staring point), original form, mutated form and other informations inherited from aligning step (e. g. Sequencing depth). They are later merged and send tio further processing.
+
+==== Caller in Use
+
+GATK HaplotypeCaller <<GATKb>>, FreeBayes <<FreeBayes>> and Illumina Manta <<Manta>> & Strelka <<Strelka2>> are general-purpose SNV & Indel caller.
+
+TODO: Article to prove the caller selected is of good quality.
+
+==== Caller Deprecated
+
+LoFreq <<LoFreq>> version 2 produces malformed VCF and cannot be processed by GATK.
+
+==== Caller Purposed
+
+Varscan reads input from SamTools MPileUp format <<SAMTools-MPileUpa>><<SAMTools-MPileUpb>>. GATK Mutect2 <<GATKb>> and LoFreq version 3 is also ready to be tested.
+
+==== Variant Merging
+
+It is clear that VCFs created by different callers are of different format. It is easy to deal with different variants documented in VCF, but dealing with format issue is harder. Variants called in the step above are merged into one file by the following steps:
+
+. To extract the header information out of original VCFs and merge them.
+. To extract the coordinate and variant information out of VCFs and merge them by counting numbers. Coordinate and variant information above threashould will be documented.
+. Extract all matched reads and merge them with extracted header.
+. Merge different formats into one.
+
+=== 4_VarAnnotation
+
+==== Variant Quality Score Recalibration
+
+VQSR uses machine-learning methods to recalibrate vriant quality scores and remove false positives <<GATKc>>.
+
+TODO: Article to prove the variants selected is of good quality.
+
+==== Variant Hard Filtering
+
+In this step, variants unable to satisfy specific cinario is being fitered. Only variants that passed all filters will be kept.
+
+==== Variant Annotation
+
+Annotation means to add information to the variants. They may include location (e. g. "5-UTR" or "Intron"), genes (e. g. "TP53"), frequency in different populations and pathogenicity. FOr example, if a variant presents in more than 10% of a specific population, it is then considered a "polymorphism" rather than a "mutation".
+
+In this pipeline, AnnoVar <<AnnoVar>> is used to annotate variants. Comparing to VEP <<VEP>> that annotates VCF to VCF, it will annotate VCFs to a TSV file, which allows easy read and interpretation.
+
+For the interpretation of AnnoVar results, please visit the homepage of AnnoVar and corresponding databases.
+
+== Utilities and Housekeeping
+
+There are some interetsing ultilities in `bin/` directory. They can be used to perform various tasks like indexing reference genome or comparing files.
+
+=== Reference Genome Conversion
+
+For those who wish to re-map a BAM or VCF file from one reference genome to another (e. g. From hg38 to hg19), you may use CrossMap <<CrossMap>>. It is available in AnaConda (Channel: BioConda) or PYPI.
+
+=== Reference Genome Downloading
+
+It is recommended to download reference genome and other files from GATK Resource Bundle available from <ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/>. You may use `bin/IndexAligner.sh` to create indexes for these references.
+
+== Comparing Variants
+
+You may wish to compare variants called from different caller, or to compare the variant you called with the standard answer. This can be done by `bin/linediff.sh`. For example:
+
+[source,bash]
+----
+#!/usr/bin/env bash
+# Firstly, extract both files
+cat foo.vcf | grep -v '^#' | cut -f 1,2,4,5 > foo.loc
+cat bar.vcf | grep -v '^#' | cut -f 1,2,4,5 > bar.loc
+# Compare them
+bin/linediff foo.loc bar.loc
+----
+
+== Hacking RNASeqAnalysis
+
+=== Used Libraries
+
+Shared Shell script libraries are under `lib/` directory.
+
+Among them, `libdo.sh` and `libstr.sh` are forked from LMP (commit  19ec030c, branch BSD). You may use the libraries there for newer version.
+
+`libexec.sh` contains function to detect available job systems. You may add your own job systems as your wish.
+
+`head.sh` under `lib/` contains common settings for YuZJLab LibDO. It (1) Sources YuZJLab LibDO and (2) define mutatable elements like `TARGET` or `WD`.
+
+=== Writing Extensions
+
+It is welcomed for you to contribute to RNASeqAnalysis. You may write extensions to:
+
+. Support more aligner and caller. We are currently working on GATK MuTect2, LoFreq3 and others.
+. Support more job systems. We are currently working on OpenPBS and Torque.
+. Multi-aligner support. We need methods to merge SAM/BAM files produced by different aligner.
+. Support somatic variation calling.
+. Support DNA sequence.
+. Support Third-Generation Sequencing (TGS).
+. Support Indels/CNVs/SVs.
+
+It is welcomed to write these extensions with *INTERPRETED* programming languages like Python, Perl or Shell script. The basic rules are as follows:
+
+. If you would prefer shell script, it is recommended to make it compatible to sh. It *MUST* be compatible to Bash.
+. If you would prefer Python, please use CPython version 3.
+. If you wish to use Perl, please enable `use strict;` and `use warnings`. Please use Perl version 5.
+. For all languages, please make sure that you added the "She Bang" line (For example, `!/usr/env/bin bash` for Bash script). Please use Tab instead of spaces. Please use `LF` instead of `CRLF` as line endings. Please use `UTF-8` as encoding.
+
+Please note that all extensions should be properly documented. They should be able to be incorporated in `etc/head.sh`.
+
+== Software Availablilty and Compatibility
+
+This pipeline is tested under Debian GNU/Linux 10 (Buster) with softwares and systems specified below. Theoridcally it will support genetic GNU/Linux with Bash >= 4.4.
+
+=== URLs
+
+|===
+|Software |URL
+
+|VAP
+|<https://github.com/modupeore/VAP>
+
+|LMP
+|<https://github.com/YuZJLab/LinuxMiniPrograms>, <https://gitee.com/YuZJLab/LinuxMiniPrograms>
+
+|HTSLib
+|<https://github.com/samtools/htslib>, <http://www.htslib.org/>
+
+|FastQC
+|<http://www.bioinformatics.babraham.ac.uk/projects/fastqc>, <https://github.com/s-andrews/FastQC>
+
+|CutAdapt
+|<https://cutadapt.readthedocs.io/en/stable>, <https://cutadapt.readthedocs.io/en/stable>
+
+|Trimmomatic
+|<http://www.usadellab.org/cms/index.php?page=trimmomatic>, <https://github.com/timflutre/trimmomatic>
+
+|SAMTools
+|<https://github.com/samtools/samtools>, <http://www.htslib.org/>
+
+|SAMTools, old versions
+|<http://samtools.sourceforge.net/>
+
+|sambamba
+|<http://www.sambamba.org/>, <https://github.com/biod/sambamba>
+
+|SAMBLASTER
+|<https://github.com/GregoryFaust/samblaster>
+
+|BamUtil
+|<https://genome.sph.umich.edu/wiki/BamUtil>, <https://github.com/statgen/bamUtil>
+
+|STAR
+|<http://code.google.com/p/rna-star/>, <https://github.com/alexdobin/STAR>
+
+|HiSat2
+|<https://daehwankimlab.github.io/hisat2/>, <https://github.com/DaehwanKimLab/hisat2>
+
+|PiCard
+|<http://broadinstitute.github.io/picard/>, <https://github.com/broadinstitute/picard>
+
+|GATK3
+|<https://console.cloud.google.com/storage/browser/gatk-software/package-archive/gatk/>
+
+|GATK4
+|<https://github.com/broadinstitute/gatk>, <https://software.broadinstitute.org/gatk>
+
+|AnnoVar
+|<http://www.openbioinformatics.org/annovar/>, <https://doc-openbio.readthedocs.io/projects/annovar/>
+
+|VEP
+|<https://github.com/Ensembl/ensembl-vep>, <https://asia.ensembl.org/info/docs/tools/vep/index.html>
+
+|CrossMap
+|<http://crossmap.sourceforge.net/>
+
+|FreeBayes
+|<https://github.com/ekg/freebayes>
+
+|Illumina Manta
+|<https://github.com/Illumina/manta>
+
+|Illumina Strelka2
+|<https://github.com/Illumina/strelka>
+
+
+|===
+
+=== Tested Versions
+
+|===
+|Software |Version
+
+|Linux Kernel
+|Linux yuzj-pc 5.10.0-5-amd64 #1 SMP Debian 5.10.24-1 (2021-03-19) x86_64 GNU/Linux
+
+|Operating System
+|Debian GNU/Linux 10 (buster)
+
+|MOTHERBOARD
+|Dell Inc. 01XT2D
+
+|FRAME
+|Dell Inc. PowerEdge R720xd
+
+|CPU
+|2 x Intel(R) Xeon(R) CPU E5-2680 v2 @ 2.80GHz
+
+|MEM
+|4 x Samsung 16GB 2Rx4 PC3L-12800R-11-11-E2-D3
+
+|NET
+|PCI Intel Corporation I350 Gigabit Network Connection (rev 01)
+
+|GNU Bourne-Again Shell
+|GNU bash, version 5.1.4(1)-release (x86_64-pc-linux-gnu)
+
+|GNU Core Utils
+|ls (GNU coreutils) 8.32
+
+|GNU Parallel
+|GNU parallel 20161222
+
+|GNU sed
+|sed (GNU sed) 4.7, Packaged by Debian
+
+|GNU grep
+|grep (GNU grep) 3.6
+
+|GNU Compiler Collection
+|gcc (Debian 10.2.1-6) 10.2.1 20210110
+
+|GNU Make
+|GNU Make 4.3, Built for x86_64-pc-linux-gnu
+
+|GNU BinUtils
+|GNU ld (GNU Binutils for Debian) 2.35.2
+
+|Perl
+|This is perl 5, version 32, subversion 1 (v5.32.1) built for x86_64-linux-gnu-thread-multi (with 45 registered patches, see perl -V for more detail)
+
+|Java
+|java version "1.8.0_281", Java(TM) SE Runtime Environment (build 1.8.0_281-b09), Java HotSpot(TM) 64-Bit Server VM (build 25.281-b09, mixed mode)
+
+|Python
+|Python 3.8.8
+
+|Pip
+|pip 21.0.1 from /home/yuzj/conda/lib/python3.8/site-packages/pip (python 3.8)
+
+|R
+|R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+
+|GNU Wget
+|GNU Wget 1.21 built on linux-gnu. -cares +digest -gpgme +https +ipv6 +iri +large-file -metalink +nls +ntlm +opie +psl +ssl/gnutls
+
+|Axel
+|Axel 2.17.10 (linux-gnu)
+
+|aria2
+|aria2 version 1.35.0
+
+|IBM Aspera Connect
+|Aspera Connect version 3.11.1.58, ascp version 4.0.0.182279
+
+|FastQC
+|FastQC v0.11.9
+
+|CutAdapt
+|3.2
+
+|HiSat2
+|/usr/bin/hisat2-align-s version 2.2.1, 64-bit, Built on Debian,
+
+|STAR
+|STAR_2.5.2b
+
+|Bowtie
+|/usr/bin/bowtie-align-s version 1.3.0, 64-bit, Built on Debian-reproducible
+
+|Bowtie2
+|/usr/bin/bowtie2-align-s version 2.4.2, 64-bit
+
+|SAMTools
+|samtools 1.11, Using htslib 1.11-4
+
+|sambamba
+|sambamba 0.8.0, LDC 1.24.0 / DMD v2.094.1 / LLVM9.0.1 / bootstrap LDC - the LLVM D compiler (1.24.0)
+
+|Genome Analysis ToolKit
+|The Genome Analysis Toolkit (GATK) v4.1.9.0, HTSJDK Version: 2.23.0, Picard Version: 2.23.3
+
+|Genome Analysis Toolkit 3
+|version 3.8-1-0-gf15c1c3ef
+
+|LoFreq
+|lofreq_star-2.1.5_linux-x86-64
+
+|FreeBayes
+|version:  v1.3.5
+
+|Illumina Manta
+|1.6.0
+
+|Illumina Strelka
+|2.9.10
+
+|Annovar
+|Version: $Date: 2020-06-07 23:56:37 -0400 (Sun,  7 Jun 2020) $
+
+|VCFTools
+|VCFtools (0.1.16)
+
+|===
+
+WARNING: Both versions of GATK *DO NOT* work on Java 11.
+
+== References
+
+[bibliography]
+- [[[AnnoVar]]] Wang, K., Li, M., & Hakonarson, H. (2010). ANNOVAR: functional annotation of genetic variants from high-throughput sequencing data. Nucleic Acids Research, 38(16), e164–e164. <https://doi.org/10.1093/nar/gkq603>
+- [[[BamUtil]]] Jun, G., Wing, M. K., Abecasis, G. R., & Kang, H. M. (2015). An efficient and scalable analysis framework for variant extraction and refinement from population-scale DNA sequence data. Genome Research, 25(6), 918–925. <https://doi.org/10.1101/gr.176552.114>
+- [[[BashManual]]] Free Software Foundation (2020). GNU Bash manual. <https://www.gnu.org/software/bash/manual/bash.html>
+- [[[CutAdapt]]] Martin, M. (2011). Cutadapt removes adapter sequences from high-throughput sequencing reads. EMBnet.Journal, 17(1), 10. <https://doi.org/10.14806/ej.17.1.200>
+- [[[GATKa]]] McKenna, A., Hanna, M., Banks, E., Sivachenko, A., Cibulskis, K., Kernytsky, A., . . . DePristo, M. A. (2010). The genome analysis toolkit: A MapReduce framework for analyzing next-generation DNA sequencing data. Genome Research, 20(9), 1297–1303. <https://doi.org/10.1101/gr.107524.110>
+- [[[GATKb]]] Depristo, M. A., Banks, E., Poplin, R., Garimella, K. V., Maguire, J. R., Hartl, C., . . . Daly, M. J. (2011). A framework for variation discovery and genotyping using next-generation DNA sequencing data. Nature Genetics, 43(5), 491–501. <https://doi.org/10.1038/ng.806>
+- [[[GATKc]]] Van der Auwera, G. A., Carneiro, M. O., Hartl, C., Poplin, R., del Angel, G., Levy-Moonshine, A., . . . DePristo, M. A. (2013). From fastQ data to high-confidence variant calls: The genome analysis toolkit best practices pipeline. Current Protocols in Bioinformatics, (SUPL.43). <https://doi.org/10.1002/0471250953.bi1110s43>
+- [[[FASTQ]]] Rhizobium, G. E. (2013) Complete Genome Sequence of the Sesbania Symbiont and Rice, Nucleic acids research. Oxford Academic, 1(1256879), pp. 13–14. doi: 10.1093/nar.
+- [[[FreeBayes]]] Garrison, E., & Marth, G. (2012). Haplotype-based variant detection from short-read sequencing. Retrieved from <http://arxiv.org/abs/1207.3907>
+- [[[FHS]]] LSB Workgroup, The Linux Foundation. (2015). Filesystem Hierarchy Standard 3.0 <https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html>
+- [[[Hisat2]]] Kim, D., Langmead, B. & Salzberg, S. HISAT: a fast spliced aligner with low memory requirements. Nat Methods 12, 357–360 (2015). <https://doi.org/10.1038/nmeth.3317>
+- [[[LoFreq]]] Wilm, A., Aw, P. P. K., Bertrand, D., Yeo, G. H. T., Ong, S. H., Wong, C. H., . . . Nagarajan, N. (2012). LoFreq: A sequence-quality aware, ultra-sensitive variant caller for uncovering cell-population heterogeneity from high-throughput sequencing datasets. Nucleic Acids Research, 40(22), 11189–11201. <https://doi.org/10.1093/nar/gks918>
+- [[[Manta]]] Chen, X., Schulz-Trieglaff, O., Shaw, R., Barnes, B., Schlesinger, F., K¨allberg, M., . . . Saunders, C. T. (2016). Manta: Rapid detection of structural variants and indels for germline and cancer sequencing applications. Bioinformatics, 32(8), 1220–1222. <https://doi.org/10.1093/bioinformatics/btv710>
+- [[[QBRC]]] Lu T., Wang S., Xu L., Zhou Q., Singla N., Gao J., et al. (2020). Tumor neoantigenicity assessment with CSiN score incorporates clonality and immunogenicity to predict immunotherapy outcomes. Sci Immunol. 2020 Feb 21;5(44):eaaz3199. <http://immunology.sciencemag.org/content/5/44/eaaz3199.abstract>
+- [[[SAMBLASTER]]] Faust, G. G., & Hall, I. M. (2014). SAMBLASTER: fast duplicate marking and structural variant read extraction. Bioinformatics, 30(17), 2503–2505. <https://doi.org/10.1093/bioinformatics/btu314>
+- [[[SAMTools-MPileUpa]]] Li, H. (2011). A statistical framework for SNP calling, mutation discovery, association mapping and population genetical parameter estimation from sequencing data. Bioinformatics, 27(21), 2987–2993. <https://doi.org/10.1093/bioinformatics/btr509>
+- [[[SAMTools-MPileUpb]]] Petr Danecek, Stephan Schiffels, R. D. (2016). Multiallelic calling model in bcftools (-m). Retrieved January 30, 2020, from <http://samtools.github.io/bcftools/call-m.pdf>
+- [[[SAMTools]]] Li, H., Handsaker, B., Wysoker, A., Fennell, T., Ruan, J., Homer, N., . . . Durbin, R. (2009). The Sequence Alignment/Map format and SAMtools. Bioinformatics, 25(16), 2078–2079. https://doi.org/10.1093/bioinformatics/btp352
+- [[[SAM]]] Cock, P. J. A., Bonfield, J. K., Chevreux, B., & Li, H. (2015). SAM/BAM format v1.5 extensions for de novo assemblies. BioRxiv, 020024. https://doi.org/10.1101/020024
+- [[[STAR]]] Dobin, A., Davis, C. A., Schlesinger, F., Drenkow, J., Zaleski, C., Jha, S., Batut, P., Chaisson, M., & Gingeras, T. R. (2013). STAR: ultrafast universal RNA-seq aligner. Bioinformatics (Oxford, England), 29(1), 15–21. <https://doi.org/10.1093/bioinformatics/bts635>
+- [[[Strelka2]]] Kim, S., Scheffler, K., Halpern, A. L., Bekritsky, M. A., Noh, E., K¨allberg, M., . . . Saunders, C. T. (2018). Strelka2: fast and accurate calling of germline and somatic variants. Nature Methods, 15(8), 591–594. <https://doi.org/10.1038/s41592-018-0051-x>
+- [[[Tophat2a]]] Trapnell, C., Pachter, L. and Salzberg, S. L. (2009) TopHat: discovering splice junctions with RNA-Seq., Bioinformatics (Oxford, England), 25(9), pp. 1105–1111. doi: 10.1093/bioinformatics/btp120.
+- [[[Tophat2b]]] Langmead, B., Trapnell, C., Pop, M. and Salzberg, S. L. (2009) Ultrafast and memory-efficient alignment of short DNA sequences to the human genome, Genome Biology. BioMed Central, 10(3), p. R25. doi: 10.1186/gb-2009-10-3-r25.
+- [[[Tophat2c]]] Kim, D., Pertea, G., Trapnell, C., Pimentel, H., Kelley, R. and Salzberg, S. L. (2013) TopHat2: Accurate alignment of transcriptomes in the presence of insertions, deletions and gene fusions, Genome Biology. BioMed Central, 14(4), p. R36. doi: 10.1186/gb-2013-14-4-r36.
+- [[[Tophat2d]]] Kim, D. and Salzberg, S. L. (2011) TopHat-Fusion: An algorithm for discovery of novel fusion transcripts, Genome Biology. BioMed Central, 12(8), p. R72. doi: 10.1186/gb-2011-12-8-r72.
+- [[[Trimmomatic]]] Bolger, A. M., Lohse, M., & Usadel, B. (2014). Trimmomatic: A flexible trimmer for Illumina sequence data. Bioinformat-ics, 30(15), 2114–2120.<https://doi.org/10.1093/bioinformatics/btu170>
+- [[[VAP]]] Adetunji MO, Lamont SJ, Abasht B, Schmidt CJ (2019) Variant analysis pipeline for accurate detection of genomic variants from transcriptome sequencing data. PLOS ONE 14(9): e0216838. <https://doi.org/10.1371/journal.pone.0216838>
+- [[[sambamba]]] Tarasov, A., Vilella, A. J., Cuppen, E., Nijman, I. J., & Prins, P. (2015). Sambamba: fast processing of NGS alignment formats. Bioinformatics, 31(12), 2032–2034. <https://doi.org/10.1093/bioinformatics/btv098>
+- [[[VCF]]] Danecek, P., Auton, A., Abecasis, G., Albers, C. A., Banks, E., DePristo, M. A., . . . Durbin, R. (2011). The variant call format and VCFtools. Bioinformatics, 27(15), 2156–2158. <https://doi.org/10.1093/bioinformatics/btr330>
+- [[[VEP]]] McLaren, W., Gil, L., Hunt, S. E., Riat, H. S., Ritchie, G. R. S., Thormann, A., Flicek, P. and Cunningham, F. (2016) The Ensembl Variant Effect Predictor, Genome Biology. BioMed Central Ltd., 17(1), p. 122. doi: 10.1186/s13059-016-0974-4.
+- [[[CrossMap]]] Zhao, H., Sun, Z., Wang, J., Huang, H., Kocher, J.-P., & Wang, L. (2014). CrossMap: a versatile tool for coordinate conversion between genome assemblies. Bioinformatics (Oxford, England), 30(7), 1006–1007. <https://doi.org/10.1093/bioinformatics/btt730>
+
+== Notes
