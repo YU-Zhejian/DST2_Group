@@ -9,6 +9,8 @@ This RNA Sequence Analyzer is used to call germline variants from RNA-Seq data. 
 
 WARNING: This program uses hg38. For those who use different genomes, you may make a contribute <<Hacking RNASeqAnalysis>>.
 
+WARNING: *THIS PIPELINE CANNOT BE USED TO CALL SOMATIC VARIATIONS*.
+
 == Abbreviations
 
 * Bash = Bourne-Again Shell
@@ -38,13 +40,13 @@ WARNING: This program uses hg38. For those who use different genomes, you may ma
 * *VARIANTS* or *MUTATIONS* are defined as differences between specific genomes.
 * *REFERENCE GENOME* are authentic genome sequences published by sequencing institutes like NCBI, ENSEMBL or USUC whih is considered as "standard" version. Popular human reference genomes are `hg19` (Or `GRCh37`) or `hg38` (Or `GRCh38`).
 * *GERMLINE MUTATIONS* are defined as mutations acquired _before birth_. They are from the germ cells of parents and may be inheritable. They are called by comparing to the reference genome.
-* *SOMATIC MUTATIONS* are defined as mutations acquired _after birth_, often arises in a specific part of body like tumours. They may come from carcinogens like tobacco or age-related issues. Somatic mutations are find by comparing mutations called from blood (which is considered as "normal") and from tumour sites. *THIS PIPELINE CANNOT BE USED TO CALL SOMATIC VARIATIONS*.
+* *SOMATIC MUTATIONS* are defined as mutations acquired _after birth_, often arises in a specific part of body like tumours. They may come from carcinogens like tobacco or age-related issues. Somatic mutations are find by comparing mutations called from blood (which is considered as "normal") and from tumour sites.
 
 == Introduction
 
 === The Design of the Software
 
-The code for performing analysis is mainly based on VAP <<VAP>>, a RNA/DNA variant calling pipeline written in Perl. The design of segments (Mentioned below) and parallel processing is mainly from a deprecated second-generation sequencing somatic DNA SNV & Indel calling pipeline implemented in Bash script. It originated from QBRC-Somatic-Pipeline <<QBRC>> (Available from <https://github.com/tianshilu/QBRC-Somatic-Pipeline>), which is also implemented in Perl. The directory structure is from , which is originated from Filesystem Hierarchy Standard (FHS) <<FHS>>.
+The code for performing analysis is mainly based on VAP <<VAP>>, a RNA/DNA variant calling pipeline written in Perl. The design of segments (Mentioned below) and parallel processing is mainly from a deprecated second-generation sequencing somatic DNA SNV & Indel calling pipeline implemented in Bash script. It originated from QBRC-Somatic-Pipeline <<QBRC>> (Available from <https://github.com/tianshilu/QBRC-Somatic-Pipeline>), which is also implemented in Perl. The directory structure is from LMP, which is originated from Filesystem Hierarchy Standard (FHS) <<FHS>>.
 
 The reason why Bash is chosen as the glue language of this project is:
 
