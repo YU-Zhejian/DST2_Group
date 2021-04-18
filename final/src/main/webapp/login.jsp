@@ -6,9 +6,10 @@
 <title>Log in</title>
 </head>
 <body>
+	<jsp:forward page="navi.jsp"></jsp:forward>
 	<form action=login method="post">
-		�û���:<input type="text" name="username" required="required">
-		���룺<input type="password" name="password" required="required">
+		用户名:<input type="text" name="username" required="required">
+		密码：<input type="password" name="password" required="required">
 		<input type="submit" value="submit">
 	</form>
 </body>

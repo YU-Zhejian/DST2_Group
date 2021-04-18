@@ -7,8 +7,8 @@
 </head>
 <body>
 	<form action=users method="post">
-		�û���:<input type="text" name="username" required="required">
-		���룺<input type="password" name="password" required="required">
+		用户名:<input type="text" name="username" required="required">
+		密码：<input type="password" name="password" required="required">
 		<input type="submit" value="submit">
 	</form>
 </body>
