@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Insert title here</title>
-	<!-- FIXME: Use dynamic filename instead of static.-->
-	<link rel="stylesheet" type="text/css" href="static/bootstap.min.css">
-</head>
-<body>
+  <head>
+    <title>Insert title here</title>
+    <link rel="stylesheet" type="text/css"
+          href="${pageContext.request.contextPath}/static/bootstrap.min.css">
+  </head>
+  <body>
 
-</body>
+  </body>
 </html>
