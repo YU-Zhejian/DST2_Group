@@ -1,6 +1,6 @@
 # Getting Started
 
-### Reference Documentation
+## Reference Documentation
 
 For further reference, please consider the following sections:
 
@@ -11,7 +11,7 @@ For further reference, please consider the following sections:
 * [Spring for Apache Kafka](https://docs.spring.io/spring-boot/docs/2.4.5/reference/htmlsingle/#boot-features-kafka)
 * [Spring Boot DevTools](https://docs.spring.io/spring-boot/docs/2.4.5/reference/htmlsingle/#using-boot-devtools)
 
-### Guides
+## Guides
 
 The following guides illustrate how to use some features concretely:
 

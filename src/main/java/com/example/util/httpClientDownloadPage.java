@@ -1,6 +1,7 @@
 package com.example.util;
 
-/*import org.apache.http.HttpEntity;
+/*
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
@@ -9,7 +10,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;*/
+import org.apache.http.util.EntityUtils;
+*/
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
@@ -37,7 +39,7 @@ public class httpClientDownloadPage {
             inputStream.close();
             return byteArrayOutputStream.toString();
         } catch (IOException var8) {
-           // log.info("", var8);
+            // log.info("", var8);
             return null;
         }
     }

@@ -20,7 +20,8 @@ public class dosingGuidelineTask {
 
     @Scheduled(initialDelay = 3000,fixedDelay = 60*60*24*7*1000)
     public void dosingGuidelineTask() throws Exception{
-        String content = this.DownloadPage.getURLContent("https://api.pharmgkb.org/v1/site/guidelinesByDrugs");
+        // Should access sttic members by class name
+        String content = httpClientDownloadPage.getURLContent("https://api.pharmgkb.org/v1/site/guidelinesByDrugs");
         Gson gson = new Gson();
         Map drugLabels = (Map)gson.fromJson(content, Map.class);
         List<Map> data = (List)drugLabels.get("data");
@@ -44,7 +45,7 @@ public class dosingGuidelineTask {
     }
 
     public void doCrawlerDosingGuideline(String url) {
-        String content = this.DownloadPage.getURLContent(String.format("https://api.pharmgkb.org/v1/data%s", url));
+        String content = httpClientDownloadPage.getURLContent(String.format("https://api.pharmgkb.org/v1/data%s", url));
         Gson gson = new Gson();
         Map guideline = (Map)gson.fromJson(content, Map.class);
         Map data = (Map)guideline.get("data");
