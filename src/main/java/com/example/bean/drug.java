@@ -1,7 +1,10 @@
 package com.example.bean;
 
+import org.hibernate.annotations.Proxy;
+
 import javax.persistence.*;
 
+@Proxy(lazy = false)
 @Entity
 @Table(name = "drug")
 public class drug {
@@ -12,7 +15,7 @@ public class drug {
     private String drug_url;
     private String Obj_cls;
 
-    public drug(){};
+    public drug(){}
 
     public drug(String id, String name, boolean biomarker, String drugUrl, String objCls) {
         this.id = id;

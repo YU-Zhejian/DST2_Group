@@ -1,9 +1,12 @@
 package com.example.bean;
 
+import org.hibernate.annotations.Proxy;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+@Proxy(lazy = false)
 @Entity
 @Table(name = "dosing_guideline")
 public class DosingGuideline {
