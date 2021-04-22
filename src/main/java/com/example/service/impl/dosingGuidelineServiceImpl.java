@@ -10,12 +10,21 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * Query or update dosing guideline database.
+ * See also: {@link drugLabelServiceImpl}
+ * @author Jie Jin
+ * @author Yaqi-SU
+ */
 @Service
 public class dosingGuidelineServiceImpl implements dosingGuidelineService {
     @Autowired
     private dosingGuidelineDao dosingGuidelineDao;
 
-
+    /**
+     * Update dosing guideline database
+     * @param dosingGuideline Entry that needs to br inserted
+     */
     @Override
     @Transactional
     public void save(DosingGuideline dosingGuideline) {
@@ -26,13 +35,16 @@ public class dosingGuidelineServiceImpl implements dosingGuidelineService {
             this.dosingGuidelineDao.save(dosingGuideline);
             this.dosingGuidelineDao.flush();
         }
-
     }
 
+    /**
+     * Query dosing guideline database
+     * @param dosingGuideline Entry that needs to be queried
+     * @return List of found entries
+     */
     @Override
     public List<DosingGuideline> findAll(DosingGuideline dosingGuideline) {
         Example<DosingGuideline> example = Example.of(dosingGuideline);
-        List<DosingGuideline> list = this.dosingGuidelineDao.findAll(example);
-        return list;
+        return this.dosingGuidelineDao.findAll(example);
     }
 }

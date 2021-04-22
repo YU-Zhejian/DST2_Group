@@ -1,7 +1,16 @@
 package com.example.bean;
 
+import org.hibernate.annotations.Proxy;
+
 import javax.persistence.*;
 
+/**
+ * A typical drug template
+ * @author Jie Jin
+ * @author Yaqi-SU
+ * FIXME: Class name should be UpperCamelCase
+ */
+@Proxy(lazy=false)
 @Entity
 @Table(name = "drug")
 public class drug {
@@ -14,6 +23,14 @@ public class drug {
 
     public drug(){};
 
+    /**
+     * Constructor for a typical drug
+     * @param id Index of drug
+     * @param name Name of a drug
+     * @param biomarker TODO
+     * @param drugUrl URL of a drug
+     * @param objCls TODO
+     */
     public drug(String id, String name, boolean biomarker, String drugUrl, String objCls) {
         this.id = id;
         this.name = name;

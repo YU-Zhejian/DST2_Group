@@ -10,35 +10,42 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * Query or update drug database.
+ * See also: {@link drugLabelServiceImpl}
+ * @author Jie Jin
+ * @author Yaqi-SU
+ */
 @Service
 public class drugServiceImpl implements drugService {
 
     @Autowired
     private drugDao drugDao;
 
+    /**
+     * Update drug database
+     * @param drug Entry that needs to br inserted
+     */
     @Override
     @Transactional
     public void save(drug drug) {
-        //查询原有数据
         drug param = new drug();
         param.setId(drug.getId());
-        //执行查询
         List<drug> list = this.findAll(param);
-        //判断结果是否为空
         if (list.size() == 0) {
-            //为空，新增或更新数据库
             this.drugDao.save(drug);
             this.drugDao.flush();
         }
-
     }
 
+    /**
+     * Query dosing guideline database
+     * @param drug Entry that needs to be queried
+     * @return List of found entries
+     */
     @Override
     public List<drug> findAll(drug drug) {
-        //设置查询条件
         Example<drug> example = Example.of(drug);
-        //执行查询
-        List<drug> list = this.drugDao.findAll(example);
-        return list;
+        return this.drugDao.findAll(example);
     }
 }

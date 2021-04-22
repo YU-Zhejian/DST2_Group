@@ -1,12 +1,22 @@
 package com.example.bean;
 
+import org.hibernate.annotations.Proxy;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+
+/**
+ * A typical Dosing guideline template
+ * @author Jie Jin
+ * @author Yaqi-SU
+ */
+@Proxy(lazy=false)
 @Entity
 @Table(name = "dosing_guideline")
 public class DosingGuideline {
+    // FIXME: Whether to use Google standard. If so, use lowerCamelCase
     @Id
     private String id;
     private String obj_cls;
@@ -21,6 +31,18 @@ public class DosingGuideline {
     public DosingGuideline() {
     }
 
+    /**
+     * Constructor for a typical dosing guideline
+     * @param id Index of the guideline
+     * @param objCls TODO
+     * @param name Name of the drug
+     * @param recommendation TODO
+     * @param drugId Index of the drug at {@link drug}
+     * @param source Produced by which group
+     * @param summaryMarkdown Notes of this drug
+     * @param textMarkdown TODO Not shown in the website
+     * @param raw TODO Not shown in the website
+     */
     public DosingGuideline(String id, String objCls, String name, boolean recommendation, String drugId, String source, String summaryMarkdown, String textMarkdown, String raw) {
         this.id = id;
         this.obj_cls = objCls;

@@ -20,8 +20,19 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * General Purposed crawler to fetch website contents
+ * @author Jie Jin
+ * @author Yaqi-SU
+ * FIXME: Use UpperCamelCase
+ */
 @Component
 public class httpClientDownloadPage {
+    /**
+     * General Purposed crawler to fetch website contents
+     * @param urlString The URL (Not URLs) to get crawled
+     * @return Contents returned by the server in String
+     */
     public static String getURLContent(String urlString) {
         try {
             URL url = new URL(urlString);
@@ -39,10 +50,8 @@ public class httpClientDownloadPage {
             inputStream.close();
             return byteArrayOutputStream.toString();
         } catch (IOException var8) {
-            // log.info("", var8);
+            // log.info("", var8); // TODO: Why is it annotated?
             return null;
         }
     }
-
-
 }

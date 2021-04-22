@@ -1,9 +1,17 @@
 package com.example.bean;
 
+import org.hibernate.annotations.Proxy;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * A typical drug label template
+ * @author Jie Jin
+ * @author Yaqi-SU
+ */
+@Proxy(lazy=false)
 @Entity
 @Table(name = "drug_label")
 public class DrugLabel {
@@ -22,7 +30,21 @@ public class DrugLabel {
 
     public DrugLabel() {
     }
-
+    
+    /**
+     * Constructor for a typical drug label template
+     * @param id TODO
+     * @param name TODO
+     * @param objCls TODO
+     * @param alternateDrugAvailable TODO
+     * @param dosingInformation TODO
+     * @param prescribingMarkdown TODO
+     * @param source TODO
+     * @param textMarkdown TODO
+     * @param summaryMarkdown TODO
+     * @param raw TODO
+     * @param drugId Index of the drug at {@link drug}
+     */
     public DrugLabel(String id, String name, String objCls, boolean alternateDrugAvailable, boolean dosingInformation, String prescribingMarkdown, String source, String textMarkdown, String summaryMarkdown, String raw, String drugId) {
         this.id = id;
         this.name = name;

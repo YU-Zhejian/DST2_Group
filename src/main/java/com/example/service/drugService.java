@@ -4,12 +4,12 @@ import com.example.bean.drug;
 
 import java.util.List;
 
+/**
+ * See implementation for more details
+ * @author Jie Jin
+ * @author Yaqi-SU
+ */
 public interface drugService {
-    //保存信息
-
-    public void save(drug drug);
-
-    //根据条件进行查询
-    public List<drug> findAll(drug drug);
-
+    void save(drug drug);
+    List<drug> findAll(drug drug);
 }
