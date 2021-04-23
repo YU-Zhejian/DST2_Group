@@ -8,11 +8,18 @@ import javax.persistence.*;
 @Entity
 @Table(name = "drug")
 public class drug {
-    @Id
+    @Id @Column(length = 100, nullable=false)
     private String id;
+
+    @Column(length = 500, nullable=false)
     private String name;
+
     private boolean biomarker;
+
+    @Column(length = 100, nullable=false)
     private String drug_url;
+
+    @Column(length = 100, nullable=false)
     private String Obj_cls;
 
     public drug(){}

@@ -2,23 +2,36 @@ package com.example.bean;
 
 import org.hibernate.annotations.Proxy;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Proxy(lazy = false)
 @Entity
 @Table(name = "dosing_guideline")
 public class DosingGuideline {
-    @Id
+    @Id @Column(length = 100, nullable=false)
     private String id;
+
+    @Column(length = 100, nullable=false)
     private String obj_cls;
+
+    @Column(length = 500, nullable=false)
     private String name;
+
     private boolean recommendation;
+
+    @Column(length = 100, nullable=false)
     private String drug_id;
+
+    @Column(length = 500, nullable=false)
     private String source;
+
+    @Column(columnDefinition = "text", nullable=false)
     private String summary_markdown;
+
+    @Column(columnDefinition = "text", nullable=false)
     private String text_markdown;
+
+    @Column(columnDefinition = "text", nullable=false)
     private String raw;
 
     public DosingGuideline() {
