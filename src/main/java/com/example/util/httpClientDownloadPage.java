@@ -50,7 +50,7 @@ public class httpClientDownloadPage {
             inputStream.close();
             return byteArrayOutputStream.toString();
         } catch (IOException var8) {
-            // log.info("", var8); // TODO: Why is it annotated?
+            // log.info("", var8); // TODO: Why is it annotated? A:Because I haven't added the logger dependency into pom.xml...
             return null;
         }
     }
