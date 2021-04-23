@@ -5,13 +5,17 @@ import java.util.Date;
 
 /**
  * Annotated Variant Calling Format (VCF) uploaded by the users
+ * TODO: Sample content?
+ * TODO: Matched content?
+ * TODO: Log in & Register?
+ * TODO: Need to be integrated into database after fruther discussion
  *
  * @author Jie Jin
- * @author Zhejian YU TODO: Sample content? TODO: Matched content? TODO: Log in & Register? TODO:
- *     Need to be integrated into database after fruther discussion
+ * @author Zhejian YU
  */
 public class Sample {
-    @Id private int id;
+    @Id
+    private int id;
     private Date createdAt;
     private String userName;
 

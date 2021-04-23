@@ -5,8 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * See implementation for more details
+ *
  * @author Jie Jin
  * @author Yaqi-SU
  */
-public interface dosingGuidelineDao extends JpaRepository<DosingGuideline,String> {
-}
+public interface dosingGuidelineDao extends JpaRepository<DosingGuideline, String> {}

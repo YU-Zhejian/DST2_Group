@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-// import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 /**
  * To download drug label information by general-purposed crawler
+ *
  * @author Jie Jin
  * @author Yaqi-SU
  */
@@ -26,12 +26,12 @@ public class drugLabelTask {
     private drugLabelService drugLabelService;
 
     /**
-     * To download drug information by general-purposed crawler
-     * TODO: May get it renamed
+     * To download drug information by general-purposed crawler TODO: May get it renamed
+     *
      * @throws Exception TODO
      */
-    @Scheduled(initialDelay = 8000,fixedDelay = 60*60*24*7*1000)
-    public void drugLabelTask() throws Exception{
+    @Scheduled(initialDelay = 8000, fixedDelay = 60 * 60 * 24 * 7 * 1000)
+    public void drugLabelTask() throws Exception {
         // Retrieve and iterate over all drug IDs
         for (String id : drugTask.Ids) {
             // While was replaced with for by IDEA
@@ -39,11 +39,11 @@ public class drugLabelTask {
             String content = httpClientDownloadPage.getURLContent(url); // FIXME: content is quite misleading. Use jsonContent instead
             Gson gson = new Gson();
             // Map used below should not be altered
-            Map result = (Map) gson.fromJson(content, Map.class);
+            Map result = gson.fromJson(content, Map.class);
             Map data = (Map) result.get("data");
             List<Map> drugLabels = (List) data.get("drugLabels");
             // log.info("Fetch label of drug {}", id);
-            for (Map x:drugLabels) {
+            for (Map x : drugLabels) {
                 // data.stream().forEach((x) -> { replaced by IDEA
                 // log.info("Going to save label: {}", (String)x.get("id"));
                 String labelId = (String) x.get("id");
@@ -62,7 +62,7 @@ public class drugLabelTask {
                 String drugId = (String) ((Map) ((List) x.get("relatedChemicals")).get(0)).get("id");
                 DrugLabel drugLabelBean = new DrugLabel(labelId, name, objCls, alternateDrugAvailable, dosingInformation, prescribingMarkdown, source, textMarkdown, summaryMarkdown, raw, drugId);
                 this.drugLabelService.save(drugLabelBean);
-            };
+            }
         }
     }
 }

@@ -8,17 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * To download dosing guideline information by general-purposed crawler
+ *
  * @author Jie Jin
  * @author Yaqi-SU
  */
 @Component
 public class dosingGuidelineTask {
     @Autowired
-    private httpClientDownloadPage DownloadPage; // Use lowerCamelCase.
+    private httpClientDownloadPage downloadPage; // Use lowerCamelCase.
 
     @Autowired
     private dosingGuidelineService dosingGuidelineService;
@@ -26,6 +29,7 @@ public class dosingGuidelineTask {
     /**
      * To download dosing guideline information by general-purposed crawler
      * TODO: May get it renamed
+     *
      * @throws Exception TODO
      */
     @Scheduled(initialDelay = 3000, fixedDelay = 60 * 60 * 24 * 7 * 1000)
@@ -34,7 +38,7 @@ public class dosingGuidelineTask {
         String content = httpClientDownloadPage.getURLContent(url); // FIXME: content is quite misleading. Use jsonContent instead
         Gson gson = new Gson();
         // Map used below should not be altered
-        Map drugLabels = (Map) gson.fromJson(content, Map.class);
+        Map drugLabels = gson.fromJson(content, Map.class);
         List<Map> data = (List) drugLabels.get("data");
         List<String> li = new ArrayList<>();
         li.add("cpic");
@@ -42,16 +46,17 @@ public class dosingGuidelineTask {
         li.add("dpwg");
         li.add("fda");
         li.add("pro");
-        for (Map x:data) {
+        for (Map x : data) {
             // data.stream().forEach((x) -> { replaced by IDEA
             // log.info("{}", x);
-            li.forEach((source) -> {
+            for (String source : li) {
+                // li.forEach((source) -> { replaced by IDEA
                 List<Map> guidelineList = (List) x.get(source);
                 guidelineList.forEach((guideline) -> {
                     String guidelineUrl = (String) guideline.get("url");
                     this.doCrawlerDosingGuideline(guidelineUrl);
                 });
-            });
+            }
         };
 
     }
@@ -61,7 +66,7 @@ public class dosingGuidelineTask {
         String content = httpClientDownloadPage.getURLContent(url); // FIXME: content is quite misleading. Use jsonContent instead
         Gson gson = new Gson();
         // Map used below should not be altered
-        Map guideline = (Map) gson.fromJson(content, Map.class);
+        Map guideline = gson.fromJson(content, Map.class);
         Map data = (Map) guideline.get("data");
         String id = (String) data.get("id");
         String objCls = (String) data.get("objCls");

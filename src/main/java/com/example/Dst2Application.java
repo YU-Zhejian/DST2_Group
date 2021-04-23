@@ -6,6 +6,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * The crawler wrapper
+ *
  * @author Jie Jin
  * @author Yaqi-SU
  */

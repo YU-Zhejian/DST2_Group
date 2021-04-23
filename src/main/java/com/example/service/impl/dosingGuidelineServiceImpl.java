@@ -11,8 +11,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- * Query or update dosing guideline database.
- * See also: {@link drugLabelServiceImpl}
+ * Query or update dosing guideline database. See also: {@link drugLabelServiceImpl}
+ *
  * @author Jie Jin
  * @author Yaqi-SU
  */
@@ -23,6 +23,7 @@ public class dosingGuidelineServiceImpl implements dosingGuidelineService {
 
     /**
      * Update dosing guideline database
+     *
      * @param dosingGuideline Entry that needs to br inserted
      */
     @Override
@@ -31,7 +32,7 @@ public class dosingGuidelineServiceImpl implements dosingGuidelineService {
         DosingGuideline param = new DosingGuideline();
         param.setId(dosingGuideline.getId());
         List<DosingGuideline> list = this.findAll(param);
-        if(list.size()==0){
+        if (list.size() == 0) {
             this.dosingGuidelineDao.save(dosingGuideline);
             this.dosingGuidelineDao.flush();
         }
@@ -39,6 +40,7 @@ public class dosingGuidelineServiceImpl implements dosingGuidelineService {
 
     /**
      * Query dosing guideline database
+     *
      * @param dosingGuideline Entry that needs to be queried
      * @return List of found entries
      */

@@ -8,7 +8,8 @@ import javax.persistence.Id;
  * @author Zhejian YU
  */
 public class User {
-    @Id private int id;
+    @Id
+    private int id;
     private String userName;
     private String passwd;
 

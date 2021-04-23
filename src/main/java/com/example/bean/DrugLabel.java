@@ -8,10 +8,11 @@ import javax.persistence.Table;
 
 /**
  * A typical drug label template
+ *
  * @author Jie Jin
  * @author Yaqi-SU
  */
-@Proxy(lazy=false)
+@Proxy(lazy = false)
 @Entity
 @Table(name = "drug_label")
 public class DrugLabel {
@@ -28,11 +29,11 @@ public class DrugLabel {
     private String raw;
     private String drug_id;
 
-    public DrugLabel() {
-    }
-    
+    public DrugLabel() {}
+
     /**
      * Constructor for a typical drug label template
+     *
      * @param id TODO
      * @param name TODO
      * @param objCls TODO
@@ -45,7 +46,18 @@ public class DrugLabel {
      * @param raw TODO
      * @param drugId Index of the drug at {@link drug}
      */
-    public DrugLabel(String id, String name, String objCls, boolean alternateDrugAvailable, boolean dosingInformation, String prescribingMarkdown, String source, String textMarkdown, String summaryMarkdown, String raw, String drugId) {
+    public DrugLabel(
+            String id,
+            String name,
+            String objCls,
+            boolean alternateDrugAvailable,
+            boolean dosingInformation,
+            String prescribingMarkdown,
+            String source,
+            String textMarkdown,
+            String summaryMarkdown,
+            String raw,
+            String drugId) {
         this.id = id;
         this.name = name;
         this.obj_cls = objCls;
@@ -147,8 +159,4 @@ public class DrugLabel {
     public void setSummaryMarkdown(String summaryMarkdown) {
         this.summary_markdown = summaryMarkdown;
     }
-
-
 }
-
-

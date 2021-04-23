@@ -6,13 +6,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
 /**
  * A typical Dosing guideline template
+ *
  * @author Jie Jin
  * @author Yaqi-SU
  */
-@Proxy(lazy=false)
+@Proxy(lazy = false)
 @Entity
 @Table(name = "dosing_guideline")
 public class DosingGuideline {
@@ -28,11 +28,11 @@ public class DosingGuideline {
     private String text_markdown;
     private String raw;
 
-    public DosingGuideline() {
-    }
+    public DosingGuideline() {}
 
     /**
      * Constructor for a typical dosing guideline
+     *
      * @param id Index of the guideline
      * @param objCls TODO
      * @param name Name of the drug
@@ -43,7 +43,16 @@ public class DosingGuideline {
      * @param textMarkdown TODO Not shown in the website
      * @param raw TODO Not shown in the website
      */
-    public DosingGuideline(String id, String objCls, String name, boolean recommendation, String drugId, String source, String summaryMarkdown, String textMarkdown, String raw) {
+    public DosingGuideline(
+            String id,
+            String objCls,
+            String name,
+            boolean recommendation,
+            String drugId,
+            String source,
+            String summaryMarkdown,
+            String textMarkdown,
+            String raw) {
         this.id = id;
         this.obj_cls = objCls;
         this.name = name;

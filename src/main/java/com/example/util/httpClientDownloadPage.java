@@ -22,21 +22,23 @@ import java.net.URL;
 
 /**
  * General Purposed crawler to fetch website contents
+ * FIXME: Use UpperCamelCase
+ *
  * @author Jie Jin
  * @author Yaqi-SU
- * FIXME: Use UpperCamelCase
  */
 @Component
 public class httpClientDownloadPage {
     /**
      * General Purposed crawler to fetch website contents
+     *
      * @param urlString The URL (Not URLs) to get crawled
      * @return Contents returned by the server in String
      */
     public static String getURLContent(String urlString) {
         try {
             URL url = new URL(urlString);
-            HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setConnectTimeout(60000);
             urlConnection.setReadTimeout(60000);
             InputStream inputStream = urlConnection.getInputStream();

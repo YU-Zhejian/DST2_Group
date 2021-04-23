@@ -11,8 +11,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- * Query or update drug database.
- * See also: {@link drugLabelServiceImpl}
+ * Query or update drug database. See also: {@link drugLabelServiceImpl}
+ *
  * @author Jie Jin
  * @author Yaqi-SU
  */
@@ -24,6 +24,7 @@ public class drugServiceImpl implements drugService {
 
     /**
      * Update drug database
+     *
      * @param drug Entry that needs to br inserted
      */
     @Override
@@ -40,6 +41,7 @@ public class drugServiceImpl implements drugService {
 
     /**
      * Query dosing guideline database
+     *
      * @param drug Entry that needs to be queried
      * @return List of found entries
      */

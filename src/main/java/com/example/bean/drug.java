@@ -2,15 +2,18 @@ package com.example.bean;
 
 import org.hibernate.annotations.Proxy;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * A typical drug template
+ * FIXME: Class name should be UpperCamelCase
+ *
  * @author Jie Jin
  * @author Yaqi-SU
- * FIXME: Class name should be UpperCamelCase
  */
-@Proxy(lazy=false)
+@Proxy(lazy = false)
 @Entity
 @Table(name = "drug")
 public class drug {
@@ -21,10 +24,11 @@ public class drug {
     private String drug_url;
     private String Obj_cls;
 
-    public drug(){};
+    public drug() {}
 
     /**
      * Constructor for a typical drug
+     *
      * @param id Index of drug
      * @param name Name of a drug
      * @param biomarker TODO
@@ -78,5 +82,4 @@ public class drug {
     public void setObjCls(String objCls) {
         this.Obj_cls = objCls;
     }
-
 }

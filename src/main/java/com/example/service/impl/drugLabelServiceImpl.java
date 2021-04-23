@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Query or update dosing label database
+ *
  * @author Jie Jin
  * @author Yaqi-SU
  */
@@ -22,6 +23,7 @@ public class drugLabelServiceImpl implements drugLabelService {
 
     /**
      * Update dosing label database
+     *
      * @param drugLabel Entry that needs to br inserted
      */
     @Override
@@ -40,6 +42,7 @@ public class drugLabelServiceImpl implements drugLabelService {
 
     /**
      * Query dosing guideline database
+     *
      * @param drugLabel Entry that needs to be queried
      * @return List of found entries
      */
