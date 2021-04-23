@@ -1,6 +1,6 @@
 package com.example.task;
 
-import com.example.bean.drug;
+import com.example.bean.Drug;
 import com.example.service.drugService;
 import com.example.util.httpClientDownloadPage;
 import com.google.gson.Gson;
@@ -41,7 +41,7 @@ public class drugTask {
             String objCls = (String)drug.get("objCls");
             String drugUrl = (String)x.get("drugUrl");
             boolean biomarker = (Boolean)x.get("biomarker");
-            com.example.bean.drug drugBean = new drug(id, name, biomarker, drugUrl, objCls);
+            com.example.bean.Drug drugBean = new Drug(id, name, biomarker, drugUrl, objCls);
             this.drugService.save(drugBean);
 
         });

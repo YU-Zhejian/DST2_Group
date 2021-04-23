@@ -1,6 +1,6 @@
 package com.example.service.impl;
 
-import com.example.bean.drug;
+import com.example.bean.Drug;
 import com.example.dao.drugDao;
 import com.example.service.drugService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +18,12 @@ public class drugServiceImpl implements drugService {
 
     @Override
     @Transactional
-    public void save(drug drug) {
+    public void save(Drug drug) {
         //查询原有数据
-        drug param = new drug();
+        Drug param = new Drug();
         param.setId(drug.getId());
         //执行查询
-        List<drug> list = this.findAll(param);
+        List<Drug> list = this.findAll(param);
         //判断结果是否为空
         if (list.size() == 0) {
             //为空，新增或更新数据库
@@ -34,11 +34,11 @@ public class drugServiceImpl implements drugService {
     }
 
     @Override
-    public List<drug> findAll(drug drug) {
+    public List<Drug> findAll(Drug drug) {
         //设置查询条件
-        Example<drug> example = Example.of(drug);
+        Example<Drug> example = Example.of(drug);
         //执行查询
-        List<drug> list = this.drugDao.findAll(example);
+        List<Drug> list = this.drugDao.findAll(example);
         return list;
     }
 }
