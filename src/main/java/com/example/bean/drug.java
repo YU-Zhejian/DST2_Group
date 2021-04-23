@@ -27,7 +27,7 @@ public class drug {
      * Constructor for a typical drug
      * @param id Index of drug
      * @param name Name of a drug
-     * @param biomarker TODO
+     * @param biomarker Whether the drug appears on FDA Biomarker List
      * @param drugUrl URL of a drug
      * @param objCls TODO
      */
