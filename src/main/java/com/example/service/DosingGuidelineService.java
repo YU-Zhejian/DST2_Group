@@ -10,7 +10,7 @@ import java.util.List;
  * @author Jie Jin
  * @author Yaqi-SU
  */
-public interface dosingGuidelineService {
+public interface DosingGuidelineService {
     void save(DosingGuideline dosingGuideline);
     List<DosingGuideline> findAll(DosingGuideline dosingGuideline);
 }

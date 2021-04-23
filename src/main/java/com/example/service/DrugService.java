@@ -1,6 +1,6 @@
 package com.example.service;
 
-import com.example.bean.drug;
+import com.example.bean.Drug;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * @author Jie Jin
  * @author Yaqi-SU
  */
-public interface drugService {
-    void save(drug drug);
-    List<drug> findAll(drug drug);
+public interface DrugService {
+    void save(Drug drug);
+    List<Drug> findAll(Drug drug);
 }

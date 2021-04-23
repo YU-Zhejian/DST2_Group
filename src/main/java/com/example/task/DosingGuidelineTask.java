@@ -1,8 +1,8 @@
 package com.example.task;
 
 import com.example.bean.DosingGuideline;
-import com.example.service.dosingGuidelineService;
-import com.example.util.httpClientDownloadPage;
+import com.example.service.DosingGuidelineService;
+import com.example.util.HttpCrawler;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,12 +19,10 @@ import java.util.Map;
  * @author Yaqi-SU
  */
 @Component
-public class dosingGuidelineTask {
-    @Autowired
-    private httpClientDownloadPage downloadPage; // Use lowerCamelCase.
+public class DosingGuidelineTask {
 
     @Autowired
-    private dosingGuidelineService dosingGuidelineService;
+    private DosingGuidelineService dosingGuidelineService;
 
     /**
      * To download dosing guideline information by general-purposed crawler
@@ -35,10 +33,10 @@ public class dosingGuidelineTask {
     @Scheduled(initialDelay = 3000, fixedDelay = 60 * 60 * 24 * 7 * 1000)
     public void dosingGuidelineTask() throws Exception {
         String url = "https://api.pharmgkb.org/v1/site/guidelinesByDrugs"; // To return all dosing guideline information
-        String content = httpClientDownloadPage.getURLContent(url); // FIXME: content is quite misleading. Use jsonContent instead
+        String jsonContent = HttpCrawler.getURLContent(url);
         Gson gson = new Gson();
         // Map used below should not be altered
-        Map drugLabels = gson.fromJson(content, Map.class);
+        Map drugLabels = gson.fromJson(jsonContent, Map.class);
         List<Map> data = (List) drugLabels.get("data");
         List<String> li = new ArrayList<>();
         li.add("cpic");
@@ -63,10 +61,10 @@ public class dosingGuidelineTask {
 
     public void doCrawlerDosingGuideline(String url) {
         url=String.format("https://api.pharmgkb.org/v1/data%s", url); // Changed to align with previous contents
-        String content = httpClientDownloadPage.getURLContent(url); // FIXME: content is quite misleading. Use jsonContent instead
+        String jsonContent = HttpCrawler.getURLContent(url);
         Gson gson = new Gson();
         // Map used below should not be altered
-        Map guideline = gson.fromJson(content, Map.class);
+        Map guideline = gson.fromJson(jsonContent, Map.class);
         Map data = (Map) guideline.get("data");
         String id = (String) data.get("id");
         String objCls = (String) data.get("objCls");

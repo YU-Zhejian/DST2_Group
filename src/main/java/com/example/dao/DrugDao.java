@@ -1,6 +1,6 @@
 package com.example.dao;
 
-import com.example.bean.DrugLabel;
+import com.example.bean.Drug;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -9,4 +9,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Jie Jin
  * @author Yaqi-SU
  */
-public interface drugLabelDao extends JpaRepository<DrugLabel, String> {}
+public interface DrugDao extends JpaRepository<Drug, String> {}

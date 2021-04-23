@@ -2,6 +2,7 @@ package com.example.bean;
 
 import org.hibernate.annotations.Proxy;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -16,18 +17,35 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "drug_label")
 public class DrugLabel {
-    @Id
+    @Id @Column(length = 100, nullable=false)
     private String id;
+
+    @Column(length = 200, nullable=false)
     private String name;
+
+    @Column(length = 100, nullable=false)
     private String obj_cls;
+
+    @Column(length = 100, nullable=false)
+    private String drug_id;
+
     private boolean alternate_drug_available;
     private boolean dosing_information;
+
+    @Column(columnDefinition = "text", nullable=false)
     private String prescribing_markdown;
+
+    @Column(length = 100, nullable=false)
     private String source;
+
+    @Column(columnDefinition = "text", nullable=false)
     private String text_markdown;
+
+    @Column(columnDefinition = "text", nullable=false)
     private String summary_markdown;
+
+    @Column(columnDefinition = "text", nullable=false)
     private String raw;
-    private String drug_id;
 
     public DrugLabel() {}
 
@@ -44,7 +62,7 @@ public class DrugLabel {
      * @param textMarkdown TODO
      * @param summaryMarkdown TODO
      * @param raw TODO
-     * @param drugId Index of the drug at {@link drug}
+     * @param drugId Index of the drug at {@link Drug}
      */
     public DrugLabel(
             String id,

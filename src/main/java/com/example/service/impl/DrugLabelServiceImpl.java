@@ -1,8 +1,8 @@
 package com.example.service.impl;
 
 import com.example.bean.DrugLabel;
-import com.example.dao.drugLabelDao;
-import com.example.service.drugLabelService;
+import com.example.dao.DrugLabelDao;
+import com.example.service.DrugLabelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -17,9 +17,9 @@ import java.util.List;
  * @author Yaqi-SU
  */
 @Service
-public class drugLabelServiceImpl implements drugLabelService {
+public class DrugLabelServiceImpl implements DrugLabelService {
     @Autowired
-    private drugLabelDao drugLabelDao; // FIXME: Name drugLabelDao drugLabelDao is same
+    private DrugLabelDao drugLabelDao;
 
     /**
      * Update dosing label database

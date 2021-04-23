@@ -11,7 +11,7 @@ import java.util.List;
  * @author Jie Jin
  * @author Yaqi-SU
  */
-public interface drugLabelService {
+public interface DrugLabelService {
     void save(DrugLabel drugLabel);
     List<DrugLabel> findAll(DrugLabel drugLabel);
 }

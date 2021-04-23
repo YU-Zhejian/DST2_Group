@@ -1,8 +1,8 @@
 package com.example.service.impl;
 
 import com.example.bean.DosingGuideline;
-import com.example.dao.dosingGuidelineDao;
-import com.example.service.dosingGuidelineService;
+import com.example.dao.DosingGuidelineDao;
+import com.example.service.DosingGuidelineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -11,15 +11,15 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- * Query or update dosing guideline database. See also: {@link drugLabelServiceImpl}
+ * Query or update dosing guideline database. See also: {@link DrugLabelServiceImpl}
  *
  * @author Jie Jin
  * @author Yaqi-SU
  */
 @Service
-public class dosingGuidelineServiceImpl implements dosingGuidelineService {
+public class DosingGuidelineServiceImpl implements DosingGuidelineService {
     @Autowired
-    private dosingGuidelineDao dosingGuidelineDao;
+    private DosingGuidelineDao dosingGuidelineDao;
 
     /**
      * Update dosing guideline database

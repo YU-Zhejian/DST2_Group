@@ -1,8 +1,8 @@
 package com.example.task;
 
 import com.example.bean.DrugLabel;
-import com.example.service.drugLabelService;
-import com.example.util.httpClientDownloadPage;
+import com.example.service.DrugLabelService;
+import com.example.util.HttpCrawler;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,28 +18,26 @@ import java.util.Map;
  * @author Yaqi-SU
  */
 @Component
-public class drugLabelTask {
-    @Autowired
-    private httpClientDownloadPage DownloadPage;
+public class DrugLabelTask {
 
     @Autowired
-    private drugLabelService drugLabelService;
+    private DrugLabelService drugLabelService;
 
     /**
-     * To download drug information by general-purposed crawler TODO: May get it renamed
+     * To download drug information by general-purposed crawler
      *
      * @throws Exception TODO
      */
     @Scheduled(initialDelay = 8000, fixedDelay = 60 * 60 * 24 * 7 * 1000)
     public void drugLabelTask() throws Exception {
         // Retrieve and iterate over all drug IDs
-        for (String id : drugTask.Ids) {
+        for (String id : DrugTask.Ids) {
             // While was replaced with for by IDEA
             String url = String.format("https://api.pharmgkb.org/v1/site/page/drugLabels/%s?view=base", id);  // To return all drug label information
-            String content = httpClientDownloadPage.getURLContent(url); // FIXME: content is quite misleading. Use jsonContent instead
+            String jsonContent = HttpCrawler.getURLContent(url);
             Gson gson = new Gson();
             // Map used below should not be altered
-            Map result = gson.fromJson(content, Map.class);
+            Map result = gson.fromJson(jsonContent, Map.class);
             Map data = (Map) result.get("data");
             List<Map> drugLabels = (List) data.get("drugLabels");
             // log.info("Fetch label of drug {}", id);

@@ -2,6 +2,7 @@ package com.example.bean;
 
 import org.hibernate.annotations.Proxy;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -17,15 +18,30 @@ import javax.persistence.Table;
 @Table(name = "dosing_guideline")
 public class DosingGuideline {
     // FIXME: Whether to use Google standard. If so, use lowerCamelCase
-    @Id
+    @Id @Column(length = 100, nullable=false)
     private String id;
+
+    @Column(length = 100, nullable=false)
     private String obj_cls;
+
+    @Column(length = 500, nullable=false)
     private String name;
+
     private boolean recommendation;
+
+    @Column(length = 100, nullable=false)
     private String drug_id;
+
+    @Column(length = 500, nullable=false)
     private String source;
+
+    @Column(columnDefinition = "text", nullable=false)
     private String summary_markdown;
+
+    @Column(columnDefinition = "text", nullable=false)
     private String text_markdown;
+
+    @Column(columnDefinition = "text", nullable=false)
     private String raw;
 
     public DosingGuideline() {}
@@ -37,7 +53,7 @@ public class DosingGuideline {
      * @param objCls TODO
      * @param name Name of the drug
      * @param recommendation TODO
-     * @param drugId Index of the drug at {@link drug}
+     * @param drugId Index of the drug at {@link Drug}
      * @param source Produced by which group
      * @param summaryMarkdown Notes of this drug
      * @param textMarkdown TODO Not shown in the website

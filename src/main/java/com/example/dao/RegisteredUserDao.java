@@ -1,6 +1,6 @@
 package com.example.dao;
 
-import com.example.bean.User;
+import com.example.bean.RegisteredUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -8,4 +8,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Zhejian YU
  */
-public interface UserDao extends JpaRepository<User, String> {}
+public interface RegisteredUserDao extends JpaRepository<RegisteredUser, String> {}

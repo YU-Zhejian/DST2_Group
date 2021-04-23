@@ -2,13 +2,13 @@ package com.example.bean;
 
 import org.hibernate.annotations.Proxy;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
  * A typical drug template
- * FIXME: Class name should be UpperCamelCase
  *
  * @author Jie Jin
  * @author Yaqi-SU
@@ -16,31 +16,38 @@ import javax.persistence.Table;
 @Proxy(lazy = false)
 @Entity
 @Table(name = "drug")
-public class drug {
-    @Id
+public class Drug {
+    @Id @Column(length = 100, nullable=false)
     private String id;
-    private String name;
-    private boolean biomarker;
-    private String drug_url;
-    private String Obj_cls;
 
-    public drug() {}
+    @Column(length = 500, nullable=false)
+    private String name;
+
+    private boolean biomarker;
+
+    @Column(length = 100, nullable=false)
+    private String drug_url;
+
+    @Column(length = 100, nullable=false)
+    private String obj_cls;
+
+    public Drug() {}
 
     /**
      * Constructor for a typical drug
      *
      * @param id Index of drug
      * @param name Name of a drug
-     * @param biomarker TODO
+     * @param biomarker Whether the drug appears on FDA Biomarker List
      * @param drugUrl URL of a drug
      * @param objCls TODO
      */
-    public drug(String id, String name, boolean biomarker, String drugUrl, String objCls) {
+    public Drug(String id, String name, boolean biomarker, String drugUrl, String objCls) {
         this.id = id;
         this.name = name;
         this.biomarker = biomarker;
         this.drug_url = drugUrl;
-        this.Obj_cls = objCls;
+        this.obj_cls = objCls;
     }
 
     public String getId() {
@@ -76,10 +83,10 @@ public class drug {
     }
 
     public String getObjCls() {
-        return this.Obj_cls;
+        return this.obj_cls;
     }
 
     public void setObjCls(String objCls) {
-        this.Obj_cls = objCls;
+        this.obj_cls = objCls;
     }
 }
