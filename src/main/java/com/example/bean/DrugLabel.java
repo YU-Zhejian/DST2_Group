@@ -17,34 +17,37 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "drug_label")
 public class DrugLabel {
-    @Id @Column(length = 100, nullable=false)
+    @Id @Column(name = "id", length = 100, nullable=false)
     private String id;
 
-    @Column(length = 200, nullable=false)
+    @Column(name = "name", length = 200, nullable=false)
     private String name;
 
-    @Column(length = 100, nullable=false)
-    private String obj_cls;
+    @Column(name = "obj_cls", length = 100, nullable=false)
+    private String objCls;
 
-    @Column(length = 100, nullable=false)
-    private String drug_id;
+    @Column(name = "drug_id", length = 100, nullable=false)
+    private String drugId;
 
-    private boolean alternate_drug_available;
-    private boolean dosing_information;
+    @Column(name = "have_alternate_drug")
+    private boolean haveAlternateDrug;
 
-    @Column(columnDefinition = "text", nullable=false)
-    private String prescribing_markdown;
+    @Column(name = "have_dosing_information")
+    private boolean haveDosingInformation;
 
-    @Column(length = 100, nullable=false)
+    @Column(name = "prescribing_markdown", columnDefinition = "text", nullable=false)
+    private String prescribingMarkdown;
+
+    @Column(name = "source", length = 100, nullable=false)
     private String source;
 
-    @Column(columnDefinition = "text", nullable=false)
-    private String text_markdown;
+    @Column(name = "text_markdown", columnDefinition = "text", nullable=false)
+    private String textMarkdown;
 
-    @Column(columnDefinition = "text", nullable=false)
-    private String summary_markdown;
+    @Column(name = "summary_markdown", columnDefinition = "text", nullable=false)
+    private String summaryMarkdown;
 
-    @Column(columnDefinition = "text", nullable=false)
+    @Column(name = "raw", columnDefinition = "text", nullable=false)
     private String raw;
 
     public DrugLabel() {}
@@ -52,24 +55,24 @@ public class DrugLabel {
     /**
      * Constructor for a typical drug label template
      *
-     * @param id TODO
-     * @param name TODO
+     * @param id Index of the label
+     * @param name Index of the label TODO: Have it removed? Or errors in DrugLabelTask?
      * @param objCls TODO
-     * @param alternateDrugAvailable TODO
-     * @param dosingInformation TODO
+     * @param haveAlternateDrug TODO
+     * @param haveDosingInformation TODO
      * @param prescribingMarkdown TODO
-     * @param source TODO
+     * @param source By which governmental organization this label is approved
      * @param textMarkdown TODO
      * @param summaryMarkdown TODO
-     * @param raw TODO
+     * @param raw This label in JSON format
      * @param drugId Index of the drug at {@link Drug}
      */
     public DrugLabel(
             String id,
             String name,
             String objCls,
-            boolean alternateDrugAvailable,
-            boolean dosingInformation,
+            boolean haveAlternateDrug,
+            boolean haveDosingInformation,
             String prescribingMarkdown,
             String source,
             String textMarkdown,
@@ -78,23 +81,23 @@ public class DrugLabel {
             String drugId) {
         this.id = id;
         this.name = name;
-        this.obj_cls = objCls;
-        this.alternate_drug_available = alternateDrugAvailable;
-        this.dosing_information = dosingInformation;
-        this.prescribing_markdown = prescribingMarkdown;
+        this.objCls = objCls;
+        this.haveAlternateDrug = haveAlternateDrug;
+        this.haveDosingInformation = haveDosingInformation;
+        this.prescribingMarkdown = prescribingMarkdown;
         this.source = source;
-        this.text_markdown = textMarkdown;
-        this.summary_markdown = summaryMarkdown;
+        this.textMarkdown = textMarkdown;
+        this.summaryMarkdown = summaryMarkdown;
         this.raw = raw;
-        this.drug_id = drugId;
+        this.drugId = drugId;
     }
 
     public String getDrugId() {
-        return this.drug_id;
+        return this.drugId;
     }
 
     public void setDrugId(String drugId) {
-        this.drug_id = drugId;
+        this.drugId = drugId;
     }
 
     public String getRaw() {
@@ -105,7 +108,6 @@ public class DrugLabel {
         this.raw = raw;
     }
 
-    @Id
     public String getId() {
         return this.id;
     }
@@ -123,35 +125,35 @@ public class DrugLabel {
     }
 
     public String getObjCls() {
-        return this.obj_cls;
+        return this.objCls;
     }
 
     public void setObjCls(String objCls) {
-        this.obj_cls = objCls;
+        this.objCls = objCls;
     }
 
     public boolean isAlternateDrugAvailable() {
-        return this.alternate_drug_available;
+        return this.haveAlternateDrug;
     }
 
     public void setAlternateDrugAvailable(boolean alternateDrugAvailable) {
-        this.alternate_drug_available = alternateDrugAvailable;
+        this.haveAlternateDrug = alternateDrugAvailable;
     }
 
     public boolean isDosingInformation() {
-        return this.dosing_information;
+        return this.haveDosingInformation;
     }
 
     public void setDosingInformation(boolean dosingInformation) {
-        this.dosing_information = dosingInformation;
+        this.haveDosingInformation = dosingInformation;
     }
 
     public String getPrescribingMarkdown() {
-        return this.prescribing_markdown;
+        return this.prescribingMarkdown;
     }
 
     public void setPrescribingMarkdown(String prescribingMarkdown) {
-        this.prescribing_markdown = prescribingMarkdown;
+        this.prescribingMarkdown = prescribingMarkdown;
     }
 
     public String getSource() {
@@ -163,18 +165,18 @@ public class DrugLabel {
     }
 
     public String getTextMarkdown() {
-        return this.text_markdown;
+        return this.textMarkdown;
     }
 
     public void setTextMarkdown(String textMarkdown) {
-        this.text_markdown = textMarkdown;
+        this.textMarkdown = textMarkdown;
     }
 
     public String getSummaryMarkdown() {
-        return this.summary_markdown;
+        return this.summaryMarkdown;
     }
 
     public void setSummaryMarkdown(String summaryMarkdown) {
-        this.summary_markdown = summaryMarkdown;
+        this.summaryMarkdown = summaryMarkdown;
     }
 }

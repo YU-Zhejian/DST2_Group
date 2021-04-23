@@ -4,6 +4,8 @@ import com.example.bean.DrugLabel;
 import com.example.service.DrugLabelService;
 import com.example.util.HttpCrawler;
 import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -20,6 +22,8 @@ import java.util.Map;
 @Component
 public class DrugLabelTask {
 
+    private final Logger log = LoggerFactory.getLogger(DrugLabelTask.class);
+
     @Autowired
     private DrugLabelService drugLabelService;
 
@@ -32,7 +36,7 @@ public class DrugLabelTask {
     public void drugLabelTask() throws Exception {
         // Retrieve and iterate over all drug IDs
         for (String id : DrugTask.Ids) {
-            // While was replaced with for by IDEA
+            log.info("Start fetching drug labels");
             String url = String.format("https://api.pharmgkb.org/v1/site/page/drugLabels/%s?view=base", id);  // To return all drug label information
             String jsonContent = HttpCrawler.getURLContent(url);
             Gson gson = new Gson();
@@ -40,11 +44,9 @@ public class DrugLabelTask {
             Map result = gson.fromJson(jsonContent, Map.class);
             Map data = (Map) result.get("data");
             List<Map> drugLabels = (List) data.get("drugLabels");
-            // log.info("Fetch label of drug {}", id);
             for (Map x : drugLabels) {
-                // data.stream().forEach((x) -> { replaced by IDEA
-                // log.info("Going to save label: {}", (String)x.get("id"));
                 String labelId = (String) x.get("id");
+                log.info("Going to save label: {} for drug {}", labelId, id);
                 String name = (String) x.get("id");
                 String objCls = (String) x.get("objCls");
                 boolean alternateDrugAvailable = (Boolean) x.get("alternateDrugAvailable");
@@ -62,5 +64,6 @@ public class DrugLabelTask {
                 this.drugLabelService.save(drugLabelBean);
             }
         }
+        log.info("Finished fetching drug labels");
     }
 }
