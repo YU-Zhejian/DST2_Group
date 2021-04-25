@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Proxy(lazy = false)
 @Entity
 @Table(name = "drug")
-public class drug {
+public class Drug {
     @Id @Column(length = 100, nullable=false)
     private String id;
 
@@ -22,9 +22,9 @@ public class drug {
     @Column(length = 100, nullable=false)
     private String Obj_cls;
 
-    public drug(){}
+    public Drug(){}
 
-    public drug(String id, String name, boolean biomarker, String drugUrl, String objCls) {
+    public Drug(String id, String name, boolean biomarker, String drugUrl, String objCls) {
         this.id = id;
         this.name = name;
         this.biomarker = biomarker;
