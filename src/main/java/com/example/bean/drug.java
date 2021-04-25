@@ -2,34 +2,53 @@ package com.example.bean;
 
 import org.hibernate.annotations.Proxy;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+/**
+ * A typical drug template
+ *
+ * @author Jie Jin
+ * @author Yaqi-SU
+ */
 @Proxy(lazy = false)
 @Entity
 @Table(name = "drug")
 public class Drug {
-    @Id @Column(length = 100, nullable=false)
-    private String id;
+    @Id @Column(name = "id", length = 100, nullable=false)
+    private String id; // TODO: Consider naming it to drugId?
 
-    @Column(length = 500, nullable=false)
+    @Column(name = "name", length = 500, nullable=false)
     private String name;
 
-    private boolean biomarker;
+    @Column(name = "is_biomarker")
+    private boolean isBiomarker;
 
-    @Column(length = 100, nullable=false)
-    private String drug_url;
+    @Column(name = "drug_url", length = 100, nullable=false)
+    private String drugUrl;
 
-    @Column(length = 100, nullable=false)
-    private String Obj_cls;
+    @Column(name = "obj_cls", length = 100, nullable=false)
+    private String objCls;
 
-    public Drug(){}
+    public Drug() {}
 
-    public Drug(String id, String name, boolean biomarker, String drugUrl, String objCls) {
+    /**
+     * Constructor for a typical drug
+     *
+     * @param id Index of drug
+     * @param name Name of a drug
+     * @param isBiomarker Whether the drug appears on FDA Biomarker List
+     * @param drugUrl URL of a drug without leading https://api.pharmgkb.org/v1/data
+     * @param objCls TODO
+     */
+    public Drug(String id, String name, boolean isBiomarker, String drugUrl, String objCls) {
         this.id = id;
         this.name = name;
-        this.biomarker = biomarker;
-        this.drug_url = drugUrl;
-        this.Obj_cls = objCls;
+        this.isBiomarker = isBiomarker;
+        this.drugUrl = drugUrl;
+        this.objCls = objCls;
     }
 
     public String getId() {
@@ -49,27 +68,26 @@ public class Drug {
     }
 
     public boolean isBiomarker() {
-        return this.biomarker;
+        return this.isBiomarker;
     }
 
     public void setBiomarker(boolean biomarker) {
-        this.biomarker = biomarker;
+        this.isBiomarker = biomarker;
     }
 
     public String getDrugUrl() {
-        return this.drug_url;
+        return this.drugUrl;
     }
 
     public void setDrugUrl(String drugUrl) {
-        this.drug_url = drugUrl;
+        this.drugUrl = drugUrl;
     }
 
     public String getObjCls() {
-        return this.Obj_cls;
+        return this.objCls;
     }
 
     public void setObjCls(String objCls) {
-        this.Obj_cls = objCls;
+        this.objCls = objCls;
     }
-
 }

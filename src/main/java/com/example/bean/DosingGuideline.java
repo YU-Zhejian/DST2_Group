@@ -2,50 +2,82 @@ package com.example.bean;
 
 import org.hibernate.annotations.Proxy;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+/**
+ * A typical Dosing guideline template
+ *
+ * @author Jie Jin
+ * @author Yaqi-SU
+ */
 @Proxy(lazy = false)
 @Entity
 @Table(name = "dosing_guideline")
 public class DosingGuideline {
-    @Id @Column(length = 100, nullable=false)
+    // FIXME: Whether to use Google standard. If so, use lowerCamelCase
+    @Id @Column(name = "id", length = 100, nullable=false)
     private String id;
 
-    @Column(length = 100, nullable=false)
-    private String obj_cls;
+    @Column(name = "obj_cls", length = 100, nullable=false)
+    private String objCls;
 
-    @Column(length = 500, nullable=false)
+    @Column(name = "name", length = 500, nullable=false)
     private String name;
 
-    private boolean recommendation;
+    @Column(name = "is_recommendation")
+    private boolean isRecommendation;
 
-    @Column(length = 100, nullable=false)
-    private String drug_id;
+    @Column(name = "drug_id", length = 100, nullable=false)
+    private String drugId;
 
-    @Column(length = 500, nullable=false)
+    @Column(name = "source", length = 500, nullable=false)
     private String source;
 
-    @Column(columnDefinition = "text", nullable=false)
-    private String summary_markdown;
+    @Column(name = "text_markdown", columnDefinition = "text", nullable=false)
+    private String textMarkdown;
 
-    @Column(columnDefinition = "text", nullable=false)
-    private String text_markdown;
+    @Column(name = "summary_markdown", columnDefinition = "text", nullable=false)
+    private String summaryMarkdown;
 
-    @Column(columnDefinition = "text", nullable=false)
+    @Column(name = "raw",columnDefinition = "text", nullable=false)
     private String raw;
 
-    public DosingGuideline() {
-    }
+    public DosingGuideline() {}
 
-    public DosingGuideline(String id, String objCls, String name, boolean recommendation, String drugId, String source, String summaryMarkdown, String textMarkdown, String raw) {
+    /**
+     * Constructor for a typical dosing guideline
+     *
+     * @param id Index of the guideline
+     * @param objCls TODO
+     * @param name Name of the dofing guideline
+     * @param isRecommendation TODO
+     * @param drugId Index of the drug at {@link Drug}
+     * @param source By which hospital & institute & research group this guideline is purposed
+     * @param summaryMarkdown TODO
+     * @param textMarkdown TODO Not shown in the website
+     * @param raw This guideline in JSON format
+     */
+    public DosingGuideline(
+            String id,
+            String objCls,
+            String name,
+            boolean isRecommendation,
+            String drugId,
+            String source,
+            String summaryMarkdown,
+            String textMarkdown,
+            String raw) {
         this.id = id;
-        this.obj_cls = objCls;
+        this.objCls = objCls;
         this.name = name;
-        this.recommendation = recommendation;
-        this.drug_id = drugId;
+        this.isRecommendation = isRecommendation;
+        this.drugId = drugId;
         this.source = source;
-        this.summary_markdown = summaryMarkdown;
-        this.text_markdown = textMarkdown;
+        this.textMarkdown = summaryMarkdown;
+        this.summaryMarkdown = textMarkdown;
         this.raw = raw;
     }
 
@@ -66,11 +98,11 @@ public class DosingGuideline {
     }
 
     public String getObjCls() {
-        return this.obj_cls;
+        return this.objCls;
     }
 
     public void setObjCls(String objCls) {
-        this.obj_cls = objCls;
+        this.objCls = objCls;
     }
 
     public String getName() {
@@ -82,19 +114,19 @@ public class DosingGuideline {
     }
 
     public boolean isRecommendation() {
-        return this.recommendation;
+        return this.isRecommendation;
     }
 
     public void setRecommendation(boolean recommendation) {
-        this.recommendation = recommendation;
+        this.isRecommendation = recommendation;
     }
 
     public String getDrugId() {
-        return this.drug_id;
+        return this.drugId;
     }
 
     public void setDrugId(String drugId) {
-        this.drug_id = drugId;
+        this.drugId = drugId;
     }
 
     public String getSource() {
@@ -106,18 +138,18 @@ public class DosingGuideline {
     }
 
     public String getSummaryMarkdown() {
-        return this.summary_markdown;
+        return this.textMarkdown;
     }
 
     public void setSummaryMarkdown(String summaryMarkdown) {
-        this.summary_markdown = summaryMarkdown;
+        this.textMarkdown = summaryMarkdown;
     }
 
     public String getTextMarkdown() {
-        return this.text_markdown;
+        return this.summaryMarkdown;
     }
 
     public void setTextMarkdown(String textMarkdown) {
-        this.text_markdown = textMarkdown;
+        this.summaryMarkdown = textMarkdown;
     }
 }

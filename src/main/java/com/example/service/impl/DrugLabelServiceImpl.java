@@ -1,8 +1,8 @@
 package com.example.service.impl;
 
 import com.example.bean.DrugLabel;
-import com.example.dao.drugLabelDao;
-import com.example.service.drugLabelService;
+import com.example.dao.DrugLabelDao;
+import com.example.service.DrugLabelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -10,35 +10,47 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * Query or update dosing label database
+ *
+ * @author Jie Jin
+ * @author Yaqi-SU
+ */
 @Service
-public class drugLabelServiceImpl implements drugLabelService {
+public class DrugLabelServiceImpl implements DrugLabelService {
     @Autowired
-    private drugLabelDao drugLabelDao;
+    private DrugLabelDao drugLabelDao;
 
+    /**
+     * Update dosing label database
+     *
+     * @param drugLabel Entry that needs to br inserted
+     */
     @Override
     @Transactional
     public void save(DrugLabel drugLabel) {
-        //查询原有数据
+        // Query existing data
         DrugLabel param = new DrugLabel();
         param.setId(drugLabel.getId());
-        //执行查询
         List<DrugLabel> list = this.findAll(param);
-        //判断结果是否为空
         if (list.size() == 0) {
-            //为空，新增或更新数据库
+            // Update if no items found
             this.drugLabelDao.save(drugLabel);
             this.drugLabelDao.flush();
         }
-
     }
 
+    /**
+     * Query dosing guideline database
+     *
+     * @param drugLabel Entry that needs to be queried
+     * @return List of found entries
+     */
     @Override
     public List<DrugLabel> findAll(DrugLabel drugLabel) {
-        //设置查询条件
+        // Setting querying protocol
         Example<DrugLabel> example = Example.of(drugLabel);
-        //执行查询
-        List<DrugLabel> list = this.drugLabelDao.findAll(example);
-        return list;
+        // Executing querying
+        return this.drugLabelDao.findAll(example); // Simplified by IDEA
     }
 }
-
