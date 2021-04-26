@@ -22,20 +22,16 @@ public class SampleServiceImpl implements SampleService {
     private SampleDao sampleDao;
 
     /**
-     * Update drug database
+     * Update sample database. It supports insert only
      *
-     * @param sample Entry that needs to br inserted
+     * @param sample Entry that needs to be inserted
      */
     @Override
     @Transactional
     public void save(Sample sample) {
-        Sample param = new Sample();
-        param.setId(sample.getId());
-        List<Sample> list = this.findAll(sample);
-        if (list.size() == 0) {
-            this.sampleDao.save(sample);
-            this.sampleDao.flush();
-        }
+        sample.setId(Long.MAX_VALUE); // Remove id to make it insert instead of update
+        this.sampleDao.save(sample);
+        this.sampleDao.flush();
     }
 
     /**

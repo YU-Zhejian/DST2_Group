@@ -64,7 +64,7 @@ public class DosingGuidelineTask {
     }
 
     public void doCrawlerDosingGuideline(String url) {
-        log.info("Fetching doding guidelines at {}", url);
+        log.info("Fetching dosing guidelines at {}", url);
         url=String.format("https://api.pharmgkb.org/v1/data%s", url); // Changed to align with previous contents
         String jsonContent = HttpCrawler.getURLContent(url);
         Gson gson = new Gson();

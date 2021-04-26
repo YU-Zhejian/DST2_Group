@@ -24,7 +24,7 @@ import java.util.Date;
 @Table(name = "registered_user")
 public class RegisteredUser {
     @Id @Column(name = "id", length = 100, nullable=false)
-    private String id;
+    private long id;
 
     @Column(name = "user_name", length = 100, nullable=false)
     private String userName;
@@ -54,7 +54,7 @@ public class RegisteredUser {
 
     /**
      * Constructor for Annotated Variant Calling Format (VCF) uploaded by the users
-     * @param id Index inside database
+     * @param id Index of the user inside database
      * @param userName Name of the user
      * @param userPasswd Password of the user. Not implemented in this version
      * @param encryptAlgorithm Encrypt method of the password. Not implemented in this version
@@ -64,7 +64,7 @@ public class RegisteredUser {
      * @param expireDate Date when the user password expires. Not implemented in this version
      * @param isActive Whether the user is active. Not implemented in this version
      */
-    public RegisteredUser(String id, String userName, String userPasswd, String encryptAlgorithm, Date lastChangeDate, Date minAge, Date maxAge, Date expireDate, boolean isActive) {
+    public RegisteredUser(long id, String userName, String userPasswd, String encryptAlgorithm, Date lastChangeDate, Date minAge, Date maxAge, Date expireDate, boolean isActive) {
         this.id = id;
         this.userName = userName;
         this.userPasswd = userPasswd;
@@ -76,11 +76,11 @@ public class RegisteredUser {
         this.isActive = isActive;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 

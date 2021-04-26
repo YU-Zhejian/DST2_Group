@@ -50,7 +50,7 @@ public class DosingGuideline {
     /**
      * Constructor for a typical dosing guideline
      *
-     * @param id Index of the guideline
+     * @param id Index of the guideline, provided by upstream database
      * @param objCls TODO
      * @param name Name of the dofing guideline
      * @param isRecommendation TODO

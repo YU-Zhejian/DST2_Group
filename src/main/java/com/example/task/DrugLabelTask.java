@@ -34,9 +34,9 @@ public class DrugLabelTask {
      */
     @Scheduled(initialDelay = 8000, fixedDelay = 60 * 60 * 24 * 7 * 1000)
     public void drugLabelTask() throws Exception {
+        log.info("Start fetching drug labels");
         // Retrieve and iterate over all drug IDs
         for (String id : DrugTask.Ids) {
-            log.info("Start fetching drug labels");
             String url = String.format("https://api.pharmgkb.org/v1/site/page/drugLabels/%s?view=base", id);  // To return all drug label information
             String jsonContent = HttpCrawler.getURLContent(url);
             Gson gson = new Gson();
