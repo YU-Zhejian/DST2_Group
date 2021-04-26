@@ -14,7 +14,7 @@
     <name>dst2</name>
     <description>Demo project for Spring Boot</description>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -40,7 +40,8 @@
             <version>2.6</version>
         </dependency>
 
-        <!-- slf4j dependency from https://www.bbsmax.com/A/amd07N2X5g/ accessed 24/04/2021 -->
+        <!-- slf4j dependency from https://www.bbsmax.com/A/amd07N2X5g/ accessed 24/04/2021
+         Following two dependencies will translate JCL to SLF4J-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
@@ -53,22 +54,18 @@
             <version>1.7.30</version>
         </dependency>
 
+        <!-- logback is te successor of log4j and is suggested by Spring Reference
+         Following dependencies from https://blog.csdn.net/qq_27870421/article/details/87998941 accessed 27/04/2021 -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.30</version>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>1.2.3</version>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.14.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.14.1</version>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
         </dependency>
 
         <dependency>
@@ -104,6 +101,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- https://www.cnblogs.com/sunylat/p/13339507.html accessed 27/04/2021-->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
         </dependency>
 
 

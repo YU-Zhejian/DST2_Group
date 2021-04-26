@@ -37,7 +37,7 @@ public class Drug {
     /**
      * Constructor for a typical drug
      *
-     * @param id Index of drug
+     * @param id Index of drug, provided by upstream database
      * @param name Name of a drug
      * @param isBiomarker Whether the drug appears on FDA Biomarker List
      * @param drugUrl URL of a drug without leading https://api.pharmgkb.org/v1/data

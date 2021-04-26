@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- * The crawler wrapper
+ * The crawler wrapper. This is the root class of this application, and should be placed above other packages (Spring Boot Reference, v2.0..RELEASE).
  *
  * @author Jie Jin
  * @author Yaqi-SU

@@ -55,7 +55,7 @@ public class DrugLabel {
     /**
      * Constructor for a typical drug label template
      *
-     * @param id Index of the label
+     * @param id Index of the label, provided by upstream database
      * @param name Index of the label TODO: Have it removed? Or errors in DrugLabelTask?
      * @param objCls TODO
      * @param haveAlternateDrug TODO
