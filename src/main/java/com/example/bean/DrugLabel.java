@@ -136,16 +136,16 @@ public class DrugLabel {
         return this.haveAlternateDrug;
     }
 
-    public void setAlternateDrugAvailable(boolean alternateDrugAvailable) {
-        this.haveAlternateDrug = alternateDrugAvailable;
+    public void setHaveAlternateDrug(boolean haveAlternateDrug) {
+        this.haveAlternateDrug = haveAlternateDrug;
     }
 
     public boolean isDosingInformation() {
         return this.haveDosingInformation;
     }
 
-    public void setDosingInformation(boolean dosingInformation) {
-        this.haveDosingInformation = dosingInformation;
+    public void setHaveDosingInformation(boolean haveDosingInformation) {
+        this.haveDosingInformation = haveDosingInformation;
     }
 
     public String getPrescribingMarkdown() {
