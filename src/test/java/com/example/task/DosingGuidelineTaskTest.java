@@ -8,12 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Test for the Drug Crawler
+ * Test for the DosingGuideline Crawler
  *
  * @author Yihui-CEN
  */
@@ -21,18 +19,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Dst2Application.class)
-public class DrugTaskTest {
+public class DosingGuidelineTaskTest {
 
-    private final Logger log = LoggerFactory.getLogger(DrugTaskTest.class);
+    private final Logger log = LoggerFactory.getLogger(DosingGuidelineTaskTest.class);
 
     @Autowired
-    private DrugTask drugTask;
+    private DosingGuidelineTask dosingGuidelineTask;
 
     @Test
     public void test() throws Exception {
         log.info("test called");
 
-        drugTask.drugTask();
+        dosingGuidelineTask.dosingGuidelineTask();
 
         log.info("test passed");
     }
