@@ -32,6 +32,8 @@ public class DosingGuidelineServiceImplTest {
     private DosingGuidelineServiceImpl dosingGuidelineServiceImpl;
 
     @Test
+    @Transactional
+    @Rollback
     public void test() {
         log.info("test called");
         DosingGuideline dosingGuideline1 = new DosingGuideline();
