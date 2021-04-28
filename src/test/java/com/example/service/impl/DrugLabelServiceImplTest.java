@@ -65,6 +65,8 @@ public class DrugLabelServiceImplTest {
         druglabelServiceImpl.save(drugLabel1);
         druglabelServiceImpl.save(drugLabel2);
 
+        System.out.println(druglabelServiceImpl.findAll(drugLabel1 ).get(0).getId());
+
         assertAll(
                 () -> assertEquals(drugLabel1.getId(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getId()),
                 () -> assertEquals(drugLabel1.getName(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getName()),

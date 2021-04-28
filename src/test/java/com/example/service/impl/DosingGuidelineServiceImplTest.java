@@ -32,8 +32,6 @@ public class DosingGuidelineServiceImplTest {
     private DosingGuidelineServiceImpl dosingGuidelineServiceImpl;
 
     @Test
-    @Transactional
-    @Rollback
     public void test() {
         log.info("test called");
         DosingGuideline dosingGuideline1 = new DosingGuideline();
@@ -61,15 +59,17 @@ public class DosingGuidelineServiceImplTest {
         dosingGuidelineServiceImpl.save(dosingGuideline1);
         dosingGuidelineServiceImpl.save(dosingGuideline2);
 
-        assertAll(
+        System.out.println(dosingGuidelineServiceImpl.findAll(dosingGuideline1));
+
+         assertAll(
                 () -> assertEquals(dosingGuideline1.getId(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getId()),
                 () -> assertEquals(dosingGuideline1.getName(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getName()),
+                () -> assertEquals(dosingGuideline1.getObjCls(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getObjCls()),
                 () -> assertEquals(dosingGuideline1.getDrugId(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getDrugId()),
                 () -> assertEquals(dosingGuideline1.getRaw(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getRaw()),
                 () -> assertEquals(dosingGuideline1.getSource(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getSource()),
                 () -> assertEquals(dosingGuideline1.getSummaryMarkdown(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getSummaryMarkdown()),
                 () -> assertEquals(dosingGuideline1.getTextMarkdown(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getTextMarkdown()),
-                () -> assertEquals(dosingGuideline1.getObjCls(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getObjCls()),
                 () -> assertEquals(dosingGuideline1.isRecommendation(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).isRecommendation())
         );
 

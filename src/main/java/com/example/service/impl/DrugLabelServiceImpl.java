@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- * Query or update dosing label database
+ * Query or update drug label database
  *
  * @author Jie Jin
  * @author Yaqi-SU
@@ -22,7 +22,7 @@ public class DrugLabelServiceImpl implements DrugLabelService {
     private DrugLabelDao drugLabelDao;
 
     /**
-     * Update dosing label database
+     * Update drug label database
      *
      * @param drugLabel Entry that needs to br inserted
      */
@@ -41,7 +41,7 @@ public class DrugLabelServiceImpl implements DrugLabelService {
     }
 
     /**
-     * Query dosing guideline database
+     * Query drug label database
      *
      * @param drugLabel Entry that needs to be queried
      * @return List of found entries

@@ -40,7 +40,7 @@ public class DrugServiceImpl implements DrugService {
     }
 
     /**
-     * Query dosing guideline database
+     * Query drug database
      *
      * @param drug Entry that needs to be queried
      * @return List of found entries
