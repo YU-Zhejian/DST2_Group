@@ -2,6 +2,7 @@ package com.example.service.impl;
 
 import com.example.Dst2Application;
 import com.example.bean.DrugLabel;
+import com.example.dao.DrugLabelDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -30,6 +31,9 @@ public class DrugLabelServiceImplTest {
 
     @Autowired
     private DrugLabelServiceImpl druglabelServiceImpl;
+
+    @Autowired
+    private DrugLabelDao drugLabelDao;
 
     @Test
     @Transactional
@@ -65,34 +69,32 @@ public class DrugLabelServiceImplTest {
         druglabelServiceImpl.save(drugLabel1);
         druglabelServiceImpl.save(drugLabel2);
 
-        System.out.println(druglabelServiceImpl.findAll(drugLabel1 ).get(0).getId());
-
         assertAll(
-                () -> assertEquals(drugLabel1.getId(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getId()),
-                () -> assertEquals(drugLabel1.getName(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getName()),
-                () -> assertEquals(drugLabel1.getDrugId(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getDrugId()),
-                () -> assertEquals(drugLabel1.getRaw(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getRaw()),
-                () -> assertEquals(drugLabel1.getPrescribingMarkdown(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getPrescribingMarkdown()),
-                () -> assertEquals(drugLabel1.getSource(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getSource()),
-                () -> assertEquals(drugLabel1.getSummaryMarkdown(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getSummaryMarkdown()),
-                () -> assertEquals(drugLabel1.getTextMarkdown(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getTextMarkdown()),
-                () -> assertEquals(drugLabel1.getObjCls(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getObjCls()),
-                () -> assertEquals(drugLabel1.isAlternateDrugAvailable(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).isAlternateDrugAvailable()),
-                () -> assertEquals(drugLabel1.isDosingInformation(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).isDosingInformation())
+                () -> assertEquals(drugLabel1.getId(), drugLabelDao.getOne("1").getId()),
+                () -> assertEquals(drugLabel1.getName(), drugLabelDao.getOne("1").getName()),
+                () -> assertEquals(drugLabel1.getDrugId(), drugLabelDao.getOne("1").getDrugId()),
+                () -> assertEquals(drugLabel1.getRaw(), drugLabelDao.getOne("1").getRaw()),
+                () -> assertEquals(drugLabel1.getPrescribingMarkdown(), drugLabelDao.getOne("1").getPrescribingMarkdown()),
+                () -> assertEquals(drugLabel1.getSource(), drugLabelDao.getOne("1").getSource()),
+                () -> assertEquals(drugLabel1.getSummaryMarkdown(), drugLabelDao.getOne("1").getSummaryMarkdown()),
+                () -> assertEquals(drugLabel1.getTextMarkdown(), drugLabelDao.getOne("1").getTextMarkdown()),
+                () -> assertEquals(drugLabel1.getObjCls(), drugLabelDao.getOne("1").getObjCls()),
+                () -> assertEquals(drugLabel1.isAlternateDrugAvailable(), drugLabelDao.getOne("1").isAlternateDrugAvailable()),
+                () -> assertEquals(drugLabel1.isDosingInformation(), drugLabelDao.getOne("1").isDosingInformation())
         );
 
         assertAll(
-                () -> assertNotEquals(drugLabel2.getId(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getId()),
-                () -> assertNotEquals(drugLabel2.getName(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getName()),
-                () -> assertNotEquals(drugLabel2.getDrugId(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getDrugId()),
-                () -> assertNotEquals(drugLabel2.getRaw(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getRaw()),
-                () -> assertNotEquals(drugLabel2.getPrescribingMarkdown(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getPrescribingMarkdown()),
-                () -> assertNotEquals(drugLabel2.getSource(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getSource()),
-                () -> assertNotEquals(drugLabel2.getSummaryMarkdown(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getSummaryMarkdown()),
-                () -> assertNotEquals(drugLabel2.getTextMarkdown(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getTextMarkdown()),
-                () -> assertNotEquals(drugLabel2.getObjCls(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).getObjCls()),
-                () -> assertNotEquals(drugLabel2.isAlternateDrugAvailable(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).isAlternateDrugAvailable()),
-                () -> assertNotEquals(drugLabel2.isDosingInformation(), druglabelServiceImpl.findAll(drugLabel1 ).get(0).isDosingInformation())
+                () -> assertNotEquals(drugLabel2.getId(), drugLabelDao.getOne("1").getId()),
+                () -> assertNotEquals(drugLabel2.getName(), drugLabelDao.getOne("1").getName()),
+                () -> assertNotEquals(drugLabel2.getDrugId(), drugLabelDao.getOne("1").getDrugId()),
+                () -> assertNotEquals(drugLabel2.getRaw(), drugLabelDao.getOne("1").getRaw()),
+                () -> assertNotEquals(drugLabel2.getPrescribingMarkdown(), drugLabelDao.getOne("1").getPrescribingMarkdown()),
+                () -> assertNotEquals(drugLabel2.getSource(), drugLabelDao.getOne("1").getSource()),
+                () -> assertNotEquals(drugLabel2.getSummaryMarkdown(), drugLabelDao.getOne("1").getSummaryMarkdown()),
+                () -> assertNotEquals(drugLabel2.getTextMarkdown(), drugLabelDao.getOne("1").getTextMarkdown()),
+                () -> assertNotEquals(drugLabel2.getObjCls(), drugLabelDao.getOne("1").getObjCls()),
+                () -> assertNotEquals(drugLabel2.isAlternateDrugAvailable(), drugLabelDao.getOne("1").isAlternateDrugAvailable()),
+                () -> assertNotEquals(drugLabel2.isDosingInformation(), drugLabelDao.getOne("1").isDosingInformation())
         );
 
         log.info("test passed");

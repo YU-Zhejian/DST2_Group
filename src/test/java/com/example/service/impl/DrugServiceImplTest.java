@@ -2,6 +2,7 @@ package com.example.service.impl;
 
 import com.example.Dst2Application;
 import com.example.bean.Drug;
+import com.example.dao.DrugDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -31,6 +32,9 @@ public class DrugServiceImplTest {
     @Autowired
     private DrugServiceImpl drugServiceImpl;
 
+    @Autowired
+    private DrugDao drugDao;
+
     @Test
     @Transactional
     @Rollback
@@ -54,19 +58,19 @@ public class DrugServiceImplTest {
         drugServiceImpl.save(drug2);
 
         assertAll(
-                () -> assertEquals(drug1.getId(), drugServiceImpl.findAll(drug1).get(0).getId()),
-                () -> assertEquals(drug1.getName(), drugServiceImpl.findAll(drug1).get(0).getName()),
-                () -> assertEquals(drug1.isBiomarker(), drugServiceImpl.findAll(drug1).get(0).isBiomarker()),
-                () -> assertEquals(drug1.getDrugUrl(), drugServiceImpl.findAll(drug1).get(0).getDrugUrl()),
-                () -> assertEquals(drug1.getObjCls(), drugServiceImpl.findAll(drug1).get(0).getObjCls())
+                () -> assertEquals(drug1.getId(), drugDao.getOne("1").getId()),
+                () -> assertEquals(drug1.getName(), drugDao.getOne("1").getName()),
+                () -> assertEquals(drug1.isBiomarker(), drugDao.getOne("1").isBiomarker()),
+                () -> assertEquals(drug1.getDrugUrl(), drugDao.getOne("1").getDrugUrl()),
+                () -> assertEquals(drug1.getObjCls(), drugDao.getOne("1").getObjCls())
         );
 
         assertAll(
-                () -> assertNotEquals(drug2.getId(), drugServiceImpl.findAll(drug1).get(0).getId()),
-                () -> assertNotEquals(drug2.getName(), drugServiceImpl.findAll(drug1).get(0).getName()),
-                () -> assertNotEquals(drug2.isBiomarker(), drugServiceImpl.findAll(drug1).get(0).isBiomarker()),
-                () -> assertNotEquals(drug2.getDrugUrl(), drugServiceImpl.findAll(drug1).get(0).getDrugUrl()),
-                () -> assertNotEquals(drug2.getObjCls(), drugServiceImpl.findAll(drug1).get(0).getObjCls())
+                () -> assertNotEquals(drug2.getId(), drugDao.getOne("1").getId()),
+                () -> assertNotEquals(drug2.getName(), drugDao.getOne("1").getName()),
+                () -> assertNotEquals(drug2.isBiomarker(), drugDao.getOne("1").isBiomarker()),
+                () -> assertNotEquals(drug2.getDrugUrl(), drugDao.getOne("1").getDrugUrl()),
+                () -> assertNotEquals(drug2.getObjCls(), drugDao.getOne("1").getObjCls())
         );
 
         log.info("test passed");

@@ -23,7 +23,7 @@ public class DrugLabel {
     @Column(name = "name", length = 200, nullable=false)
     private String name;
 
-    @Column(name = "obj_cls", length = 100, nullable=false)
+    @Column(name = "obj_cls", length = 200, nullable=false)
     private String objCls;
 
     @Column(name = "drug_id", length = 100, nullable=false)

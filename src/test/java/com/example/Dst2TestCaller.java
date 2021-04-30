@@ -20,7 +20,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({HttpCrawlerTest.class,DrugTest.class,DrugLabelTest.class,DosingGuidelineTest.class,DrugDaoTest.class,DrugLabelDaoTest.class,DosingGuidelineDaoTest.class,DrugServiceImplTest.class,DrugLabelServiceImplTest.class,DosingGuidelineServiceImplTest.class,DrugTaskTest.class,DosingGuidelineTaskTest.class,DrugLabelTaskTest.class})
+@Suite.SuiteClasses({HttpCrawlerTest.class,DrugTest.class,DrugLabelTest.class,DosingGuidelineTest.class,DrugDaoTest.class,DrugLabelDaoTest.class,DosingGuidelineDaoTest.class,DrugServiceImplTest.class,DrugLabelServiceImplTest.class,DosingGuidelineServiceImplTest.class,DosingGuidelineTaskTest.class,DrugTaskTest.class,DrugLabelTaskTest.class})
 @Transactional
 @Rollback
 public class Dst2TestCaller extends TestCase {

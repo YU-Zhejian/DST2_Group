@@ -2,6 +2,7 @@ package com.example.service.impl;
 
 import com.example.Dst2Application;
 import com.example.bean.DosingGuideline;
+import com.example.dao.DosingGuidelineDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -30,6 +31,9 @@ public class DosingGuidelineServiceImplTest {
 
     @Autowired
     private DosingGuidelineServiceImpl dosingGuidelineServiceImpl;
+
+    @Autowired
+    private DosingGuidelineDao dosingGuidelineDao;
 
     @Test
     @Transactional
@@ -61,30 +65,28 @@ public class DosingGuidelineServiceImplTest {
         dosingGuidelineServiceImpl.save(dosingGuideline1);
         dosingGuidelineServiceImpl.save(dosingGuideline2);
 
-        System.out.println(dosingGuidelineServiceImpl.findAll(dosingGuideline1));
-
          assertAll(
-                () -> assertEquals(dosingGuideline1.getId(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getId()),
-                () -> assertEquals(dosingGuideline1.getName(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getName()),
-                () -> assertEquals(dosingGuideline1.getObjCls(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getObjCls()),
-                () -> assertEquals(dosingGuideline1.getDrugId(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getDrugId()),
-                () -> assertEquals(dosingGuideline1.getRaw(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getRaw()),
-                () -> assertEquals(dosingGuideline1.getSource(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getSource()),
-                () -> assertEquals(dosingGuideline1.getSummaryMarkdown(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getSummaryMarkdown()),
-                () -> assertEquals(dosingGuideline1.getTextMarkdown(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getTextMarkdown()),
-                () -> assertEquals(dosingGuideline1.isRecommendation(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).isRecommendation())
+                () -> assertEquals(dosingGuideline1.getId(), dosingGuidelineDao.getOne("1").getId()),
+                () -> assertEquals(dosingGuideline1.getName(), dosingGuidelineDao.getOne("1").getName()),
+                () -> assertEquals(dosingGuideline1.getObjCls(), dosingGuidelineDao.getOne("1").getObjCls()),
+                () -> assertEquals(dosingGuideline1.getDrugId(), dosingGuidelineDao.getOne("1").getDrugId()),
+                () -> assertEquals(dosingGuideline1.getRaw(), dosingGuidelineDao.getOne("1").getRaw()),
+                () -> assertEquals(dosingGuideline1.getSource(), dosingGuidelineDao.getOne("1").getSource()),
+                () -> assertEquals(dosingGuideline1.getSummaryMarkdown(), dosingGuidelineDao.getOne("1").getSummaryMarkdown()),
+                () -> assertEquals(dosingGuideline1.getTextMarkdown(), dosingGuidelineDao.getOne("1").getTextMarkdown()),
+                () -> assertEquals(dosingGuideline1.isRecommendation(), dosingGuidelineDao.getOne("1").isRecommendation())
         );
 
         assertAll(
-                () -> assertNotEquals(dosingGuideline2.getId(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getId()),
-                () -> assertNotEquals(dosingGuideline2.getName(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getName()),
-                () -> assertNotEquals(dosingGuideline2.getDrugId(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getDrugId()),
-                () -> assertNotEquals(dosingGuideline2.getRaw(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getRaw()),
-                () -> assertNotEquals(dosingGuideline2.getSource(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getSource()),
-                () -> assertNotEquals(dosingGuideline2.getSummaryMarkdown(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getSummaryMarkdown()),
-                () -> assertNotEquals(dosingGuideline2.getTextMarkdown(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getTextMarkdown()),
-                () -> assertNotEquals(dosingGuideline2.getObjCls(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).getObjCls()),
-                () -> assertNotEquals(dosingGuideline2.isRecommendation(), dosingGuidelineServiceImpl.findAll(dosingGuideline1).get(0).isRecommendation())
+                () -> assertNotEquals(dosingGuideline2.getId(), dosingGuidelineDao.getOne("1").getId()),
+                () -> assertNotEquals(dosingGuideline2.getName(), dosingGuidelineDao.getOne("1").getName()),
+                () -> assertNotEquals(dosingGuideline2.getDrugId(), dosingGuidelineDao.getOne("1").getDrugId()),
+                () -> assertNotEquals(dosingGuideline2.getRaw(), dosingGuidelineDao.getOne("1").getRaw()),
+                () -> assertNotEquals(dosingGuideline2.getSource(), dosingGuidelineDao.getOne("1").getSource()),
+                () -> assertNotEquals(dosingGuideline2.getSummaryMarkdown(), dosingGuidelineDao.getOne("1").getSummaryMarkdown()),
+                () -> assertNotEquals(dosingGuideline2.getTextMarkdown(), dosingGuidelineDao.getOne("1").getTextMarkdown()),
+                () -> assertNotEquals(dosingGuideline2.getObjCls(), dosingGuidelineDao.getOne("1").getObjCls()),
+                () -> assertNotEquals(dosingGuideline2.isRecommendation(), dosingGuidelineDao.getOne("1").isRecommendation())
         );
 
         log.info("test passed");

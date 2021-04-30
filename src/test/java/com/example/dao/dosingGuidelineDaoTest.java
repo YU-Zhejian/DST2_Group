@@ -61,6 +61,7 @@ public class DosingGuidelineDaoTest {
         dosingGuidelineDao.save(dosingGuideline1);
         dosingGuidelineDao.save(dosingGuideline2);
 
+        System.out.println(dosingGuidelineDao.findAll());
         assertAll(
                 () -> assertEquals(dosingGuideline1.getId(), dosingGuidelineDao.getOne("1").getId()),
                 () -> assertEquals(dosingGuideline1.getName(), dosingGuidelineDao.getOne("1").getName()),

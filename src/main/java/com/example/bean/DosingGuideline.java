@@ -21,11 +21,11 @@ public class DosingGuideline {
     @Id @Column(name = "id", length = 100, nullable=false)
     private String id;
 
-    @Column(name = "obj_cls", length = 100, nullable=false)
-    private String objCls;
-
     @Column(name = "name", length = 500, nullable=false)
     private String name;
+
+    @Column(name = "obj_cls", length = 200, nullable=false)
+    private String objCls;
 
     @Column(name = "is_recommendation")
     private boolean isRecommendation;
@@ -62,8 +62,8 @@ public class DosingGuideline {
      */
     public DosingGuideline(
             String id,
-            String objCls,
             String name,
+            String objCls,
             boolean isRecommendation,
             String drugId,
             String source,
@@ -71,8 +71,8 @@ public class DosingGuideline {
             String textMarkdown,
             String raw) {
         this.id = id;
-        this.objCls = objCls;
         this.name = name;
+        this.objCls = objCls;
         this.isRecommendation = isRecommendation;
         this.drugId = drugId;
         this.source = source;
