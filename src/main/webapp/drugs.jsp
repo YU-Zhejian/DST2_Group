@@ -7,15 +7,16 @@
 
 <style type="text/css">
 td {text-align:center;}
-form {margin:50% 0}
 </style>
 
 <title>Insert title here</title>
 </head>
 <body>
-	<%@include file="navi.jsp" %>
+    <%if(request.getAttribute("drugs")==null){
+    	request.getRequestDispatcher("/drugs").forward(request,response);} 
+    %>
 	
-	<table border="1" class="table table-striped table-sm">
+	<table border="1">
 		<tr>
 			<td>ID</td>
 			<td>Name</td>
@@ -23,14 +24,12 @@ form {margin:50% 0}
 			<td>Biomarker</td>
 		</tr>
 		
-		<c:forEach items="${result}" var="row">
+		<c:forEach items="${drugs}" var="drug">
 		<tr>
-			<td>${row.id}</td>
-			<td>${row.name}</td>
-			<td><a href="https://api.pharmgkb.org/v1/data${row.drug_url}">${row.drug_url}</a></td>
-			<td>${row.biomarker}</td>
-			
-			
+			<td>${drug.id}</td>
+			<td>${drug.name}</td>
+			<td><a href="https://api.pharmgkb.org/v1/data${row.drug_url}">${drug.drug_url}</a></td>
+			<td>${drug.biomarker}</td>
 		</tr>
 		</c:forEach>
 	</table>

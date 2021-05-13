@@ -20,11 +20,18 @@ public class drugs extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
-
-		String sql="SELECT * FROM drug";
-		ArrayList a=JDBC.result(sql);
- 		request.setAttribute("result", a);
-		request.getRequestDispatcher("drugs.jsp").forward(request,response);
+		String sql;
+		
+		sql="SELECT * FROM drug";
+ 		request.setAttribute("drugs",JDBC.result(sql));
+ 		
+ 		sql="SELECT * FROM drug_label";
+		request.setAttribute("labels",JDBC.result(sql));
+		
+ 		sql="SELECT * FROM dosing_guideline";
+		request.setAttribute("guidelines",JDBC.result(sql));
+		
+		request.getRequestDispatcher("index2.jsp").forward(request,response);
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 

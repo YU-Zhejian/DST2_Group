@@ -19,17 +19,15 @@ public class users extends HttpServlet {
 		String user=request.getParameter("username");
 		String pw=request.getParameter("password");
 		
-		//write the user information to local file 
-		String path=this.getServletContext().getRealPath(getServletInfo()+"\\src\\main\\webapp\\WEB-INF\\1.csv");
-		BufferedWriter out=new BufferedWriter(new FileWriter(path,true));
-		String line=user+","+pw+"\n";
-		out.write(line);
-		out.close();
-		
+
 		//write ... to database
 		String sql="INSERT INTO users VALUES('"+user+"','"+pw+"')";
 		int i=JDBC.execute(sql);
 		System.out.println(i);
+		
+		response.sendRedirect("index2.jsp");
+		
+
 		
 	}
 
