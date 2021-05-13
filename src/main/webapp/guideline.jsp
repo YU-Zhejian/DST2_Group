@@ -6,19 +6,27 @@
 	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <title>Insert title here</title>
+<style type="text/css">
+table,tr, td {vertical-align:baseline}
+</style>
+
 </head>
 <body>
-	<%@include file="navi.jsp" %>
+	<%if(request.getAttribute("labels")==null){
+    	request.getRequestDispatcher("/drugs").forward(request,response);} 
+    %>
 	
 	<table border="1">
-		<c:forEach items="${result}" var="row">
+		<tr align="center">
+			<td>ID</td>
+			<td>Source</td>
+			<td width="50%">Summary markdown</td>
+		</tr>
+		<c:forEach items="${guidelines}" var="guideline">
 		<tr>
-			<td>${row.id}</td>
-			<td>${row.name}</td>
-			<td>${row.recommendation}</td>
-			<td>${row.drug_id}</td>
-			<td>${row.source}</td>
-			<td>${row.summary_markdown}</td>
+			<td align="center">${guideline.id}</td>
+			<td align="center">${guideline.source}</td>
+			<td>${guideline.summary_markdown}</td>
 			
 			
 			

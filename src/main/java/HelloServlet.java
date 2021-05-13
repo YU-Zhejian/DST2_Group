@@ -12,7 +12,10 @@ public class HelloServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
-
+		if(request.getSession().getAttribute("username")!=null) {
+			request.getSession().removeAttribute("username");
+			response.sendRedirect("index.jsp");
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 

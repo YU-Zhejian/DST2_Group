@@ -21,6 +21,8 @@
             <li class="active"><a href="<%=path%>/drugs">Drugs</a></li>
             <li class="active"><a href="<%=path%>/druglabels">Drug labels</a></li>
             <li class="active"><a href="<%=path%>/guideline">Dosing Guideline</a></li>
+            <li class="sign-up__btn"><a href=login.jsp>Log in</a></li>
+            <li class="active"><a href="<%=path%>/hello">Log out</a></li>
         </ul>
     </div>
     </div>
