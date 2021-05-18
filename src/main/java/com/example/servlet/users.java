@@ -20,11 +20,11 @@ public class users extends HttpServlet {
 		
 
 		//write ... to database
-		String sql="INSERT INTO users VALUES('"+user+"','"+pw+"')";
+		String sql="INSERT INTO registered_user VALUES('"+user+"','"+pw+"')";
 		int i=JDBC.execute(sql);
 		System.out.println(i);
 
-		response.sendRedirect("index.jsp");
+		/*response.sendRedirect("index.jsp");*/
 		
 
 		

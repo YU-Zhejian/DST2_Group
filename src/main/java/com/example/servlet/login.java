@@ -19,11 +19,11 @@ public class login extends HttpServlet {
 			request.getRequestDispatcher("/users").forward(request, response);
 		}
 
-		String sql = "SELECT * FROM users WHERE username='" + user + "' AND password='" + pw + "'";
+		String sql = "SELECT * FROM registered_user WHERE user_name='" + user + "' AND user_passwd='" + pw + "'";
 		System.out.println(sql);
 		if (JDBC.result(sql).size() > 0) {
 			request.getSession().setAttribute("username", user);
-			response.sendRedirect("index.jsp");
+			/* response.sendRedirect("index.jsp");*/
 			System.out.println("sql");
 			/*
 			 * if(Pattern.matches(".*match",request.getHeader("Referer"))) {

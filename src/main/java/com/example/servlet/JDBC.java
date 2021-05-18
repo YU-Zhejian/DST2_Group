@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class JDBC {
-	private static final String URL = "jdbc:postgresql://localhost:5432/group";
+	private static final String URL = "jdbc:postgresql://localhost:5432/MedTest";
 	private static final String USER = "postgres";
-	private static final String PASSWORD = "tianguang";
+	private static final String PASSWORD = "1109";
 
 	public JDBC() {
-		String URL = "jdbc:postgresql://localhost:5432/group";
-		String PASSWORD = "tianguang";
+		String URL = "jdbc:postgresql://localhost:5432/MedTest";
+		String PASSWORD = "1109";
 	}
 
 	public static int execute(String sql) {
