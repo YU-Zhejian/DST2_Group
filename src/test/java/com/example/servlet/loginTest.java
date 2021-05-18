@@ -17,53 +17,40 @@ import static org.junit.Assert.assertTrue;
 public class loginTest {
 
 	private users servlet;
-
 	private HttpServletRequest mockRequest;
-
 	private HttpServletResponse mockResponse;
 
-
 	@Before
-
 	public void setUp() {
 
 		servlet = new users();
 
-
-		mockRequest = createMock(HttpServletRequest.class);                          //加载
-
+		mockRequest = createMock(HttpServletRequest.class);
 		mockResponse = createMock(HttpServletResponse.class);
 
 	}
 
 	@After
-
 	public void tearDown() {
 
-		verify(mockRequest);                //验证
-
+		verify(mockRequest);
 		verify(mockResponse);
 
 	}
 
 	@Transactional
 	@Test
-
 	public void test() {
 
-
 		mockRequest.getParameter("username");
-
-		expectLastCall().andReturn("alle");//传入参数
+		expectLastCall().andReturn("alle");
 
 
 		mockRequest.getParameter("password");
+		expectLastCall().andReturn("12345");
 
-		expectLastCall().andReturn("12345");//传入参数
 
-
-		replay(mockRequest);                                           //回放
-
+		replay(mockRequest);
 		replay(mockResponse);
 
 		try {
@@ -73,22 +60,15 @@ public class loginTest {
 		} catch (ServletException e) {
 
 			// TODO Auto-generated catch block
-
 			e.printStackTrace();
 
 		} catch (IOException e) {
 
 			// TODO Auto-generated catch block
-
 			e.printStackTrace();
 
 		}
 
-
-		//调用
-
 		assertTrue(true);
-
-
 	}
 }
