@@ -1,26 +1,33 @@
+package com.example.servlet;
 
-
-import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-@WebServlet("/hello")
-public class HelloServlet extends HttpServlet {
-
+@WebServlet("/users")
+public class users extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
-		if(request.getSession().getAttribute("username")!=null) {
-			request.getSession().removeAttribute("username");
-			response.sendRedirect("index.jsp");
-		}
-	}
-
+	} 
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
-		doGet(request, response);
+		String user=request.getParameter("username");
+		String pw=request.getParameter("password");
+		
+
+		//write ... to database
+		String sql="INSERT INTO users VALUES('"+user+"','"+pw+"')";
+		int i=JDBC.execute(sql);
+		System.out.println(i);
+
+		response.sendRedirect("index.jsp");
+		
+
+		
 	}
 
 }
