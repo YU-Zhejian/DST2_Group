@@ -1,6 +1,10 @@
 package com.example.servlet;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -9,10 +13,7 @@ public class JDBC {
 	private static final String USER = "postgres";
 	private static final String PASSWORD = "1109";
 
-	public JDBC() {
-		String URL = "jdbc:postgresql://localhost:5432/MedTest";
-		String PASSWORD = "1109";
-	}
+	public JDBC() { }
 
 	public static int execute(String sql) {
 		int i = 0; // return 0 when failed
@@ -31,7 +32,7 @@ public class JDBC {
 	}
 
 	public static ArrayList<HashMap<String, String>> result(String sql) {
-		ResultSet rs = null; // return null when failed
+		ResultSet rs; // return null when failed
 
 		ArrayList<HashMap<String, String>> a = new ArrayList<HashMap<String, String>>();
 

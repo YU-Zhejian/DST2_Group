@@ -17,7 +17,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "dosing_guideline")
 public class DosingGuideline {
-    // FIXME: Whether to use Google standard. If so, use lowerCamelCase
     @Id @Column(name = "id", length = 100, nullable=false)
     private String id;
 

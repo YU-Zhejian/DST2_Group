@@ -14,8 +14,7 @@ public class drugs extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 		String sql="SELECT * FROM drug";
- 		request.setAttribute("drugs",JDBC.result(sql));
-		
+		request.setAttribute("drugs",JDBC.result(sql));
 		request.getRequestDispatcher("drugs.jsp").forward(request,response);
 	}
 	
@@ -23,5 +22,4 @@ public class drugs extends HttpServlet {
 			throws ServletException, IOException {
 		doGet(request,response);
 	}
-
 }

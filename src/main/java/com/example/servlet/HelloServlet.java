@@ -14,7 +14,7 @@ public class HelloServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String sql="SELECT DISTINCT * FROM drug_label "
 				+ "INNER JOIN (select * from result where username='"
-				+ (String)request.getSession().getAttribute("username")
+				+ request.getSession().getAttribute("username")
 				+ "') as t ON drug_label.id=t.drug";
 
 		request.setAttribute("result",JDBC.result(sql));
@@ -25,5 +25,4 @@ public class HelloServlet extends HttpServlet {
 			throws ServletException, IOException {
 		doGet(request, response);
 	}
-
 }
