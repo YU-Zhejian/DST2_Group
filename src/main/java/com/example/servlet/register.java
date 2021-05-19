@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/users")
-public class users extends HttpServlet {
+@WebServlet("/register")
+public class register extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 	} 
@@ -17,17 +17,10 @@ public class users extends HttpServlet {
 			throws ServletException, IOException {
 		String user=request.getParameter("username");
 		String pw=request.getParameter("password");
-		
-
-		//write ... to database
-		String sql="INSERT INTO registered_user VALUES('"+user+"','"+pw+"')";
+		String sql="INSERT INTO registered_user (encrypt_algorithm, user_name, user_passwd) VALUES('PLAIN','"+user+"','"+pw+"')";
 		int i=JDBC.execute(sql);
 		System.out.println(i);
 
 		response.sendRedirect("index.jsp");
-		
-
-		
 	}
-
 }

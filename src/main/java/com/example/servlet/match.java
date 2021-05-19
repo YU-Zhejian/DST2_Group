@@ -35,7 +35,7 @@ public class match extends HttpServlet {
 			requestPart = (Part) request.getSession().getAttribute("ao");
 		}
 		if (request.getSession().getAttribute("username") == null) {
-			request.getRequestDispatcher("welcome.jsp").include(request, response);
+			request.getRequestDispatcher("login.jsp").include(request, response);
 		} else {
 			InputStream inputStream = requestPart.getInputStream();
 			byte[] bytes = inputStream.readAllBytes();

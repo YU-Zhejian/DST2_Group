@@ -15,16 +15,12 @@ public class login extends HttpServlet {
 		String user = request.getParameter("username");
 		String pw = request.getParameter("password");
 
-		if (request.getParameter("action") == "login") {
-			request.getRequestDispatcher("/users").forward(request, response);
-		}
-
 		String sql = "SELECT * FROM registered_user WHERE user_name='" + user + "' AND user_passwd='" + pw + "'";
-		System.out.println(sql);
+		// System.out.println(sql);
 		if (JDBC.result(sql).size() > 0) {
 			request.getSession().setAttribute("username", user);
 			response.sendRedirect("index.jsp");
-			System.out.println("sql");
+			// System.out.println("sql");
 			/*
 			 * if(Pattern.matches(".*match",request.getHeader("Referer"))) {
 			 * response.sendRedirect(request.getContextPath()+"/match"); }else {
@@ -41,8 +37,7 @@ public class login extends HttpServlet {
 			 * "		</form><html>");
 			 */
 
-			response.sendRedirect("welcome.jsp");
-			System.out.println("djfs");
+			response.sendRedirect("login.jsp");
 		}
 	}
 }

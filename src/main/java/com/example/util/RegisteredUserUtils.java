@@ -30,11 +30,11 @@ public class RegisteredUserUtils {
 	 * @throws Exception TODO
 	 */
 	public void registerPreservedUser() throws Exception {
-		log.info("Start adding users");
+		log.info("Start adding register");
 		RegisteredUser rootUser = new RegisteredUser();
 		rootUser.setUserName("root");
 		if (this.registeredUserService.findAll(rootUser) != null) {
-			log.info("Finished adding users -- done previously");
+			log.info("Finished adding register -- done previously");
 			return;
 		}
 		rootUser.setId(0L);
@@ -45,6 +45,6 @@ public class RegisteredUserUtils {
 			tmpUser.setId(userId);
 			this.registeredUserService.save(tmpUser);
 		}
-		log.info("Finished adding users");
+		log.info("Finished adding register");
 	}
 }
