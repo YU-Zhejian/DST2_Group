@@ -67,7 +67,7 @@ Free for personal and commercial use under the CCA 3.0 license (html5up.net/lice
 				<div class="col-8 col-7-large col-12-medium">
 					<header><h2><strong>Match</strong></h2></header>
 
-					<form action="match" enctype="multipart/form-data" method="post">
+					<form action="${pageContext.request.contextPath}/match" enctype="multipart/form-data" method="POST">
 						Upload<input type="file" name="annovar" required="required">
 						<input type="submit" name="submit">
 					</form>

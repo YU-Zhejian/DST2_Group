@@ -5,7 +5,6 @@
 
 		<style>
 			td {text-align: center;}
-
 			form {margin: 50% 0}
 		</style>
 

@@ -7,13 +7,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 @WebServlet("/match")
-@MultipartConfig
+@MultipartConfig(maxFileSize = 2097152000)
 public class match extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -28,7 +29,7 @@ public class match extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Part requestPart = null;
+		Part requestPart;
 		try {
 			requestPart = request.getPart("annovar");
 		} catch (Exception e) {
@@ -37,12 +38,10 @@ public class match extends HttpServlet {
 		if (request.getSession().getAttribute("username") == null) {
 			request.getRequestDispatcher("login.jsp").include(request, response);
 		} else {
-			InputStream inputStream = requestPart.getInputStream();
-			byte[] bytes = inputStream.readAllBytes();
-			String content = new String(bytes);
-			String[] lines = content.split("\n");
-			ArrayList<String> a = new ArrayList<String>();
-			for (String line : lines) {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(requestPart.getInputStream()));
+			ArrayList<String> a = new ArrayList<>();
+			String line;
+			while ((line = reader.readLine()) !=null){
 				String[] entries = line.split("\t");
 				String refgene = entries[6];
 				ArrayList<HashMap<String, String>> rs =
@@ -60,7 +59,6 @@ public class match extends HttpServlet {
 					}
 				}
 			}
-
 			String path = request.getContextPath();
 			response.sendRedirect(path + "/result");
 		}
