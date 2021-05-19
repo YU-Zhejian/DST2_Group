@@ -1,4 +1,4 @@
-package com.example.servlet;
+package com.example.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,12 +8,12 @@ import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class JDBC {
+public class DBUtils {
 	private static final String URL = "jdbc:postgresql://localhost:5432/MedTest";
 	private static final String USER = "postgres";
 	private static final String PASSWORD = "1109";
 
-	public JDBC() { }
+	public DBUtils() { }
 
 	public static int execute(String sql) {
 		int i = 0; // return 0 when failed
@@ -77,9 +77,9 @@ public class JDBC {
 	}
 
 	public static void main(String[] args) {
-		JDBC A = new JDBC();
-		System.out.println(JDBC.class.getPackage().getName());
-		System.out.println(JDBC.class.getPackage().getName());
-		System.out.println(JDBC.class.getPackage().getName());
+		DBUtils A = new DBUtils();
+		System.out.println(DBUtils.class.getPackage().getName());
+		System.out.println(DBUtils.class.getPackage().getName());
+		System.out.println(DBUtils.class.getPackage().getName());
 	}
 }

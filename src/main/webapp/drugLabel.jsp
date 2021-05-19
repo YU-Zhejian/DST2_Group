@@ -24,7 +24,6 @@
 				<tr>
 					<td>${label.id}</td>
 					<td>${label.source}</td>
-					<td>${label.dosing_information}</td>
 					<td>${label.summary_markdown}</td>
 				</tr>
 			</c:forEach>

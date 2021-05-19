@@ -1,5 +1,7 @@
 package com.example.servlet;
 
+import com.example.util.DBUtils;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -13,9 +15,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-@WebServlet("/match")
+@WebServlet("/MatchingServlet")
 @MultipartConfig(maxFileSize = 2097152000)
-public class match extends HttpServlet {
+public class MatchingServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -23,7 +25,7 @@ public class match extends HttpServlet {
 				"SELECT * FROM drug_label INNER JOIN (select * from result where username='"
 						+ request.getSession().getAttribute("username")
 						+ "') as t ON drug_label.id=t.drug";
-		request.setAttribute("result", JDBC.result(sql));
+		request.setAttribute("result", DBUtils.result(sql));
 		request.getRequestDispatcher("result.jsp").forward(request, response);
 	}
 
@@ -45,7 +47,7 @@ public class match extends HttpServlet {
 				String[] entries = line.split("\t");
 				String refgene = entries[6];
 				ArrayList<HashMap<String, String>> rs =
-						JDBC.result("SELECT id,summary_markdown FROM drug_label");
+						DBUtils.result("SELECT id,summary_markdown FROM drug_label");
 				for (HashMap<String, String> drug : rs) {
 					if (drug.get("summary_markdown").contains(refgene) && !a.contains(drug.get("id"))) {
 						a.add(drug.get("id"));
@@ -55,12 +57,12 @@ public class match extends HttpServlet {
 										+ "','"
 										+ drug.get("id")
 										+ "')";
-						JDBC.execute(sql);
+						DBUtils.execute(sql);
 					}
 				}
 			}
 			String path = request.getContextPath();
-			response.sendRedirect(path + "/result");
+			response.sendRedirect(path + "/ResultServlet");
 		}
 	}
 }

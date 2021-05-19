@@ -18,11 +18,11 @@ Free for personal and commercial use under the CCA 3.0 license (html5up.net/lice
 			<ul class="container">
 				<% String path = request.getContextPath();%>
 				<li><a href="<%=path%>">Welcome</a></li>
-				<li><a href="<%=path%>/drugs">Drug</a></li>
-				<li><a href="<%=path%>/druglabels">Label</a>
+				<li><a href="<%=path%>/DrugServlet">Drug</a></li>
+				<li><a href="<%=path%>/DrugLabelServlet">Drug Label</a>
 				<li>
-				<li><a href="<%=path%>/guideline">Dosage</a></li>
-				<li><a href="<%=path%>/result">Result</a></li>
+				<li><a href="<%=path%>/DosingGuidelineServlet">Dosing Guideline</a></li>
+				<li><a href="<%=path%>/ResultServlet">Result</a></li>
 				<% if (request.getSession().getAttribute("username") == null){
 					out.println("<li><a href=\""+request.getContextPath()+"/login.jsp\">Log in</a></li>");
 				}

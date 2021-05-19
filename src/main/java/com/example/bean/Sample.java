@@ -40,7 +40,7 @@ public class Sample {
 	 * @param createdAt Date it was uploaded
 	 * @param userName By whom it was uploaded. See also: {@link RegisteredUser}
 	 * @param vcfContent Annotated VCF content
-	 * @param matchedId Matched drug label IDs separated by semicolon (;). See also: {@link DrugLabel}
+	 * @param matchedId Matched drug IDs separated by semicolon (;). See also: {@link Drug}
 	 */
 	public Sample(Long id, Date createdAt, String userName, String vcfContent, String matchedId) {
 		this.id = id;

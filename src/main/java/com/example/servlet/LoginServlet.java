@@ -1,5 +1,7 @@
 package com.example.servlet;
 
+import com.example.util.DBUtils;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,13 +19,13 @@ public class LoginServlet extends HttpServlet {
 
 		String sql = "SELECT * FROM registered_user WHERE user_name='" + user + "' AND user_passwd='" + pw + "'";
 		// System.out.println(sql);
-		if (JDBC.result(sql).size() > 0) {
+		if (DBUtils.result(sql).size() > 0) {
 			request.getSession().setAttribute("username", user);
 			response.sendRedirect("index.jsp");
 			// System.out.println("sql");
 			/*
 			 * if(Pattern.matches(".*match",request.getHeader("Referer"))) {
-			 * response.sendRedirect(request.getContextPath()+"/match"); }else {
+			 * response.sendRedirect(request.getContextPath()+"/MatchingServlet"); }else {
 			 * response.sendRedirect(request.getContextPath()); }
 			 */
 		} else {

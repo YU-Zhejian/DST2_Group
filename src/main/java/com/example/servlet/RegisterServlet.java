@@ -1,5 +1,7 @@
 package com.example.servlet;
 
+import com.example.util.DBUtils;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +20,7 @@ public class RegisterServlet extends HttpServlet {
 		String user=request.getParameter("username");
 		String pw=request.getParameter("password");
 		String sql="INSERT INTO registered_user (encrypt_algorithm, user_name, user_passwd) VALUES('PLAIN','"+user+"','"+pw+"')";
-		int i=JDBC.execute(sql);
+		int i= DBUtils.execute(sql);
 		System.out.println(i);
 
 		response.sendRedirect("index.jsp");

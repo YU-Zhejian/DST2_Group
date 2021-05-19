@@ -1,5 +1,7 @@
 package com.example.servlet;
 
+import com.example.util.DBUtils;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +16,7 @@ public class DrugServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 		String sql="SELECT * FROM drug";
-		request.setAttribute("drugs",JDBC.result(sql));
+		request.setAttribute("drugs", DBUtils.result(sql));
 		request.getRequestDispatcher("drugs.jsp").forward(request,response);
 	}
 	

@@ -8,7 +8,7 @@
 	<body>
 		<%
 			if (request.getSession().getAttribute("username") != null) {
-				response.sendRedirect(request.getContextPath() + "/match");
+				response.sendRedirect(request.getContextPath() + "/MatchingServlet");
 			}
 		%>
 
