@@ -18,39 +18,39 @@ import java.util.List;
  */
 @Service
 public class DrugLabelServiceImpl implements DrugLabelService {
-    @Autowired
-    private DrugLabelDao drugLabelDao;
+	@Autowired
+	private DrugLabelDao drugLabelDao;
 
-    /**
-     * Update dosing label database
-     *
-     * @param drugLabel Entry that needs to br inserted
-     */
-    @Override
-    @Transactional
-    public void save(DrugLabel drugLabel) {
-        // Query existing data
-        DrugLabel param = new DrugLabel();
-        param.setId(drugLabel.getId());
-        List<DrugLabel> list = this.findAll(param);
-        if (list.size() == 0) {
-            // Update if no items found
-            this.drugLabelDao.save(drugLabel);
-            this.drugLabelDao.flush();
-        }
-    }
+	/**
+	 * Update dosing label database
+	 *
+	 * @param drugLabel Entry that needs to br inserted
+	 */
+	@Override
+	@Transactional
+	public void save(DrugLabel drugLabel) {
+		// Query existing data
+		DrugLabel param = new DrugLabel();
+		param.setId(drugLabel.getId());
+		List<DrugLabel> list = this.findAll(param);
+		if (list.size() == 0) {
+			// Update if no items found
+			this.drugLabelDao.save(drugLabel);
+			this.drugLabelDao.flush();
+		}
+	}
 
-    /**
-     * Query dosing guideline database
-     *
-     * @param drugLabel Entry that needs to be queried
-     * @return List of found entries
-     */
-    @Override
-    public List<DrugLabel> findAll(DrugLabel drugLabel) {
-        // Setting querying protocol
-        Example<DrugLabel> example = Example.of(drugLabel);
-        // Executing querying
-        return this.drugLabelDao.findAll(example); // Simplified by IDEA
-    }
+	/**
+	 * Query dosing guideline database
+	 *
+	 * @param drugLabel Entry that needs to be queried
+	 * @return List of found entries
+	 */
+	@Override
+	public List<DrugLabel> findAll(DrugLabel drugLabel) {
+		// Setting querying protocol
+		Example<DrugLabel> example = Example.of(drugLabel);
+		// Executing querying
+		return this.drugLabelDao.findAll(example); // Simplified by IDEA
+	}
 }

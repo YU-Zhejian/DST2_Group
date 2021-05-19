@@ -14,10 +14,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class InitApp implements ApplicationRunner {
 
-    // https://blog.csdn.net/m0_37642745/article/details/107106496 Accessed 26/04/2021
-    @Override
-    public void run(ApplicationArguments args) throws Exception {
-        RegisteredUserUtils registeredUserUtils = new RegisteredUserUtils();
-        registeredUserUtils.registerPreservedUser();
-    }
+	// https://blog.csdn.net/m0_37642745/article/details/107106496 Accessed 26/04/2021
+	@Override
+	public void run(ApplicationArguments args) throws Exception {
+		RegisteredUserUtils registeredUserUtils = new RegisteredUserUtils();
+		registeredUserUtils.registerPreservedUser();
+	}
 }

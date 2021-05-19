@@ -11,6 +11,6 @@ import java.util.List;
  * @author Yaqi-SU
  */
 public interface DosingGuidelineService {
-    void save(DosingGuideline dosingGuideline);
-    List<DosingGuideline> findAll(DosingGuideline dosingGuideline);
+	void save(DosingGuideline dosingGuideline);
+	List<DosingGuideline> findAll(DosingGuideline dosingGuideline);
 }

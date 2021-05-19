@@ -18,35 +18,35 @@ import java.util.List;
  */
 @Service
 public class DosingGuidelineServiceImpl implements DosingGuidelineService {
-    @Autowired
-    private DosingGuidelineDao dosingGuidelineDao;
+	@Autowired
+	private DosingGuidelineDao dosingGuidelineDao;
 
-    /**
-     * Update dosing guideline database
-     *
-     * @param dosingGuideline Entry that needs to br inserted
-     */
-    @Override
-    @Transactional
-    public void save(DosingGuideline dosingGuideline) {
-        DosingGuideline param = new DosingGuideline();
-        param.setId(dosingGuideline.getId());
-        List<DosingGuideline> list = this.findAll(param);
-        if (list.size() == 0) {
-            this.dosingGuidelineDao.save(dosingGuideline);
-            this.dosingGuidelineDao.flush();
-        }
-    }
+	/**
+	 * Update dosing guideline database
+	 *
+	 * @param dosingGuideline Entry that needs to br inserted
+	 */
+	@Override
+	@Transactional
+	public void save(DosingGuideline dosingGuideline) {
+		DosingGuideline param = new DosingGuideline();
+		param.setId(dosingGuideline.getId());
+		List<DosingGuideline> list = this.findAll(param);
+		if (list.size() == 0) {
+			this.dosingGuidelineDao.save(dosingGuideline);
+			this.dosingGuidelineDao.flush();
+		}
+	}
 
-    /**
-     * Query dosing guideline database
-     *
-     * @param dosingGuideline Entry that needs to be queried
-     * @return List of found entries
-     */
-    @Override
-    public List<DosingGuideline> findAll(DosingGuideline dosingGuideline) {
-        Example<DosingGuideline> example = Example.of(dosingGuideline);
-        return this.dosingGuidelineDao.findAll(example);
-    }
+	/**
+	 * Query dosing guideline database
+	 *
+	 * @param dosingGuideline Entry that needs to be queried
+	 * @return List of found entries
+	 */
+	@Override
+	public List<DosingGuideline> findAll(DosingGuideline dosingGuideline) {
+		Example<DosingGuideline> example = Example.of(dosingGuideline);
+		return this.dosingGuidelineDao.findAll(example);
+	}
 }

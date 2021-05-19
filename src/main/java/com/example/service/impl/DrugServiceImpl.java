@@ -19,35 +19,35 @@ import java.util.List;
 @Service
 public class DrugServiceImpl implements DrugService {
 
-    @Autowired
-    private DrugDao drugDao;
+	@Autowired
+	private DrugDao drugDao;
 
-    /**
-     * Update drug database
-     *
-     * @param drug Entry that needs to br inserted
-     */
-    @Override
-    @Transactional
-    public void save(Drug drug) {
-        Drug param = new Drug();
-        param.setId(drug.getId());
-        List<Drug> list = this.findAll(param);
-        if (list.size() == 0) {
-            this.drugDao.save(drug);
-            this.drugDao.flush();
-        }
-    }
+	/**
+	 * Update drug database
+	 *
+	 * @param drug Entry that needs to br inserted
+	 */
+	@Override
+	@Transactional
+	public void save(Drug drug) {
+		Drug param = new Drug();
+		param.setId(drug.getId());
+		List<Drug> list = this.findAll(param);
+		if (list.size() == 0) {
+			this.drugDao.save(drug);
+			this.drugDao.flush();
+		}
+	}
 
-    /**
-     * Query dosing guideline database
-     *
-     * @param drug Entry that needs to be queried
-     * @return List of found entries
-     */
-    @Override
-    public List<Drug> findAll(Drug drug) {
-        Example<Drug> example = Example.of(drug);
-        return this.drugDao.findAll(example);
-    }
+	/**
+	 * Query dosing guideline database
+	 *
+	 * @param drug Entry that needs to be queried
+	 * @return List of found entries
+	 */
+	@Override
+	public List<Drug> findAll(Drug drug) {
+		Example<Drug> example = Example.of(drug);
+		return this.drugDao.findAll(example);
+	}
 }

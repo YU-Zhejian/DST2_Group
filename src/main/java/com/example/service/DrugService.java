@@ -11,6 +11,6 @@ import java.util.List;
  * @author Yaqi-SU
  */
 public interface DrugService {
-    void save(Drug drug);
-    List<Drug> findAll(Drug drug);
+	void save(Drug drug);
+	List<Drug> findAll(Drug drug);
 }

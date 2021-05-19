@@ -19,32 +19,32 @@ import java.util.List;
 @Component
 public class RegisteredUserUtils {
 
-    private final Logger log = LoggerFactory.getLogger(com.example.util.RegisteredUserUtils.class);
+	private final Logger log = LoggerFactory.getLogger(com.example.util.RegisteredUserUtils.class);
 
-    @Autowired
-    private RegisteredUserService registeredUserService;
+	@Autowired
+	private RegisteredUserService registeredUserService;
 
-    /**
-     * To add default registered users
-     *
-     * @throws Exception TODO
-     */
-    public void registerPreservedUser() throws Exception {
-        log.info("Start adding users");
-        RegisteredUser rootUser = new RegisteredUser();
-        rootUser.setUserName("root");
-        if (this.registeredUserService.findAll(rootUser) != null) {
-            log.info("Finished adding users -- done previously");
-            return;
-        }
-        rootUser.setId(0L);
-        this.registeredUserService.save(rootUser);
-        for (long userId = 0L; userId < 1000; userId++) {
-            RegisteredUser tmpUser = new RegisteredUser();
-            tmpUser.setUserName("PRESERVED_" + userId);
-            tmpUser.setId(userId);
-            this.registeredUserService.save(tmpUser);
-        }
-        log.info("Finished adding users");
-    }
+	/**
+	 * To add default registered users
+	 *
+	 * @throws Exception TODO
+	 */
+	public void registerPreservedUser() throws Exception {
+		log.info("Start adding users");
+		RegisteredUser rootUser = new RegisteredUser();
+		rootUser.setUserName("root");
+		if (this.registeredUserService.findAll(rootUser) != null) {
+			log.info("Finished adding users -- done previously");
+			return;
+		}
+		rootUser.setId(0L);
+		this.registeredUserService.save(rootUser);
+		for (long userId = 0L; userId < 1000; userId++) {
+			RegisteredUser tmpUser = new RegisteredUser();
+			tmpUser.setUserName("PRESERVED_" + userId);
+			tmpUser.setId(userId);
+			this.registeredUserService.save(tmpUser);
+		}
+		log.info("Finished adding users");
+	}
 }

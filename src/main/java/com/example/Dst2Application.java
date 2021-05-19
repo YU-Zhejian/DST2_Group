@@ -17,7 +17,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EntityScan // https://stackoverflow.com/questions/48019364/nested-exception-is-java-lang-illegalargumentexception-not-a-managed-type-clas Accessed 24/04/2021
 @EnableScheduling // To enable the task be executed as scheduled (fixDelay=1 week)
 public class Dst2Application {
-    public static void main(String[] args) {
-        SpringApplication.run(Dst2Application.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(Dst2Application.class, args);
+	}
 }

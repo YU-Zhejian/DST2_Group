@@ -10,6 +10,6 @@ import java.util.List;
  * @author Zhejian YU
  */
 public interface SampleService {
-    void save(Sample sample);
-    List<Sample> findAll(Sample sample);
+	void save(Sample sample);
+	List<Sample> findAll(Sample sample);
 }

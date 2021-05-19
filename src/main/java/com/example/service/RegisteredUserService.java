@@ -12,8 +12,8 @@ import java.util.List;
  *
  */
 public interface RegisteredUserService {
-    void save(RegisteredUser registeredUser);
-    List<RegisteredUser> findAll(RegisteredUser registeredUser);
+	void save(RegisteredUser registeredUser);
+	List<RegisteredUser> findAll(RegisteredUser registeredUser);
 
-    RegisteredUser findRegisteredUserByUserName(String userName);
+	RegisteredUser findRegisteredUserByUserName(String userName);
 }
