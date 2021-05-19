@@ -4,11 +4,9 @@
 		<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 		<link rel="stylesheet" type="text/css"
 			  href="${pageContext.request.contextPath}/static/main.min.css"/>
-
 		<style>
 			td {text-align: center;}
 		</style>
-
 		<title>DRUGS</title>
 	</head>
 	<body>
@@ -20,16 +18,13 @@
 			<tr>
 				<td>ID</td>
 				<td>Name</td>
-				<td>Drug URL</td>
 				<td>Biomarker</td>
 			</tr>
-
 			<c:forEach items="${drugs}" var="drug">
 				<tr>
-					<td>${drug.id}</td>
+					<td><a href="https://www.pharmgkb.org${drug.drug_url}">${drug.id}</a></td>
 					<td>${drug.name}</td>
-					<td>>${drug.drug_url}</td>
-					<td>${drug.biomarker}</td>
+					<td>${drug.is_biomarker}</td>
 				</tr>
 			</c:forEach>
 		</table>

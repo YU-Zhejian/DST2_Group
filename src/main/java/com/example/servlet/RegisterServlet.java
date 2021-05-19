@@ -9,6 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Servlet that performs register
+ *
+ * @author Tianxin HU
+ * @author Zhejian YU
+ */
 @WebServlet("/RegisterServlet")
 public class RegisterServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 

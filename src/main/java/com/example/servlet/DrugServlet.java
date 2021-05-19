@@ -8,8 +8,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
- 
 
+/**
+ * Servlet that reads drug from database
+ *
+ * @author Tianxin HU
+ */
 @WebServlet("/DrugServlet")
 public class DrugServlet extends HttpServlet {
 
@@ -17,7 +21,7 @@ public class DrugServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String sql="SELECT * FROM drug";
 		request.setAttribute("drugs", DBUtils.result(sql));
-		request.getRequestDispatcher("drugs.jsp").forward(request,response);
+		request.getRequestDispatcher("drug.jsp").forward(request,response);
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 

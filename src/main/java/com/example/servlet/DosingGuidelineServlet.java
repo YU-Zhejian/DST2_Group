@@ -1,7 +1,6 @@
 package com.example.servlet;
 
 import com.example.util.DBUtils;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,13 +10,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Servlet that reads dosing guideline from database
+ *
+ * @author Tianxin HU
+ */
 @WebServlet("/DosingGuidelineServlet")
 public class DosingGuidelineServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String sql = "SELECT * FROM dosing_guideline";
-		ArrayList<HashMap<String, String>> a = DBUtils.result(sql);
-		request.setAttribute("guidelines", a);
-		request.getRequestDispatcher("guideline.jsp").forward(request, response);
+		ArrayList<HashMap<String, String>> guidelines = DBUtils.result(sql);
+		request.setAttribute("guidelines", guidelines);
+		request.getRequestDispatcher("dosingGuideline.jsp").forward(request, response);
 	}
 }

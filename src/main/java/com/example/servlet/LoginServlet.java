@@ -9,6 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Servlet that performs login
+ *
+ * @author Tianxin HU
+ * @author Zhejian YU
+ */
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 
@@ -23,22 +29,7 @@ public class LoginServlet extends HttpServlet {
 			request.getSession().setAttribute("username", user);
 			response.sendRedirect("index.jsp");
 			// System.out.println("sql");
-			/*
-			 * if(Pattern.matches(".*match",request.getHeader("Referer"))) {
-			 * response.sendRedirect(request.getContextPath()+"/MatchingServlet"); }else {
-			 * response.sendRedirect(request.getContextPath()); }
-			 */
 		} else {
-			/*
-			 * out.print("<html>"+ "<form method=\"POST\">\r\n" +
-			 * "			<h2>whether use the username and password to register automatically?</h2>\r\n"
-			 * + "			<input type=\"hidden\" name=\"username\" value=\""+user+"\">" +
-			 * "			<input type=\"hidden\" name=\"password\" value=\""+pw+"\">" +
-			 * "			<button formaction=\"users\">yes</button>\r\n" +
-			 * "			<button formaction=\"SignIn.jsp\">no</button>\r\n" +
-			 * "		</form><html>");
-			 */
-
 			request.setAttribute("errMsg","Failed for some reason");
 			request.getRequestDispatcher("login.jsp").forward(request, response);
 

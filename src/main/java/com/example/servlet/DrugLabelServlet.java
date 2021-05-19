@@ -11,13 +11,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Servlet that reads drug labels from database
+ *
+ * @author Tianxin HU
+ */
 @WebServlet("/DrugLabelServlet")
 public class DrugLabelServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String sql = "SELECT * FROM drug_label";
-		ArrayList<HashMap<String, String>> a = DBUtils.result(sql);
-		request.setAttribute("labels", a);
+		ArrayList<HashMap<String, String>> labels = DBUtils.result(sql);
+		request.setAttribute("labels", labels);
 		request.getRequestDispatcher("drugLabel.jsp").forward(request, response);
 	}
 }

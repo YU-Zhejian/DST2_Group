@@ -15,6 +15,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Servlet that performs drug label matching. Will pass results to {@link ResultServlet} as an ArrayList
+ *
+ * @author Tianxin HU
+ * @author Zhejian YU
+ */
 @WebServlet("/MatchingServlet")
 @MultipartConfig(maxFileSize = 2097152000)
 public class MatchingServlet extends HttpServlet {

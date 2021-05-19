@@ -10,11 +10,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Servlet that search drug label ids from {@link MatchingServlet} inside the database
+ *
+ * @author Tianxin HU
+ * @author Zhejian YU
+ */
 @WebServlet("/ResultServlet")
 public class ResultServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 		StringBuilder sb = new StringBuilder();
+		// Do not modify this
 		for (String s : (ArrayList<String>) request.getAttribute("matchedIDs")) {
 			if (s != null && !"".equals(s)) {
 				sb.append(',').append(s);
