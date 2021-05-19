@@ -2,10 +2,7 @@ package com.example.bean;
 
 import org.hibernate.annotations.Proxy;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -23,7 +20,7 @@ import java.util.Date;
 @Entity
 @Table(name = "registered_user")
 public class RegisteredUser {
-    @Id @Column(name = "id", length = 100, nullable=false)
+    @Id @Column(name = "id") @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "user_name", length = 100, nullable=false)
