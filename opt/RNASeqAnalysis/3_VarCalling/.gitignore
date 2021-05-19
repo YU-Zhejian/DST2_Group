@@ -1,0 +1,6 @@
+*HC.snps.*
+*.vcf
+*.vcf.unmap
+*/
+!exec/
+*.all_loc

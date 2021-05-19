@@ -3,8 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/dst2.iml" filepath="$PROJECT_DIR$/dst2.iml" />
-      <module fileurl="file://$PROJECT_DIR$/final.iml" filepath="$PROJECT_DIR$/final.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.mvn/wrapper/wrapper.iml" filepath="$PROJECT_DIR$/.mvn/wrapper/wrapper.iml" />
     </modules>
   </component>
 </project>

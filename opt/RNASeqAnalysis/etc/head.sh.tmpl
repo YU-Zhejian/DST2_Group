@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+# Previous lines should not be modified.
+
+# The following line specifies the path of LibDO in YuZJLab MiniPrograms.
+# You may get YuZJLab MiniPrograms at https://github.com/YuZJLab/LinuxMiniPrograms
+# LibDO is used to collect stdout, stderr and exit value of a specific command.
+# It also records the start/end timestamp.
+# You may view its log by `libdoman` in YuZJLab MiniPrograms.
+# You may change this into the absolute path of libdo.sh installed under ../lib
+# LibDO version 2 or 3 is allowed.
+LIBDO_PATH="${HOME}/LinuxMiniPrograms/lib/libdo"
+
+# Whether your data comes from a local file.
+# Set true to read data from local file and prevent downloading.
+IS_LOCALFILE=false
+
+# Whether to use bsub/ylsjs/bash as job-control system.
+# If you are on a computing cluster, please refer to the system administrator.
+# Default is true.
+# Will use system in an order of (1) bsub, (2) ylsjs and (3) bash.
+ENABLE_JCS=true
+# Which job system to use. You may use bsub, ylsjs, bash or path to your own wrapper.
+bsub=""
+
+# How to define single thread? 1 by default.
+# If you are on a computing cluster, please refer to the system administrator.
+SINGLE_THREAD=1
+
+# The following line specifies the genome FASTA and GZipped genome FASTA.
+# You may use the version provided in GATK bundle.
+GENOME_FASTA_DIR="${HOME}/REF/GRCg6a/"
+GENOME_FASTA_GZ="${GENOME_FASTA_DIR}/Gallus_gallus.GRCg6a.dna_sm.toplevel.fa.gz"
+GENOME_FASTA="${GENOME_FASTA_DIR}/Gallus_gallus.GRCg6a.dna_sm.toplevel.fa"
+
+# The following line specifies the hisat2 index of the genome FASTA.
+GENOME_FASTA_HISAT2_INDEX="${GENOME_FASTA_DIR}/hisat2/GRCg6a"
+GENOME_FASTA_STAR_INDEX="${GENOME_FASTA_DIR}/STAR/"
+
+# If you're willing to use IM Aspera Connect to download these files, please specify where you install it.
+# We will check for asperaweb_id_dsa.openssh and asperaweb_id_dsa.putty.
+ASCP_ETC="${HOME}/opt/aspera_connect/etc/"
+
+# Whether to use BQSR.
+ENABLE_BQSR=false
+
+# Whether to use VQSR
+ENABLE_VQSR=false
+
+# Whether to use Indel Realignment.
+ENABLE_IndelRealn=false
+
+# Whether to use following variant caller
+ENABLE_HAPLOTYPECALLER=true
+ENABLE_FREEBAYES=true
+ENABLE_LOFREQ=true
+ENABLE_STRELKA=true
+# ENABLE_MUTECT2=true
+# ENABLE_VARSCAN=true
+
+# Where GATK bundle is installed. We will check for these files:
+# dbsnp_146.hg38.vcf.gz
+# hapmap_3.3.hg38.vcf.gz
+# Mills_and_1000G_gold_standard.indels.hg38.vcf.gz
+GATK_BASE="${HOME}/REF/GATK/hg38"
+
+# Where humandb of ANNOVAR is located.
+ANNOVAR_HUMANDB="${HOME}/REF/humandb"
+
+# Variants identified by more than ${VAR_THR} will be filtered.
+VAR_THR=4

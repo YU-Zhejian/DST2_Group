@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+# CONFIGURE v1
+set -eu
+DN="$(readlink -f "$(dirname "${0}")")"
+cd "${DN}"
+. lib/libstr.sh
+
+infoh "---------------Checking etc/head.sh---------------"
+. etc/head.sh
+. "${LIBDO_PATH}"
+type DO &>> /dev/null && \
+infoh "LIBDO_PATH=${LIBDO_PATH} verified" || \
+errh "LIBDO_PATH=${LIBDO_PATH:-} invalid!"
+
+[ -f "${GENOME_FASTA:-}" ] && \
+infoh "GENOME_FASTA=${GENOME_FASTA} verified" || \
+errh "GENOME_FASTA=${GENOME_FASTA:-} invalid!"
+
+[ -f "${GENOME_FASTA_GZ:-}" ] && \
+infoh "GENOME_FASTA_GZ=${GENOME_FASTA_GZ} verified" || \
+errh "GENOME_FASTA_GA=${GENOME_FASTA_GZ:-} invalid!"
+
+if [ -n "${GENOME_FASTA_HISAT2_INDEX:-}" ];then
+	ls "${GENOME_FASTA_HISAT2_INDEX}".*.ht2 &>> /dev/null && \
+	infoh "GENOME_FASTA_HISAT2_INDEX=${GENOME_FASTA_HISAT2_INDEX} verified" || \
+	errh "GENOME_FASTA_HISAT2_INDEX=${GENOME_FASTA_HISAT2_INDEX} invalid!"
+fi
+
+if [ -n "${GENOME_FASTA_STAR_INDEX:-}" ];then
+	[ -d "${GENOME_FASTA_STAR_INDEX}" ] && \
+	infoh "GENOME_FASTA_STAR_INDEX=${GENOME_FASTA_STAR_INDEX} verified" || \
+	errh "GENOME_FASTA_STAR_INDEX=${GENOME_FASTA_STAR_INDEX} invalid!"
+fi
+
+
+if ${ENABLE_BQSR:-} || ${ENABLE_IndelRealn} || ${ENABLE_VQSR};then
+	[ -d "${GATK_BASE:-}" ] || errh "GATK_BASE invalid!"
+	[ -f "${GATK_BASE}"/dbsnp_146.hg38.vcf.gz ] && \
+	[ -f "${GATK_BASE}"/hapmap_3.3.hg38.vcf.gz ] && \
+	[ -f "${GATK_BASE}"/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz ] && \
+	[ -f "${GATK_BASE}"/1000G_omni2.5.hg38.vcf.gz ] && \
+	[ -f "${GATK_BASE}"/1000G_phase1.snps.high_confidence.hg38.vcf.gz ] && \
+	infoh "GATK_BASE=${GATK_BASE} verified" || \
+	errh "GATK_BASE=${GATK_BASE} invalid!"
+fi
+
+# TODO: Annovar Humandb validation
+
+infoh "---------------Checking executables---------------"
+rm -rf etc/path.sh
+mkdir -p etc
+function oneof() {
+	y=1
+	for PROGNAME in "${@}";do
+		printf "Locating ${PROGNAME}..."
+		x=$(which "${PROGNAME}" &>> /dev/null && echo "true" || echo "false")
+		which "${PROGNAME}" &>> /dev/null && y=0
+		echo "my${PROGNAME}=${x}" >> etc/path.sh
+		echo "${x}"
+	done
+	if [ ${y} -eq 1 ];then
+		errh "None of ${*} was present!"
+	fi
+}
+if ! ${IS_LOCALFILE};then
+	if [ -n "${ASCP_ETC:-}" ];then
+		[ -f "${ASCP_ETC}"/asperaweb_id_dsa.openssh ] && \
+		[ -f "${ASCP_ETC}"/asperaweb_id_dsa.putty ] && \
+		infoh "ASCP_ETC=${ASCP_ETC} verified" || \
+		errh "ASCP_ETC=${ASCP_ETC} invalid!"
+	fi
+	oneof aria2c ascp axel wget
+fi
+${ENABLE_FREEBAYES} && oneof freebayes
+${ENABLE_LOFREQ} && oneof lofreq
+${ENABLE_STRELKA} && oneof configManta.py && oneof configureStrelkaGermlineWorkflow.py
+oneof fastqc
+oneof cutadapt
+oneof hisat2 STAR # TODO: Support multiple aligner
+oneof gatk
+oneof samtools sambamba
+oneof table_annovar.pl
+if ${ENABLE_JCS};then
+	oneof bsub ylsjs
+fi

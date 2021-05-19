@@ -43,9 +43,11 @@ Free for personal and commercial use under the CCA 3.0 license (html5up.net/lice
 						<header>
 							<h2><strong>Welcome</strong></h2>
 						</header>
-						<p>Welcome to use our software</p>
-						<p>This software was built by students from Zhejiang University, University
-							of Edinburgh Institute, majoring in bioinformatics.</p>
+						<p>Welcome to use the &quot;Precision Drug Search&quot; software, which was built by students from Zhejiang University, University of Edinburgh Institute, majoring in bioinformatics. The database of our software was crawled from PharmGKB and will be automatically uploaded every week.</p>
+						<p>The major two functions of our software are listed below.</p>
+						<p>1.All the drugs, durg labels and dosing guidelines stored in the database are showed in our web, you can click the corresponding tag in the header for detailed information.</p>
+						<p>2.This web can help you to match variants in your own file with corresponding target drug information. you can click the &quot;Match&quot; button and then click the &quot;Upload&quot; button to upload your file. The result will be showed in the &quot;Result&quot; part soon.</p>
+						<p>Before matching your file, it is necessary to register by simply clicking the &quot;Register&quot; button and then type in your username and password. If you already have your account, you can just click the &quot;Login&quot; button and then you can exploring your data.</p>
 					</div>
 				</div>
 				<div class="title">GET STARTED</div>
