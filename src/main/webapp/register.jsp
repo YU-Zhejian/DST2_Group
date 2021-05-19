@@ -27,6 +27,12 @@
 				<input type="submit" value="register">
 				<br>
 				<a href="${pageContext.request.contextPath}/login.jsp">Already have an account? Goto login</a>
+				<br>
+				<p style="color: red">
+				<%
+					if (request.getAttribute("errMsg") != null){ out.println(request.getAttribute("errMsg")); }
+				%>
+				</p>
 			</form>
 		</div>
 	</body>

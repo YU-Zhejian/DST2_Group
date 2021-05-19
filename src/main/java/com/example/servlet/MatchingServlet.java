@@ -41,28 +41,22 @@ public class MatchingServlet extends HttpServlet {
 			request.getRequestDispatcher("login.jsp").include(request, response);
 		} else {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(requestPart.getInputStream()));
-			ArrayList<String> a = new ArrayList<>();
+			ArrayList<String> matchedIDs = new ArrayList<>();
 			String line;
+			ArrayList<HashMap<String, String>> rs =
+					DBUtils.result("SELECT id,summary_markdown FROM drug_label");
 			while ((line = reader.readLine()) !=null){
 				String[] entries = line.split("\t");
 				String refgene = entries[6];
-				ArrayList<HashMap<String, String>> rs =
-						DBUtils.result("SELECT id,summary_markdown FROM drug_label");
 				for (HashMap<String, String> drug : rs) {
-					if (drug.get("summary_markdown").contains(refgene) && !a.contains(drug.get("id"))) {
-						a.add(drug.get("id"));
-						String sql =
-								"INSERT INTO result VALUES('"
-										+ request.getSession().getAttribute("username")
-										+ "','"
-										+ drug.get("id")
-										+ "')";
-						DBUtils.execute(sql);
+					if (drug.get("summary_markdown").contains(refgene) && !matchedIDs.contains(drug.get("id"))) {
+						matchedIDs.add(drug.get("id"));
+						System.out.println(drug.get("id"));
 					}
 				}
 			}
-			String path = request.getContextPath();
-			response.sendRedirect(path + "/ResultServlet");
+			request.setAttribute("matchedIDs",matchedIDs);
+			request.getRequestDispatcher("ResultServlet").forward(request, response);
 		}
 	}
 }

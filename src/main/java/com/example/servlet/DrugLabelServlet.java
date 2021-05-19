@@ -9,13 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @WebServlet("/DrugLabelServlet")
 public class DrugLabelServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String sql = "SELECT * FROM drug_label";
-		ArrayList a = DBUtils.result(sql);
+		ArrayList<HashMap<String, String>> a = DBUtils.result(sql);
 		request.setAttribute("labels", a);
 		request.getRequestDispatcher("drugLabel.jsp").forward(request, response);
 	}

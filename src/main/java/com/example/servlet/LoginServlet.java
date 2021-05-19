@@ -39,7 +39,9 @@ public class LoginServlet extends HttpServlet {
 			 * "		</form><html>");
 			 */
 
-			response.sendRedirect("login.jsp");
+			request.setAttribute("errMsg","Failed for some reason");
+			request.getRequestDispatcher("login.jsp").forward(request, response);
+
 		}
 	}
 }

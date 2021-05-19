@@ -8,17 +8,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 
 @WebServlet("/ResultServlet")
 public class ResultServlet extends HttpServlet {
-
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
-		String sql="SELECT DISTINCT * FROM drug_label "
-				+ "INNER JOIN (select * from result where username='"
-				+ request.getSession().getAttribute("username")
-				+ "') as t ON drug_label.id=t.drug";
+		StringBuilder sb = new StringBuilder();
+		for (String s : (ArrayList<String>) request.getAttribute("matchedIDs")) {
+			if (s != null && !"".equals(s)) {
+				sb.append(',').append(s);
+			}
+		}
+		sb.deleteCharAt(0);
 
+		String sql="SELECT * FROM drug_label WHERE id = ANY(STRING_TO_ARRAY('"+ sb +"',','))";
+		System.out.println(sql);
 		request.setAttribute("result", DBUtils.result(sql));
 		request.getRequestDispatcher("result.jsp").forward(request, response);
 	}
