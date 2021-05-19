@@ -23,8 +23,13 @@ Free for personal and commercial use under the CCA 3.0 license (html5up.net/lice
 				<li>
 				<li><a href="<%=path%>/guideline">Dosage</a></li>
 				<li><a href="<%=path%>/result">Result</a></li>
-				<li class="ml-auto"><%=(String) request.getSession().getAttribute("username")%>
-				</li>
+				<% if (request.getSession().getAttribute("username") == null){
+					out.println("<li><a href=\""+request.getContextPath()+"/login.jsp\">Log in</a></li>");
+				}
+				else{
+					out.println("<li>"+ request.getSession().getAttribute("username")+"</li>");
+				}
+				%>
 			</ul>
 		</nav>
 	</body>

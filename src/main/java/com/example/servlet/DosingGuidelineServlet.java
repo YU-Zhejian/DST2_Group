@@ -8,13 +8,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-@WebServlet("/druglabels")
-public class drugLabels extends HttpServlet {
+@WebServlet("/DosingGuidelineServlet")
+public class DosingGuidelineServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String sql = "SELECT * FROM drug_label";
+		String sql = "SELECT * FROM dosing_guideline";
 		ArrayList a = JDBC.result(sql);
-		request.setAttribute("labels", a);
-		request.getRequestDispatcher("drugLabel.jsp").forward(request, response);
+		request.setAttribute("guidelines", a);
+		request.getRequestDispatcher("DosingGuidelineServlet.jsp").forward(request, response);
 	}
 }

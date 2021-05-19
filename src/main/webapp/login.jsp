@@ -11,7 +11,7 @@
 	<body>
 		<div id="login-box">
 			<h1>Login</h1>
-			<form name="this" action="login" method="POST">
+			<form name="this" action="${pageContext.request.contextPath}/LoginServlet" method="POST">
 				<div class="item">
 					<i class="fa fa-github-alt" style="font-size:24px"></i>
 					<label>

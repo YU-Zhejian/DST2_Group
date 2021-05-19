@@ -58,7 +58,7 @@ Free for personal and commercial use under the CCA 3.0 license (html5up.net/lice
 							also committed to broadening participation within biomedical informatics
 							and improving the communication of science outside the academic
 							realm.</p>
-						<a href="login.jsp" class="button large scrolly">Log in</a>
+
 					</div>
 				</div>
 

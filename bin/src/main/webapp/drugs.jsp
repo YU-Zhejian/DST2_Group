@@ -13,7 +13,7 @@
 	</head>
 	<body>
 		<%
-			if (request.getAttribute("drugs") == null) { request.getRequestDispatcher("/drugs").forward(request, response); }
+			if (request.getAttribute("drugs") == null) { request.getRequestDispatcher("/DrugServlet").forward(request, response); }
 		%>
 		<%@include file="navi.jsp" %>
 		<table style="border: solid">
