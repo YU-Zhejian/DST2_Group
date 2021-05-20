@@ -21,6 +21,7 @@
 				<tr>
 					<td>${row.id}</td>
 					<td>${row.source}</td>
+					<td>${row.have_dosing_information}</td>
 					<td>${row.summary_markdown}</td>
 				</tr>
 			</c:forEach>

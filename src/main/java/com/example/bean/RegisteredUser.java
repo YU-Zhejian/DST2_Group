@@ -20,10 +20,7 @@ import java.util.Date;
 @Entity
 @Table(name = "registered_user")
 public class RegisteredUser {
-	@Id @Column(name = "id") @GeneratedValue(strategy= GenerationType.IDENTITY)
-	private long id;
-
-	@Column(name = "user_name", length = 100, nullable=false)
+	@Id @Column(name = "user_name", length = 100, nullable=false)
 	private String userName;
 
 	@Column(name = "user_passwd", length = 100, nullable=false)
@@ -51,7 +48,6 @@ public class RegisteredUser {
 
 	/**
 	 * Constructor for Annotated Variant Calling Format (VCF) uploaded by the users
-	 * @param id Index of the user inside database
 	 * @param userName Name of the user
 	 * @param userPasswd Password of the user. Not implemented in this version
 	 * @param encryptAlgorithm Encrypt method of the password. Not implemented in this version
@@ -61,8 +57,7 @@ public class RegisteredUser {
 	 * @param expireDate Date when the user password expires. Not implemented in this version
 	 * @param isActive Whether the user is active. Not implemented in this version
 	 */
-	public RegisteredUser(long id, String userName, String userPasswd, String encryptAlgorithm, Date lastChangeDate, Date minAge, Date maxAge, Date expireDate, boolean isActive) {
-		this.id = id;
+	public RegisteredUser(String userName, String userPasswd, String encryptAlgorithm, Date lastChangeDate, Date minAge, Date maxAge, Date expireDate, boolean isActive) {
 		this.userName = userName;
 		this.userPasswd = userPasswd;
 		this.encryptAlgorithm = encryptAlgorithm;
@@ -71,14 +66,6 @@ public class RegisteredUser {
 		this.maxAge = maxAge;
 		this.expireDate = expireDate;
 		this.isActive = isActive;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	public String getUserPasswd() {

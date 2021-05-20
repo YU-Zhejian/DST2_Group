@@ -15,9 +15,9 @@ import java.io.IOException;
  * @author Tianxin HU
  * @author Zhejian YU
  */
-@WebServlet("/LoginServlet")
+@WebServlet(name = "LoginServlet",urlPatterns="/LoginServlet")
 public class LoginServlet extends HttpServlet {
-
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String user = request.getParameter("username");

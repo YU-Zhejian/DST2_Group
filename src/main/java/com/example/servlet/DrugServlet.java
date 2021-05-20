@@ -14,16 +14,16 @@ import java.io.IOException;
  *
  * @author Tianxin HU
  */
-@WebServlet("/DrugServlet")
+@WebServlet(name = "DrugServlet",urlPatterns="/DrugServlet")
 public class DrugServlet extends HttpServlet {
-
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 		String sql="SELECT * FROM drug";
 		request.setAttribute("drugs", DBUtils.result(sql));
 		request.getRequestDispatcher("drug.jsp").forward(request,response);
 	}
-	
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 		doGet(request,response);

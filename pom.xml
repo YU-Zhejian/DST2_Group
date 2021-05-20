@@ -53,12 +53,12 @@
         </dependency>
 
         <!-- These lines should be commented if we use Tomcat-->
-        <dependency>
+        <!-- <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.0.1</version>
             <scope>provided</scope>
-        </dependency>
+        </dependency> -->
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -104,15 +104,23 @@
             <version>5.2.17.Final</version>
         </dependency>
 
+        <!-- https://blog.csdn.net/baidu_32377671/article/details/78433474 accessed 26/04/2021 -->
+        <!-- https://www.cnblogs.com/sunylat/p/13339507.html accessed 27/04/2021-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
         </dependency>
 
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.8.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <dependency>
@@ -133,13 +141,17 @@
             <version>2.0.7.RELEASE</version>
         </dependency>
 
-        <!-- https://blog.csdn.net/baidu_32377671/article/details/78433474 accessed 26/04/2021 -->
-        <!-- https://www.cnblogs.com/sunylat/p/13339507.html accessed 27/04/2021-->
+        <!-- https://blog.csdn.net/weixin_39885435/article/details/82556112 -->
         <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+        </dependency>
+
     </dependencies>
     <properties>
         <maven.compiler.source>11</maven.compiler.source>

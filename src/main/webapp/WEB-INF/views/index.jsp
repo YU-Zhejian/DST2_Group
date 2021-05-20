@@ -35,7 +35,7 @@ Free for personal and commercial use under the CCA 3.0 license (html5up.net/lice
 			<div class="container">
 				<div class="row">
 					<div class="col-4 col-5-large col-12-medium">
-						<span class="image fit"><p><img src="search.png" alt=""/></p>
+						<span class="image fit"><p><img src="${pageContext.request.contextPath}/static/search.png" alt=""/></p>
 							Undergraduate<br>
 							<i>Zhejiang University, University of Edinburgh Institute</i></span>
 					</div>

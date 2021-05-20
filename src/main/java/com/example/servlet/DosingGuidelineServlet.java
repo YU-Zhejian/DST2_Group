@@ -15,8 +15,9 @@ import java.util.HashMap;
  *
  * @author Tianxin HU
  */
-@WebServlet("/DosingGuidelineServlet")
+@WebServlet(name = "DosingGuidelineServlet" ,urlPatterns="/DosingGuidelineServlet")
 public class DosingGuidelineServlet extends HttpServlet {
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String sql = "SELECT * FROM dosing_guideline";

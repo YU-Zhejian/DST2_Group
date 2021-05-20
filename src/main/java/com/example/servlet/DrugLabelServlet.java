@@ -16,8 +16,9 @@ import java.util.HashMap;
  *
  * @author Tianxin HU
  */
-@WebServlet("/DrugLabelServlet")
+@WebServlet(name ="DrugLabelServlet",urlPatterns="/DrugLabelServlet")
 public class DrugLabelServlet extends HttpServlet {
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String sql = "SELECT * FROM drug_label";

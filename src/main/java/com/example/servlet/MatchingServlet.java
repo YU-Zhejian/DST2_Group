@@ -21,20 +21,10 @@ import java.util.HashMap;
  * @author Tianxin HU
  * @author Zhejian YU
  */
-@WebServlet("/MatchingServlet")
+@WebServlet(name = "MatchingServlet",urlPatterns="/MatchingServlet")
 @MultipartConfig(maxFileSize = 2097152000)
 public class MatchingServlet extends HttpServlet {
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		String sql =
-				"SELECT * FROM drug_label INNER JOIN (select * from result where username='"
-						+ request.getSession().getAttribute("username")
-						+ "') as t ON drug_label.id=t.drug";
-		request.setAttribute("result", DBUtils.result(sql));
-		request.getRequestDispatcher("result.jsp").forward(request, response);
-	}
-
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Part requestPart;
