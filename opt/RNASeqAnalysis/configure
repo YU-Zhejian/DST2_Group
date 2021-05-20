@@ -55,7 +55,7 @@ function oneof() {
 		printf "Locating ${PROGNAME}..."
 		x=$(which "${PROGNAME}" &>> /dev/null && echo "true" || echo "false")
 		which "${PROGNAME}" &>> /dev/null && y=0
-		echo "my${PROGNAME}=${x}" >> etc/path.sh
+		echo "my${PROGNAME}=${x}" | tr '.' '_' >> etc/path.sh
 		echo "${x}"
 	done
 	if [ ${y} -eq 1 ];then
