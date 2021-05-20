@@ -8,7 +8,7 @@ For those who wants to clone my repository and get a higher grade:
 
 # Readme @ DST Group Project
 
-Good morning! Welcome to Group 6! Before starting our project, it is important to state our rules:
+Good morning! Welcome to Group 5! Before starting our project, it is important to state our rules:
 
 1. 代码千万行，注释第一行；注释不规范，同事两行泪。(This line appears in every public project of me.)
 2. This public projects prefers **MERGEING** than **REBASING**. If you follow that guideline, you’ll be fine. If you don’t, people will hate you, and you’ll be scorned by friends and family. And **NEVER PREFORM FORCE PUSH**. If you accidentally committed and pushed something wrong, fix it ASAP and commit & push it again.
