@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Servlet that search drug label ids from {@link MatchingServlet} inside the database
@@ -24,13 +23,9 @@ public class ResultServlet extends HttpServlet {
 		String sql="SELECT DISTINCT * FROM drug_label "
 				+ "INNER JOIN (select * from sample where user_name='"
 				+ request.getSession().getAttribute("username")
-				+ "') as t ON drug_label.drug_id=t.matched_drug";
+				+ "') as t ON drug_label.drug_id=t.matched_id";
 		request.setAttribute("result", DBUtils.result(sql));
 		request.getRequestDispatcher("result").forward(request, response);
-
-		request.setAttribute("result",DBUtils.result(sql));
-		request.getRequestDispatcher("result").forward(request, response);
-
 	}
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 

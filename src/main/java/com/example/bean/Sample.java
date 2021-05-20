@@ -21,7 +21,7 @@ import java.util.Date;
 @Entity
 @Table(name = "sample")
 public class Sample {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)  @Column(name = "id")
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
 	private long id;
 	@Column(name = "created_at")
 	private Date createdAt;

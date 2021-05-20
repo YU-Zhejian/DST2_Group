@@ -36,7 +36,7 @@ public class DrugTask {
 	 *
 	 * @throws Exception TODO
 	 */
-	@Scheduled(initialDelay = 2000,fixedDelay = 60*60*24*7*1000)
+	//@Scheduled(initialDelay = 2000,fixedDelay = 60*60*24*7*1000)
 	public void drugTask() throws Exception{
 		log.info("Start fetching drugs");
 		String url = "https://api.pharmgkb.org/v1/site/labelsByDrug"; // To return all drug information

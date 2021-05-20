@@ -44,21 +44,20 @@ public class MatchingServlet extends HttpServlet {
 			String line;
 			ArrayList<HashMap<String, String>> rs =
 					DBUtils.result("SELECT drug_id,summary_markdown FROM drug_label");
-	        Date date = new Date();
+			Date date = new Date();
 			SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
-	        String time = ft.format(date);
+			String time = ft.format(date);
 			while ((line = reader.readLine()) !=null){
 				String[] entries = line.split("\t");
 				String refgene = entries[6];
 				for (HashMap<String, String> drug : rs) {
 					if (drug.get("summary_markdown").contains(refgene) && !matchedIDs.contains(drug.get("drug_id"))) {
 						matchedIDs.add(drug.get("drug_id"));
-						String sql="INSERT INTO sample VALUES(null,'"+time+"','"+drug.get("drug_id")+"','"+(String)request.getSession().getAttribute("username")+"')";
+						String sql="INSERT INTO sample (created_at, matched_id, user_name) VALUES('"+time+"','"+drug.get("drug_id")+"','"+ request.getSession().getAttribute("username") +"')";
 						DBUtils.execute(sql);
 					}
 				}
 			}
-			request.setAttribute("matchedIDs",matchedIDs);
 			request.getRequestDispatcher("ResultServlet").forward(request, response);
 		}
 	}

@@ -35,7 +35,7 @@ public class DosingGuidelineTask {
 	 *
 	 * @throws Exception TODO
 	 */
-	@Scheduled(initialDelay = 3000, fixedDelay = 60 * 60 * 24 * 7 * 1000)
+	//@Scheduled(initialDelay = 3000, fixedDelay = 60 * 60 * 24 * 7 * 1000)
 	public void dosingGuidelineTask() throws Exception {
 		log.info("Start fetching dosing guidelines");
 		String url = "https://api.pharmgkb.org/v1/site/guidelinesByDrugs"; // To return all dosing guideline information

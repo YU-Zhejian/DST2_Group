@@ -32,7 +32,7 @@ public class DrugLabelTask {
 	 *
 	 * @throws Exception TODO
 	 */
-	@Scheduled(initialDelay = 8000, fixedDelay = 60 * 60 * 24 * 7 * 1000)
+	//@Scheduled(initialDelay = 8000, fixedDelay = 60 * 60 * 24 * 7 * 1000)
 	public void drugLabelTask() throws Exception {
 		log.info("Start fetching drug labels");
 		// Retrieve and iterate over all drug IDs
