@@ -4,9 +4,7 @@
 		<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 		<link rel="stylesheet" type="text/css"
 			  href="${pageContext.request.contextPath}/static/main.min.css"/>
-
 		<title>LABELS</title>
-
 		<style>
 			td {text-align: center;}
 		</style>
@@ -22,9 +20,9 @@
 			</tr>
 			<c:forEach items="${labels}" var="label">
 				<tr>
-					<td>${label.id}</td>
+					<td><a href="https://www.pharmgkb.org/labelAnnotation/${label.id}">${label.id}</a></td>
 					<td>${label.source}</td>
-					<td>${label.dosing_information}</td>
+					<td>${label.have_dosing_information}</td>
 					<td>${label.summary_markdown}</td>
 				</tr>
 			</c:forEach>

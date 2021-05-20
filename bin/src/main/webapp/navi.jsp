@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <!--
 Miniport by HTML5 UP
 html5up.net | @ajlkn
@@ -18,14 +18,17 @@ Free for personal and commercial use under the CCA 3.0 license (html5up.net/lice
 			<ul class="container">
 				<% String path = request.getContextPath();%>
 				<li><a href="<%=path%>">Welcome</a></li>
-				<li><a href="<%=path%>/drugs">Drug</a></li>
-				<li><a href="<%=path%>/druglabels">Label</a>
-				<li>
-				<li><a href="<%=path%>/guideline">Dosage</a></li>
-				<li><a href="<%=path%>/result">Result</a></li>
-				<li class="ml-auto"><%=(String) request.getSession().getAttribute("username")%>
-				</li>
+				<li><a href="<%=path%>/DrugServlet">Drug</a></li>
+				<li><a href="<%=path%>/DrugLabelServlet">Drug Label</a></li>
+				<li><a href="<%=path%>/DosingGuidelineServlet">Dosing Guideline</a></li>
+				<% if (request.getSession().getAttribute("username") == null){
+					out.println("<li><a href=\""+request.getContextPath()+"/login.jsp\">Log in</a></li>");
+				}
+				else{
+					out.println("<li>"+ request.getSession().getAttribute("username")+"</li>");
+				}
+				%>
 			</ul>
 		</nav>
 	</body>
-
+</html>
