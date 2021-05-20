@@ -38,7 +38,7 @@ public class DrugLabelServiceImplTest {
     @Test
     @Transactional
     @Rollback
-    public void test() {
+    public void testSave() {
         log.info("test called");
         DrugLabel drugLabel1 = new DrugLabel();
         drugLabel1.setId("1");

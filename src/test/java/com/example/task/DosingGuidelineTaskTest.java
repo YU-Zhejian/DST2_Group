@@ -27,7 +27,7 @@ public class DosingGuidelineTaskTest {
     private DosingGuidelineTask dosingGuidelineTask;
 
     @Test
-    public void test() throws Exception {
+    public void testDosingGuidelineTask() throws Exception {
         log.info("test called");
 
         dosingGuidelineTask.dosingGuidelineTask();

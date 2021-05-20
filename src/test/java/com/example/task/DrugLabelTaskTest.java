@@ -33,7 +33,7 @@ public class DrugLabelTaskTest {
     private DrugDao drugDao;
 
     @Test
-    public void test() throws Exception {
+    public void testDrugLabelTask() throws Exception {
         log.info("test called");
         DrugTask.Ids.clear();
         for(int i = 1; i < drugDao.findAll().size();i++){

@@ -14,6 +14,8 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -38,7 +40,7 @@ public class DosingGuidelineServiceImplTest {
     @Test
     @Transactional
     @Rollback
-    public void test() {
+    public void testSave() {
         log.info("test called");
         DosingGuideline dosingGuideline1 = new DosingGuideline();
         dosingGuideline1.setId("1");

@@ -37,7 +37,7 @@ public class HttpCrawlerTest {
     @Test
     @Transactional
     @Rollback
-    public void test() {
+    public void testHttpCrawler() {
 
         log.info("test called");
 

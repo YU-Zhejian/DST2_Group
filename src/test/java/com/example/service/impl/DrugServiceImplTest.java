@@ -38,7 +38,7 @@ public class DrugServiceImplTest {
     @Test
     @Transactional
     @Rollback
-    public void test() {
+    public void testSave() {
         log.info("test called");
         Drug drug1 = new Drug();
         drug1.setId("1");

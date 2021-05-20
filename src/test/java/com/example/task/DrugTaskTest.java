@@ -29,7 +29,7 @@ public class DrugTaskTest {
     private DrugTask drugTask;
 
     @Test
-    public void test() throws Exception {
+    public void testDrug() throws Exception {
         log.info("test called");
 
         drugTask.drugTask();
