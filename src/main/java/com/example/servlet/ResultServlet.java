@@ -33,7 +33,7 @@ public class ResultServlet extends HttpServlet {
 		String sql="SELECT * FROM drug_label WHERE id = ANY(STRING_TO_ARRAY('"+ sb +"',','))";
 		System.out.println(sql);
 		request.setAttribute("result", DBUtils.result(sql));
-		request.getRequestDispatcher("result.jsp").forward(request, response);
+		request.getRequestDispatcher("result").forward(request, response);
 	}
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 

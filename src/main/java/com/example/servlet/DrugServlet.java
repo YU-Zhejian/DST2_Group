@@ -21,7 +21,7 @@ public class DrugServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String sql="SELECT * FROM drug";
 		request.setAttribute("drugs", DBUtils.result(sql));
-		request.getRequestDispatcher("drug.jsp").forward(request,response);
+		request.getRequestDispatcher("drug").forward(request,response);
 	}
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 

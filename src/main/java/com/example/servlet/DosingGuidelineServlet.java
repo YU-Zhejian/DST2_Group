@@ -23,6 +23,6 @@ public class DosingGuidelineServlet extends HttpServlet {
 		String sql = "SELECT * FROM dosing_guideline";
 		ArrayList<HashMap<String, String>> guidelines = DBUtils.result(sql);
 		request.setAttribute("guidelines", guidelines);
-		request.getRequestDispatcher("dosingGuideline.jsp").forward(request, response);
+		request.getRequestDispatcher("dosingGuideline").forward(request, response);
 	}
 }

@@ -43,7 +43,7 @@ public class DrugLabelTask {
 			// Map used below should not be altered
 			Map result = gson.fromJson(jsonContent, Map.class);
 			Map data = (Map) result.get("data");
-			List<Map> drugLabels = (List) data.get("DrugLabelServlet");
+			List<Map> drugLabels = (List) data.get("drugLabels");
 			for (Map x : drugLabels) {
 				String labelId = (String) x.get("id");
 				log.info("Going to save label: {} for drug {}", labelId, id);

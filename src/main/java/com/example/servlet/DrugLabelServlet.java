@@ -24,6 +24,6 @@ public class DrugLabelServlet extends HttpServlet {
 		String sql = "SELECT * FROM drug_label";
 		ArrayList<HashMap<String, String>> labels = DBUtils.result(sql);
 		request.setAttribute("labels", labels);
-		request.getRequestDispatcher("drugLabel.jsp").forward(request, response);
+		request.getRequestDispatcher("drugLabel").forward(request, response);
 	}
 }

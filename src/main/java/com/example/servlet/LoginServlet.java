@@ -27,12 +27,11 @@ public class LoginServlet extends HttpServlet {
 		// System.out.println(sql);
 		if (DBUtils.result(sql).size() > 0) {
 			request.getSession().setAttribute("username", user);
-			response.sendRedirect("index.jsp");
+			response.sendRedirect("index");
 			// System.out.println("sql");
 		} else {
 			request.setAttribute("errMsg","Failed for some reason");
-			request.getRequestDispatcher("login.jsp").forward(request, response);
-
+			request.getRequestDispatcher("login").forward(request, response);
 		}
 	}
 }

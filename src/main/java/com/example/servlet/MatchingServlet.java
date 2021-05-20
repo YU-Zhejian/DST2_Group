@@ -34,7 +34,7 @@ public class MatchingServlet extends HttpServlet {
 			requestPart = (Part) request.getSession().getAttribute("ao");
 		}
 		if (request.getSession().getAttribute("username") == null) {
-			request.getRequestDispatcher("login.jsp").include(request, response);
+			request.getRequestDispatcher("login").include(request, response);
 		} else {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(requestPart.getInputStream()));
 			ArrayList<String> matchedIDs = new ArrayList<>();
