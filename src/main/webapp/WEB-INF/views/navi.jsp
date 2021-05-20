@@ -26,7 +26,7 @@ Free for personal and commercial use under the CCA 3.0 license (html5up.net/lice
 					out.println("<li><a href=\""+request.getContextPath()+"/login\">Log in</a></li>");
 				}
 				else{
-					out.println("<li>"+ request.getSession().getAttribute("username")+"</li>");
+					out.println("<li><a href=\""+request.getContextPath()+"/ResultServlet\">"+ request.getSession().getAttribute("username")+"</a></li>");
 				}
 				%>
 			</ul>

@@ -21,19 +21,16 @@ public class ResultServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
-		StringBuilder sb = new StringBuilder();
-		// Do not modify this
-		for (String s : (ArrayList<String>) request.getAttribute("matchedIDs")) {
-			if (s != null && !"".equals(s)) {
-				sb.append(',').append(s);
-			}
-		}
-		sb.deleteCharAt(0);
-
-		String sql="SELECT * FROM drug_label WHERE id = ANY(STRING_TO_ARRAY('"+ sb +"',','))";
-		System.out.println(sql);
+		String sql="SELECT DISTINCT * FROM drug_label "
+				+ "INNER JOIN (select * from sample where user_name='"
+				+ request.getSession().getAttribute("username")
+				+ "') as t ON drug_label.drug_id=t.matched_drug";
 		request.setAttribute("result", DBUtils.result(sql));
 		request.getRequestDispatcher("result").forward(request, response);
+
+		request.setAttribute("result",DBUtils.result(sql));
+		request.getRequestDispatcher("result").forward(request, response);
+
 	}
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 

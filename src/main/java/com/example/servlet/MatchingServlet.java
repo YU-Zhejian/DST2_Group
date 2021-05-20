@@ -15,6 +15,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
 /**
  * Servlet that performs drug label matching. Will pass results to {@link ResultServlet} as an ArrayList
  *
@@ -40,14 +43,18 @@ public class MatchingServlet extends HttpServlet {
 			ArrayList<String> matchedIDs = new ArrayList<>();
 			String line;
 			ArrayList<HashMap<String, String>> rs =
-					DBUtils.result("SELECT id,summary_markdown FROM drug_label");
+					DBUtils.result("SELECT drug_id,summary_markdown FROM drug_label");
+	        Date date = new Date();
+			SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+	        String time = ft.format(date);
 			while ((line = reader.readLine()) !=null){
 				String[] entries = line.split("\t");
 				String refgene = entries[6];
 				for (HashMap<String, String> drug : rs) {
-					if (drug.get("summary_markdown").contains(refgene) && !matchedIDs.contains(drug.get("id"))) {
-						matchedIDs.add(drug.get("id"));
-						System.out.println(drug.get("id"));
+					if (drug.get("summary_markdown").contains(refgene) && !matchedIDs.contains(drug.get("drug_id"))) {
+						matchedIDs.add(drug.get("drug_id"));
+						String sql="INSERT INTO sample VALUES(null,'"+time+"','"+drug.get("drug_id")+"','"+(String)request.getSession().getAttribute("username")+"')";
+						DBUtils.execute(sql);
 					}
 				}
 			}
