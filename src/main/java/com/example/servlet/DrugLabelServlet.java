@@ -1,6 +1,9 @@
 package com.example.servlet;
 
+import com.example.service.DrugLabelService;
 import com.example.util.DBUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,12 +21,13 @@ import java.util.HashMap;
  */
 @WebServlet(name ="DrugLabelServlet",urlPatterns="/DrugLabelServlet")
 public class DrugLabelServlet extends HttpServlet {
+	@Autowired
+	private DrugLabelService drugLabelService;
+
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String sql = "SELECT * FROM drug_label";
-		ArrayList<HashMap<String, String>> labels = DBUtils.result(sql);
-		request.setAttribute("labels", labels);
+		request.setAttribute("labels", drugLabelService.findAll());
 		request.getRequestDispatcher("drugLabel").forward(request, response);
 	}
 }

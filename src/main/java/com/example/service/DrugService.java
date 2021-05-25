@@ -13,4 +13,5 @@ import java.util.List;
 public interface DrugService {
 	void save(Drug drug);
 	List<Drug> findAll(Drug drug);
+	List<Drug> findAll();
 }

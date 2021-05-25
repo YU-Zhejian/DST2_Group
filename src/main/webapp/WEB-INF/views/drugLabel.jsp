@@ -20,10 +20,10 @@
 			</tr>
 			<c:forEach items="${labels}" var="label">
 				<tr>
-					<td><a href="https://www.pharmgkb.org/labelAnnotation/${label.id}">${label.id}</a></td>
-					<td>${label.source}</td>
-					<td>${label.have_dosing_information}</td>
-					<td>${label.summary_markdown}</td>
+					<td><a href="https://www.pharmgkb.org/labelAnnotation/${label.getId()}">${label.getId()}</a></td>
+					<td>${label.getSource()}</td>
+					<td>${label.isDosingInformation()}</td>
+					<td>${label.getSummaryMarkdown()}</td>
 				</tr>
 			</c:forEach>
 		</table>

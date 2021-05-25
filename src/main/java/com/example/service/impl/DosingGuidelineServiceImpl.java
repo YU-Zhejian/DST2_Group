@@ -3,6 +3,7 @@ package com.example.service.impl;
 import com.example.bean.DosingGuideline;
 import com.example.dao.DosingGuidelineDao;
 import com.example.service.DosingGuidelineService;
+import com.example.servlet.DosingGuidelineServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -48,5 +49,10 @@ public class DosingGuidelineServiceImpl implements DosingGuidelineService {
 	public List<DosingGuideline> findAll(DosingGuideline dosingGuideline) {
 		Example<DosingGuideline> example = Example.of(dosingGuideline);
 		return this.dosingGuidelineDao.findAll(example);
+	}
+
+	@Override
+	public List<DosingGuideline> findAll() {
+		return dosingGuidelineDao.findAll();
 	}
 }

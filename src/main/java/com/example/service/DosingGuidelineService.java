@@ -13,4 +13,5 @@ import java.util.List;
 public interface DosingGuidelineService {
 	void save(DosingGuideline dosingGuideline);
 	List<DosingGuideline> findAll(DosingGuideline dosingGuideline);
+	List<DosingGuideline> findAll();
 }

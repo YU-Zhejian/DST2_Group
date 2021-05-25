@@ -50,4 +50,9 @@ public class DrugServiceImpl implements DrugService {
 		Example<Drug> example = Example.of(drug);
 		return this.drugDao.findAll(example);
 	}
+
+	@Override
+	public List<Drug> findAll() {
+		return drugDao.findAll();
+	}
 }
