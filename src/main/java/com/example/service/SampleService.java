@@ -12,4 +12,5 @@ import java.util.List;
 public interface SampleService {
 	void save(Sample sample);
 	List<Sample> findAll(Sample sample);
+	List<Sample> findSamplesByUserName(String userName);
 }
