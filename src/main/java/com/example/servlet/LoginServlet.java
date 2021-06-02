@@ -1,6 +1,9 @@
 package com.example.servlet;
 
-import com.example.util.DBUtils;
+import com.example.bean.RegisteredUser;
+import com.example.service.RegisteredUserService;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,20 +20,22 @@ import java.io.IOException;
  */
 @WebServlet(name = "LoginServlet",urlPatterns="/LoginServlet")
 public class LoginServlet extends HttpServlet {
+	@Autowired
+	private RegisteredUserService registeredUserService;
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String user = request.getParameter("username");
+		String userName = request.getParameter("username");
 		String pw = request.getParameter("password");
 
-		String sql = "SELECT * FROM registered_user WHERE user_name='" + user + "' AND user_passwd='" + pw + "'";
-		// System.out.println(sql);
-		if (DBUtils.result(sql).size() > 0) {
-			request.getSession().setAttribute("username", user);
+		RegisteredUser matchedUser = registeredUserService.findRegisteredUserByUserName(userName);
+
+		if (matchedUser != null && matchedUser.getUserPasswd().equals(DigestUtils.md5Hex(pw))) {
+			request.getSession().setAttribute("username", userName);
 			response.sendRedirect("index");
-			// System.out.println("sql");
 		} else {
-			request.setAttribute("errMsg","Failed for some reason");
+			request.setAttribute("errMsg","User name or password is incorrect.");
 			request.getRequestDispatcher("login").forward(request, response);
 		}
 	}
