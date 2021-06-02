@@ -6,7 +6,7 @@
 			td {text-align: center;}
 			form {margin: 50% 0}
 		</style>
-		<title>suggested medicine</title>
+		<title>Recommendation</title>
 	</head>
 	<body>
 		<%@include file="navi.jsp" %>
@@ -18,13 +18,13 @@
 				<td>Dosing information</td>
 				<td style="width: 50%">Summary Markdown</td>
 			</tr>
-			<c:forEach items="${result}" var="row">
+			<c:forEach items="${result}" var="sample">
 				<tr>
-					<td>${row.created_at}</td>
-					<td>${row.drug_id}</td>
-					<td>${row.source}</td>
-					<td>${row.have_dosing_information}</td>
-					<td>${row.summary_markdown}</td>
+					<td>${sample.getCreatedAt()}</td>
+					<td>${sample.getMatchedDrug().getDrugId()}</td>
+					<td>${sample.getMatchedDrug().getSource()}</td>
+					<td>${sample.getMatchedDrug().hasDosingInformation()}</td>
+					<td>${sample.getMatchedDrug().getSummaryMarkdown()}</td>
 				</tr>
 			</c:forEach>
 		</table>

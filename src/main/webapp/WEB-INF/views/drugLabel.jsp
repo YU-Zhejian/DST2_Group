@@ -22,7 +22,7 @@
 				<tr>
 					<td><a href="https://www.pharmgkb.org/labelAnnotation/${label.getId()}">${label.getId()}</a></td>
 					<td>${label.getSource()}</td>
-					<td>${label.isDosingInformation()}</td>
+					<td>${label.hasDosingInformation()}</td>
 					<td>${label.getSummaryMarkdown()}</td>
 				</tr>
 			</c:forEach>
