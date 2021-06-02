@@ -140,7 +140,7 @@ public class DrugLabel {
 		this.haveAlternateDrug = alternateDrugAvailable;
 	}
 
-	public boolean isDosingInformation() {
+	public boolean hasDosingInformation() {
 		return this.haveDosingInformation;
 	}
 
