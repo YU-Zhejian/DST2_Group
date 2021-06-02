@@ -1,9 +1,7 @@
 package com.example.servlet;
 
 import com.example.service.DrugService;
-import com.example.util.DBUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

@@ -2,7 +2,6 @@ package com.example.servlet;
 
 import com.example.service.DosingGuidelineService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
