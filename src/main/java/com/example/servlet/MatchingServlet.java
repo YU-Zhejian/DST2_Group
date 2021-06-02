@@ -1,6 +1,10 @@
 package com.example.servlet;
 
-import com.example.util.DBUtils;
+import com.example.bean.DrugLabel;
+import com.example.bean.Sample;
+import com.example.service.DrugLabelService;
+import com.example.service.SampleService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -12,11 +16,10 @@ import javax.servlet.http.Part;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import java.util.Date;
-import java.text.SimpleDateFormat;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * Servlet that performs drug label matching. Will pass results to {@link ResultServlet} as an ArrayList
@@ -27,6 +30,12 @@ import java.text.SimpleDateFormat;
 @WebServlet(name = "MatchingServlet",urlPatterns="/MatchingServlet")
 @MultipartConfig(maxFileSize = 2097152000)
 public class MatchingServlet extends HttpServlet {
+	@Autowired
+	private DrugLabelService drugLabelService;
+
+	@Autowired
+	private SampleService sampleService;
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -40,21 +49,26 @@ public class MatchingServlet extends HttpServlet {
 			request.getRequestDispatcher("login").include(request, response);
 		} else {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(requestPart.getInputStream()));
-			ArrayList<String> matchedIDs = new ArrayList<>();
+
 			String line;
-			ArrayList<HashMap<String, String>> rs =
-					DBUtils.result("SELECT drug_id,summary_markdown FROM drug_label");
-			Date date = new Date();
-			SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
-			String time = ft.format(date);
+			List<DrugLabel> rs = drugLabelService.findAll();
+			HashSet<String> matchedGenes = new HashSet<>();
+
 			while ((line = reader.readLine()) !=null){
 				String[] entries = line.split("\t");
 				String refgene = entries[6];
-				for (HashMap<String, String> drug : rs) {
-					if (drug.get("summary_markdown").contains(refgene) && !matchedIDs.contains(drug.get("drug_id"))) {
-						matchedIDs.add(drug.get("drug_id"));
-						String sql="INSERT INTO sample (created_at, matched_id, user_name) VALUES('"+time+"','"+drug.get("drug_id")+"','"+ request.getSession().getAttribute("username") +"')";
-						DBUtils.execute(sql);
+				if (!matchedGenes.contains(refgene)) {
+					matchedGenes.add(refgene);
+
+					for (DrugLabel drug : rs) {
+						if (drug.getSummaryMarkdown().contains(refgene)) {
+							Sample sample = new Sample();
+							sample.setCreatedAt(new Date());
+							sample.setMatchedId(drug.getId());
+							sample.setMatchedDrug(drug);
+							sample.setUserName((String)request.getSession().getAttribute("username"));
+							sampleService.save(sample);
+						}
 					}
 				}
 			}
