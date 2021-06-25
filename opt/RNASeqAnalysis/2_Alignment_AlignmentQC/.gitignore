@@ -1,0 +1,11 @@
+*.bam
+*.bam.bai
+*_dupmark_metrics.txt
+*.bai
+*.bed
+*/
+!exec/
+*_bqsr
+*.bam.sbi
+*.list
+*.txt
