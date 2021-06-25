@@ -2,12 +2,7 @@ package com.example.bean;
 
 import org.hibernate.annotations.Proxy;
 
-import javax.persistence.Id;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Table;
-import javax.persistence.Column;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -29,6 +24,8 @@ public class Sample {
 	private String userName;
 	@Column(name = "matched_id", length = 100, nullable=false)
 	private String matchedId;
+	@OneToOne(targetEntity = DrugLabel.class, cascade = CascadeType.ALL)
+	private DrugLabel matchedDrug;
 
 	public Sample() {}
 
@@ -78,5 +75,13 @@ public class Sample {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public DrugLabel getMatchedDrug() {
+		return matchedDrug;
+	}
+
+	public void setMatchedDrug(DrugLabel matchedDrug) {
+		this.matchedDrug = matchedDrug;
 	}
 }

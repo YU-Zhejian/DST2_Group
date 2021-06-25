@@ -1,5 +1,6 @@
 package com.example.service.impl;
 
+import com.example.bean.Drug;
 import com.example.bean.DrugLabel;
 import com.example.dao.DrugLabelDao;
 import com.example.service.DrugLabelService;
@@ -52,5 +53,10 @@ public class DrugLabelServiceImpl implements DrugLabelService {
 		Example<DrugLabel> example = Example.of(drugLabel);
 		// Executing querying
 		return this.drugLabelDao.findAll(example); // Simplified by IDEA
+	}
+
+	@Override
+	public List<DrugLabel> findAll() {
+		return drugLabelDao.findAll();
 	}
 }

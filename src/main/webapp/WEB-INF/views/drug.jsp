@@ -22,9 +22,9 @@
 			</tr>
 			<c:forEach items="${drugs}" var="drug">
 				<tr>
-					<td><a href="https://www.pharmgkb.org${drug.drug_url}">${drug.id}</a></td>
-					<td>${drug.name}</td>
-					<td>${drug.is_biomarker}</td>
+					<td><a href="https://www.pharmgkb.org${drug.getDrugUrl()}">${drug.getId()}</a></td>
+					<td>${drug.getName()}</td>
+					<td>${drug.isBiomarker()}</td>
 				</tr>
 			</c:forEach>
 		</table>

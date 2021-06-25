@@ -45,4 +45,9 @@ public class SampleServiceImpl implements SampleService {
 		Example<Sample> example = Example.of(sample);
 		return this.sampleDao.findAll(example);
 	}
+
+	@Override
+	public List<Sample> findSamplesByUserName(String userName) {
+		return sampleDao.findSamplesByUserName(userName);
+	}
 }

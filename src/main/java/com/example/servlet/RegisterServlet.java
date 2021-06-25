@@ -1,6 +1,9 @@
 package com.example.servlet;
 
-import com.example.util.DBUtils;
+import com.example.bean.RegisteredUser;
+import com.example.service.RegisteredUserService;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,22 +20,20 @@ import java.io.IOException;
  */
 @WebServlet(name = "RegisterServlet", urlPatterns = "/RegisterServlet")
 public class RegisterServlet extends HttpServlet {
+	@Autowired
+	private RegisteredUserService registeredUserService;
+
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException {
-	}
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException {
-		String user=request.getParameter("username");
-		String pw=request.getParameter("password");
-		String sql="INSERT INTO registered_user (encrypt_algorithm, user_name, user_passwd) VALUES('PLAIN','"+user+"','"+pw+"')";
-		int i= DBUtils.execute(sql);
-		// System.out.println(i);
-		if (i == 0){
-			request.setAttribute("errMsg","Failed for some reason");
-			request.getRequestDispatcher("register").forward(request, response);
-		}
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+		RegisteredUser user = new RegisteredUser();
+		user.setUserName(request.getParameter("username"));
+		user.setUserPasswd(DigestUtils.md5Hex(
+				request.getParameter("password")
+		));
+		user.setEncryptAlgorithm("MD5");
+		registeredUserService.save(user);
+
 		response.sendRedirect("index");
 	}
 }

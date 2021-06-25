@@ -14,4 +14,5 @@ import java.util.List;
 public interface DrugLabelService {
 	void save(DrugLabel drugLabel);
 	List<DrugLabel> findAll(DrugLabel drugLabel);
+	List<DrugLabel> findAll();
 }

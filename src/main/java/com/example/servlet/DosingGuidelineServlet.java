@@ -1,14 +1,14 @@
 package com.example.servlet;
 
-import com.example.util.DBUtils;
+import com.example.service.DosingGuidelineService;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Servlet that reads dosing guideline from database
@@ -17,12 +17,13 @@ import java.util.HashMap;
  */
 @WebServlet(name = "DosingGuidelineServlet" ,urlPatterns="/DosingGuidelineServlet")
 public class DosingGuidelineServlet extends HttpServlet {
+	@Autowired
+	private DosingGuidelineService dosingGuidelineService;
+
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String sql = "SELECT * FROM dosing_guideline";
-		ArrayList<HashMap<String, String>> guidelines = DBUtils.result(sql);
-		request.setAttribute("guidelines", guidelines);
+		request.setAttribute("guidelines", dosingGuidelineService.findAll());
 		request.getRequestDispatcher("dosingGuideline").forward(request, response);
 	}
 }

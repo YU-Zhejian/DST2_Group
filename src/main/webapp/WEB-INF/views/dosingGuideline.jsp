@@ -22,12 +22,12 @@
 			</tr>
 			<c:forEach items="${guidelines}" var="guideline">
 				<tr>
-					<td style="align-content: center"><a href="https://www.pharmgkb.org/guidelineAnnotation/${guideline.id}">${guideline.id}</a></td>
-					<td style="align-content: center">${guideline.name}</td>
-					<td style="align-content: center">${guideline.is_recommendation}</td>
-					<td style="align-content: center">${guideline.drug_id}</td>
-					<td style="align-content: center">${guideline.source}</td>
-					<td style="width: 50%">${guideline.summary_markdown}</td>
+					<td style="align-content: center"><a href="https://www.pharmgkb.org/guidelineAnnotation/${guideline.getId()}">${guideline.getId()}</a></td>
+					<td style="align-content: center">${guideline.getName()}</td>
+					<td style="align-content: center">${guideline.isRecommendation()}</td>
+					<td style="align-content: center">${guideline.getDrugId()}</td>
+					<td style="align-content: center">${guideline.getSource()}</td>
+					<td style="width: 50%">${guideline.getSummaryMarkdown()}</td>
 				</tr>
 			</c:forEach>
 		</table>

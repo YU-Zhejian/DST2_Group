@@ -1,6 +1,7 @@
 package com.example.servlet;
 
-import com.example.util.DBUtils;
+import com.example.service.DrugService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,11 +17,13 @@ import java.io.IOException;
  */
 @WebServlet(name = "DrugServlet",urlPatterns="/DrugServlet")
 public class DrugServlet extends HttpServlet {
+	@Autowired
+	private DrugService drugService;
+
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
-		String sql="SELECT * FROM drug";
-		request.setAttribute("drugs", DBUtils.result(sql));
+		request.setAttribute("drugs", drugService.findAll());
 		request.getRequestDispatcher("drug").forward(request,response);
 	}
 	@Override
